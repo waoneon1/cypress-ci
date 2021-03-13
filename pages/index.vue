@@ -1,44 +1,36 @@
 <template>
   <div class="container">
     <div>
-      <Logo />
-      <h1 class="title">
-        affro
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+      <div class="title mb-10">
+        <h1 class="text-primary font-bold">
+          {{ title }}
+        </h1>
+        <p class="text-lg">{{ message }}</p>
       </div>
+      <div class="mr-4 md:mr-0 rounded-full py-1 px-4 sm:py-2 sm:px-8 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer">
+        Login
+      </div>
+       <button @click="someMethod">Click me !</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+  import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({})
+  @Component
+  export default class ClassLogin extends Vue {
+
+    title: string = 'AFFRO'
+    message: string = 'Present by alterra'
+
+    someMethod() {
+      console.log('testing');
+    }
+  }
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
 .container {
   margin: 0 auto;
   min-height: 100vh;
@@ -61,8 +53,7 @@ export default Vue.extend({})
     sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
+  font-size: 100px; 
   letter-spacing: 1px;
 }
 
