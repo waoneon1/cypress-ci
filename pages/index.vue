@@ -7,26 +7,61 @@
         </h1>
         <p class="text-lg">{{ message }}</p>
       </div>
-      <div class="mr-4 md:mr-0 rounded-full py-1 px-4 sm:py-2 sm:px-8 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer">
+      <div class="mr-4 md:mr-0 rounded-full py-1 px-4 sm:py-2 sm:px-8 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer"
+        @click="handleClickLogin"
+      >
         Login
       </div>
-       <button @click="someMethod">Click me !</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator'
+  
+  export const state = () => ({
+    things: [] as string[],
+    data: [],
+  })
+
+  export type RootState = ReturnType<typeof state>
 
   @Component
   export default class ClassLogin extends Vue {
-
+    
     title: string = 'AFFRO'
     message: string = 'Present by alterra'
+    $gAuth: any
 
-    someMethod() {
-      console.log('testing');
+    async handleClickLogin() {
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }
+        console.log('googleUser', googleUser);
+        console.log('getId', googleUser.getId());
+        console.log('getBasicProfile', googleUser.getBasicProfile());
+        console.log('getAuthResponse', googleUser.getAuthResponse());
+        console.log(
+          'getAuthResponse',
+          this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse(),
+        );
+
+        if (this.$gAuth.isAuthorized) {
+          console.log('send token to backend');
+
+          await this.$store.dispatch('credential/getToken', 'dsajfl');
+          console.log( this.$store.state.credential.data);
+        }
+      } catch (error) {
+        // on fail do something
+        // console.error(error);
+        // return null;
+      }
+      return null;
     }
+    
   }
 </script>
 

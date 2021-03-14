@@ -24,6 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    './plugins/vue-google-oauth2'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,8 +40,13 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
   ],
 
+  axios: {
+    baseURL: 'https://almock.alterra.dev/enhydra-pobox/',
+  },
+  
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
