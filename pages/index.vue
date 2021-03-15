@@ -78,9 +78,6 @@
       const domain = this.email.split("@")
       return typeof this.email !== 'undefined' && domain[1] == 'alterra.id' ? true : false
     }
-    
-    // public created() { this.init() }
-    // async init() { }
   }
 </script>
 
