@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="my-0 mx-auto min-h-screen flex justify-center items-center text-center">
     <div>
-      <div class="title mb-10">
-        <h1 class="text-primary font-bold">
+      <div class="mb-10">
+        <h1 class="text-primary text-5xl font-bold">
           {{ title }}
         </h1>
         <p class="text-lg">{{ message }}</p>
@@ -18,41 +18,53 @@
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator'
-  
-  export const state = () => ({
-    things: [] as string[],
-    data: [],
-  })
-
-  export type RootState = ReturnType<typeof state>
+  import CredentialModule from '~/store/credential'
+  import { getModule } from 'vuex-module-decorators';
 
   @Component
   export default class ClassLogin extends Vue {
     
-    title: string = 'AFFRO'
+    email: string = ''
+    title: string = 'RSS'
     message: string = 'Present by alterra'
     $gAuth: any
 
     async handleClickLogin() {
       try {
-        const googleUser = await this.$gAuth.signIn();
+        const googleUser = await this.$gAuth.signIn()
         if (!googleUser) {
           return null;
         }
         console.log('googleUser', googleUser);
         console.log('getId', googleUser.getId());
-        console.log('getBasicProfile', googleUser.getBasicProfile());
+        console.log('getBasicProfile', googleUser.getBasicProfile().dx);
         console.log('getAuthResponse', googleUser.getAuthResponse());
         console.log(
           'getAuthResponse',
           this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse(),
         );
 
-        if (this.$gAuth.isAuthorized) {
-          console.log('send token to backend');
+        const profile = googleUser.getBasicProfile()
+        this.email = profile.nt
+        if (this.validateEmail()) {
+          console.log('email is alterra')
+          
+          if (this.$gAuth.isAuthorized) {
+            console.log('send token to backend')
+            const CredentialInstance = getModule(CredentialModule, this.$store);
+            // Do stuff with module
+            await CredentialInstance.getToken(googleUser.getAuthResponse().id_token)
+            console.log('jwt token from backend : ', JSON.parse(CredentialInstance.token))
 
-          await this.$store.dispatch('credential/getToken', 'dsajfl');
-          console.log( this.$store.state.credential.data);
+            // If success redirect to dashboard
+            if (getModule(CredentialModule,this.$store).token) {
+              console.log('redirecting...')
+              this.$router.push('/dashboard');
+            }
+          }
+        } else {
+          console.log('not email alterra')
+          return null;
         }
       } catch (error) {
         // on fail do something
@@ -61,46 +73,16 @@
       }
       return null;
     }
+
+    validateEmail() {
+      const domain = this.email.split("@")
+      return typeof this.email !== 'undefined' && domain[1] == 'alterra.id' ? true : false
+    }
     
+    // public created() { this.init() }
+    // async init() { }
   }
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px; 
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>
