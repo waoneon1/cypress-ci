@@ -17,19 +17,20 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component } from 'vue-property-decorator'
   import CredentialModule from '~/store/credential'
   import { getModule } from 'vuex-module-decorators';
 
-  @Component
+  @Component({
+    layout: 'login'
+  })
   export default class ClassLogin extends Vue {
-    
-    email: string = ''
-    title: string = 'RSS'
-    message: string = 'Present by alterra'
-    $gAuth: any
+    private email: string = ''
+    public title: string = 'RSS'
+    public message: string = 'Present by alterra'
+    private $gAuth: any
 
-    async handleClickLogin() {
+    public async handleClickLogin() {
       try {
         const googleUser = await this.$gAuth.signIn()
         if (!googleUser) {
@@ -74,9 +75,10 @@
       return null;
     }
 
-    validateEmail() {
+    public validateEmail() {
+      const validEmail = 'alterra.id'
       const domain = this.email.split("@")
-      return typeof this.email !== 'undefined' && domain[1] == 'alterra.id' ? true : false
+      return typeof this.email !== 'undefined' && domain[1] == validEmail ? true : false
     }
   }
 </script>

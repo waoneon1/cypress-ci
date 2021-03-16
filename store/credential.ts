@@ -1,5 +1,4 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import Vuex from 'vuex'
 import { $axios } from '~/utils/api'
 @Module({ namespaced: true, name: 'credential' })
 export default class CredentialModule extends VuexModule {
@@ -23,9 +22,3 @@ export default class CredentialModule extends VuexModule {
     return '{"response_code" : "0000","message":"OK","data":{"access_token":"xxxxxx"}}'
   }
 }
-
-const store = new Vuex.Store({
-  modules: {
-    credential: CredentialModule
-  }
-})
