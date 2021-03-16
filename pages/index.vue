@@ -33,7 +33,7 @@
       <div class="mt-16">
         <div class="mr-4 md:mr-0 rounded-full py-4 px-4 sm:py-2 sm:px-8 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer"
           @click="handleClickLogin"
-        > 
+        >
           <div class="flex items-center mx-auto justify-center">
             <svg class="mr-3" width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22 11.8969C22 18.5297 17.6316 23.25 11.1803 23.25C4.99508 23.25 0 18.0562 0 11.625C0 5.19375 4.99508 0 11.1803 0C14.1918 0 16.7254 1.14844 18.6775 3.04219L15.6344 6.08438C11.6537 2.09063 4.25123 5.09063 4.25123 11.625C4.25123 15.6797 7.36639 18.9656 11.1803 18.9656C15.6074 18.9656 17.2664 15.6656 17.5279 13.9547H11.1803V9.95625H21.8242C21.9279 10.5516 22 11.1234 22 11.8969Z" fill="white"/>
@@ -51,30 +51,36 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
-  import CredentialModule from '~/store/credential'
-  import { getModule } from 'vuex-module-decorators'
-  import Alert from '~/components/utilities/Alert.vue'
+import { Vue, Component } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
+import CredentialModule from '~/store/credential';
+import Alert from '~/components/utilities/Alert.vue';
 
   @Component({
     layout: 'login',
-    components: { Alert }
+    components: { Alert },
   })
-  export default class ClassLogin extends Vue {
+export default class ClassLogin extends Vue {
     email: string = ''
+
     title: string = 'RRS'
+
     message: string = 'Present by alterra'
 
     $gAuth: any
+
     // alert
     alert: boolean = false
+
     alertTitle: string = 'title'
+
     alertDescription: string = 'description'
+
     alertTheme: string = 'success'
 
     async handleClickLogin() {
       try {
-        const googleUser = await this.$gAuth.signIn()
+        const googleUser = await this.$gAuth.signIn();
         // console.log('googleUser', googleUser);
         // console.log('getId', googleUser.getId());
         // console.log('getBasicProfile', googleUser.getBasicProfile());
@@ -91,11 +97,11 @@
             console.log('send token to backend');
             const CredentialInstance = getModule(CredentialModule, this.$store);
             // Do stuff with module
-            await CredentialInstance.getToken(googleUser.getAuthResponse().id_token)
+            await CredentialInstance.getToken(googleUser.getAuthResponse().id_token);
             // If success redirect to dashboard
             if (CredentialInstance.token) {
               // success
-              this.loginStatus(true)
+              this.loginStatus(true);
               // set localstorage
               localStorage.setItem(
                 'token',
@@ -103,14 +109,13 @@
               );
               // redirect . . .
               setTimeout(() => {
-               this.$router.push('/dashboard');
-              }, 1000)
-
+                this.$router.push('/dashboard');
+              }, 1000);
             }
           }
         } else {
           // fail
-         this.loginStatus(false)
+          this.loginStatus(false);
         }
       } catch (error) {
         // on fail do something
@@ -121,22 +126,21 @@
     }
 
     validateEmail() {
-      const validEmail = 'alterra.id'
-      const domain = this.email.split("@")
-      return typeof this.email !== 'undefined' && domain[1] == validEmail ? true : false
+      const validEmail = 'alterra.id';
+      const domain = this.email.split('@');
+      return !!(typeof this.email !== 'undefined' && domain[1] == validEmail);
     }
 
-    
     loginStatus(value: boolean): void {
-      this.alert = true
-      if(value) {
-        this.alertTitle = 'Your Login Success'
-        this.alertDescription = 'Welcome'
-        this.alertTheme = 'success'
+      this.alert = true;
+      if (value) {
+        this.alertTitle = 'Your Login Success';
+        this.alertDescription = 'Welcome';
+        this.alertTheme = 'success';
       } else {
-        this.alertTitle = 'Your Login Failed'
-        this.alertDescription = 'Try again using alterra email'
-        this.alertTheme = 'danger'
+        this.alertTitle = 'Your Login Failed';
+        this.alertDescription = 'Try again using alterra email';
+        this.alertTheme = 'danger';
       }
     }
 }
