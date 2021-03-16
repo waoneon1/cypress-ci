@@ -17,21 +17,23 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator'
-  import CredentialModule from '~/store/credential'
-  import { getModule } from 'vuex-module-decorators';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
+import CredentialModule from '~/store/credential';
 
   @Component
-  export default class ClassLogin extends Vue {
-    
+export default class ClassLogin extends Vue {
     email: string = ''
+
     title: string = 'RSS'
+
     message: string = 'Present by alterra'
+
     $gAuth: any
 
     async handleClickLogin() {
       try {
-        const googleUser = await this.$gAuth.signIn()
+        const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
           return null;
         }
@@ -44,26 +46,26 @@
           this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse(),
         );
 
-        const profile = googleUser.getBasicProfile()
-        this.email = profile.nt
+        const profile = googleUser.getBasicProfile();
+        this.email = profile.nt;
         if (this.validateEmail()) {
-          console.log('email is alterra')
-          
+          console.log('email is alterra');
+
           if (this.$gAuth.isAuthorized) {
-            console.log('send token to backend')
+            console.log('send token to backend');
             const CredentialInstance = getModule(CredentialModule, this.$store);
             // Do stuff with module
-            await CredentialInstance.getToken(googleUser.getAuthResponse().id_token)
-            console.log('jwt token from backend : ', JSON.parse(CredentialInstance.token))
+            await CredentialInstance.getToken(googleUser.getAuthResponse().id_token);
+            console.log('jwt token from backend : ', JSON.parse(CredentialInstance.token));
 
             // If success redirect to dashboard
-            if (getModule(CredentialModule,this.$store).token) {
-              console.log('redirecting...')
+            if (getModule(CredentialModule, this.$store).token) {
+              console.log('redirecting...');
               this.$router.push('/dashboard');
             }
           }
         } else {
-          console.log('not email alterra')
+          console.log('not email alterra');
           return null;
         }
       } catch (error) {
@@ -75,10 +77,10 @@
     }
 
     validateEmail() {
-      const domain = this.email.split("@")
-      return typeof this.email !== 'undefined' && domain[1] == 'alterra.id' ? true : false
+      const domain = this.email.split('@');
+      return !!(typeof this.email !== 'undefined' && domain[1] == 'alterra.id');
     }
-  }
+}
 </script>
 
 <style>

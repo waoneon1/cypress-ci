@@ -1,34 +1,21 @@
 module.exports = {
   env: {
     browser: true,
-    es2020: true,
-    node: true,
+    es2021: true,
   },
-  extends: ['plugin:vue/essential', 'airbnb-base', 'plugin:jest/recommended'],
+  extends: [
+    'plugin:vue/essential',
+    'airbnb-base',
+  ],
   parserOptions: {
-    ecmaVersion: 11,
+    ecmaVersion: 12,
+    parser: '@typescript-eslint/parser',
     sourceType: 'module',
   },
-  plugins: ['vue', 'jest'],
-  globals: {
-    $nuxt: true,
-  },
+  plugins: [
+    'vue',
+    '@typescript-eslint',
+  ],
   rules: {
-    'max-len': 0,
-    'no-underscore-dangle': ['error', { allow: ['_chart'] }],
-  },
-  settings: {
-    'import/resolver': {
-      alias: {
-        map: [
-          ['@', './'],
-          ['~', './'],
-        ],
-        extensions: ['.ts', '.js', '.jsx', '.json'],
-      },
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.vue'],
-      },
-    },
   },
 };
