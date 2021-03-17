@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'plugin:vue/essential',
     'airbnb-base',
+    'plugin:import/typescript',
   ],
   parserOptions: {
     ecmaVersion: 12,
@@ -16,13 +17,21 @@ module.exports = {
     'vue',
     '@typescript-eslint',
   ],
+  globals: {
+    $nuxt: true,
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
   rules: {
     'max-len': 0,
-    'no-underscore-dangle': ['error'],
-    'no-useless-rename': ['error', {
-      ignoreDestructuring: true,
-      ignoreImport: true,
-      ignoreExport: true,
-    }],
+    // 'no-underscore-dangle': ['error'],
+    // 'no-useless-rename': ['error', {
+    //   ignoreDestructuring: true,
+    //   ignoreImport: true,
+    //   ignoreExport: true,
+    // }],
   },
 };
