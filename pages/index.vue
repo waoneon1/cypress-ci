@@ -128,7 +128,7 @@ export default class ClassLogin extends Vue {
     validateEmail() {
       const validEmail = 'alterra.id';
       const domain = this.email.split('@');
-      return !!(typeof this.email !== 'undefined' && domain[1] == validEmail);
+      return !!(typeof this.email !== 'undefined' && domain[1] === validEmail);
     }
 
     loginStatus(value: boolean): void {
