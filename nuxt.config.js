@@ -33,6 +33,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     './plugins/vue-google-oauth2',
+    './plugins/accecor',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -52,7 +53,7 @@ export default {
   ],
 
   axios: {
-    baseURL: 'https://almock.alterra.dev/enhydra-pobox/',
+    baseURL: 'https://pobox.sumpahpalapa.com/api',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -94,10 +94,11 @@ export default class ClassLogin extends Vue {
         this.email = profile.nt;
         if (this.validateEmail()) {
           if (this.$gAuth.isAuthorized) {
-            console.log('send token to backend');
             const CredentialInstance = getModule(CredentialModule, this.$store);
+
             // Do stuff with module
             await CredentialInstance.getToken(googleUser.getAuthResponse().id_token);
+
             // If success redirect to dashboard
             if (CredentialInstance.token) {
               // success
