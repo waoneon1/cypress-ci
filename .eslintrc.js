@@ -3,20 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'plugin:vue/essential',
-    'airbnb-base',
-    'plugin:import/typescript',
-  ],
+  extends: ['plugin:vue/essential', 'airbnb-base', 'plugin:import/typescript'],
   parserOptions: {
     ecmaVersion: 12,
     parser: '@typescript-eslint/parser',
     sourceType: 'module',
   },
-  plugins: [
-    'vue',
-    '@typescript-eslint',
-  ],
+  plugins: ['vue', '@typescript-eslint'],
   globals: {
     $nuxt: true,
   },
@@ -27,6 +20,7 @@ module.exports = {
   },
   rules: {
     'max-len': 0,
+    'import/extensions': 'off',
     // 'no-underscore-dangle': ['error'],
     // 'no-useless-rename': ['error', {
     //   ignoreDestructuring: true,
