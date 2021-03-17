@@ -23,13 +23,13 @@ import { Vue, Prop, Component } from 'vue-property-decorator';
 
   @Component
 export default class ClassAlert extends Vue {
-    @Prop({ required: true, type: String }) title!: string
+    @Prop({ required: true, type: String }) title!: string;
 
-    @Prop({ required: true, type: String }) description!: string
+    @Prop({ required: true, type: String }) description!: string;
 
-    @Prop({ required: true, type: String }) theme!: string
+    @Prop({ required: true, type: String }) theme!: string;
 
-    showAlert: Boolean = true
+    showAlert: Boolean = true;
 }
 </script>
 

@@ -61,22 +61,22 @@ import Alert from '~/components/utilities/Alert.vue';
     components: { Alert },
   })
 export default class ClassLogin extends Vue {
-    email: string = ''
+    email: string = '';
 
-    title: string = 'RRS'
+    title: string = 'RRS';
 
-    message: string = 'Present by alterra'
+    message: string = 'Present by alterra';
 
-    $gAuth: any
+    $gAuth: any;
 
     // alert
-    alert: boolean = false
+    alert: boolean = false;
 
-    alertTitle: string = 'title'
+    alertTitle: string = 'title';
 
-    alertDescription: string = 'description'
+    alertDescription: string = 'description';
 
-    alertTheme: string = 'success'
+    alertTheme: string = 'success';
 
     async handleClickLogin() {
       try {

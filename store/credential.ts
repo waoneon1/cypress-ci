@@ -5,7 +5,7 @@ import { $axios } from '~/utils/api';
 
 @Module({ namespaced: true, name: 'credential' })
 export default class CredentialModule extends VuexModule {
-  public token: string = ''
+  public token: string = '';
 
   @Mutation
   setToken(token: string): void {
