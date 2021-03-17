@@ -1,9 +1,9 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { NuxtAxiosInstance } from '@nuxtjs/axios';
 
-let $axios: NuxtAxiosInstance
+let $axios: NuxtAxiosInstance;
 
 export function initializeAxios(axiosInstance: NuxtAxiosInstance) {
-  $axios = axiosInstance
+  $axios = axiosInstance;
 }
-   
-export { $axios }
+
+export { $axios };

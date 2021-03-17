@@ -6,6 +6,8 @@
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
+    "lint": "eslint --ext .js,.vue,.ts .",
+    "lintfix": "eslint --fix --ext .js,.vue,.ts .",
     "generate": "nuxt-ts generate"
   },
   "dependencies": {
@@ -13,16 +15,28 @@
     "@nuxtjs/axios": "^5.13.1",
     "core-js": "^3.8.3",
     "nuxt": "^2.14.12",
+    "vue": "^2.6.12",
     "vue-class-component": "^7.2.6",
     "vue-google-oauth2": "^1.5.8",
-    "vue-property-decorator": "^9.1.2"
+    "vue-property-decorator": "^9.1.2",
+    "@nuxt/types": "^2.14.12",
+    "vuex-module-decorators": "^1.0.1"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.12",
     "@nuxt/typescript-build": "^2.0.4",
     "@nuxtjs/tailwindcss": "^3.4.2",
     "@types/gapi": "0.0.39",
     "@types/gapi.auth2": "0.0.53",
-    "vuex-module-decorators": "^1.0.1"
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^3.9.1",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^23.20.0",
+    "eslint-plugin-nuxt": "^1.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "ts-jest": "^26.1.0"
   }
 }

@@ -12,15 +12,14 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator';
 
   @Component
-  export default class ClassDashboard extends Vue {
-    
+export default class ClassDashboard extends Vue {
     title: string = 'RSS Dashboard'
-    message: string = 'Content here'
 
-  }
+    message: string = 'Content here'
+}
 </script>
 
 <style>

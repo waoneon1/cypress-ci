@@ -4,21 +4,19 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator';
 
   @Component
-  export default class ClassLogout extends Vue {
-    
-    mounted() {
-      this.init()
-    }
-
-    init() {
-      localStorage.removeItem('token');
-      this.$router.push('/');
-    }
-
+export default class ClassLogout extends Vue {
+  mounted() {
+    this.init();
   }
+
+  init() {
+    localStorage.removeItem('token');
+    this.$router.push('/');
+  }
+}
 </script>
 
 <style>
