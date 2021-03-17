@@ -2,7 +2,6 @@ import {
   Module, VuexModule, Mutation, Action,
 } from 'vuex-module-decorators';
 import { $axios } from '~/utils/api';
-// import axios from '@nuxtjs/axios';
 
 @Module({ namespaced: true, name: 'credential' })
 export default class CredentialModule extends VuexModule {
