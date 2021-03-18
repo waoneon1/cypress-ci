@@ -1,6 +1,8 @@
 // import { shallowMount } from 'ts-jest/utils';
 import ClassLogin from '@/pages/index.vue';
-import { expect, it, describe, beforeEach } from '@jest/globals';
+import {
+  expect, it, describe, beforeEach,
+} from '@jest/globals';
 import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils';
 
 let wrapper: Wrapper<ClassLogin>;
