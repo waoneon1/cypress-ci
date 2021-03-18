@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
     <Alert v-show="alert" :title="alertTitle" :description="alertDescription" :theme="alertTheme" />
-    <div class="relative my-0 mx-auto h-full max-w-md bg-white p-5">
+    <div class="relative my-0 mx-auto h-full max-w-lg bg-white p-5">
       <div class="flex items-center mb-5 ">
         <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M28.6732 13.6405C28.2018 14.1 27.9868 14.7619 28.098 15.4107L28.6328 18.5285C28.913 20.1623 27.1982 21.4082 25.7309 20.6368L22.9307 19.1647C22.348 18.8584 21.652 18.8584 21.0693 19.1647L18.2691 20.6369C16.8018 21.4082 15.087 20.1623 15.3672 18.5285L15.9019 15.4107C16.0132 14.7619 15.7982 14.1 15.3268 13.6405L13.0609 11.4315C11.874 10.2744 12.5291 8.25855 14.1695 8.02021L17.3005 7.56528C17.9519 7.47063 18.5151 7.06148 18.8064 6.47117L20.2065 3.6341C20.9401 2.14758 23.0599 2.14758 23.7935 3.6341L25.1936 6.47117C25.4849 7.06148 26.0481 7.47063 26.6995 7.56528L29.8305 8.02021C31.4709 8.25855 32.126 10.2744 30.9391 11.4315L28.6732 13.6405Z" fill="#FFA91E"/>
@@ -20,7 +20,7 @@
         <h1 class="text-4xl font-black leading-tight text-primary mb-4">Know Your Best<br> Be The Best</h1>
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
-      <!-- <div class="flex justify-center">
+      <div class="flex justify-center">
         <div class="relative">
           <img class="absolute top-0 mt-8" src="~/static/img/login_achive.png" style="left: -60px;"/>
           <div class="rounded-3xl shadow-lg p-10 inline-block">
@@ -29,10 +29,10 @@
           </div>
           <img class="absolute top-0 mt-16" src="~/static/img/login_grap.png" style="right: -60px;"/>
         </div>
-      </div> -->
+      </div>
       <div class="bottom-0 absolute w-full">
-        <div class="relative">
-          <div class="md:mr-0 rounded-full py-4 px-4 sm:py-2 sm:px-8 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer"
+        <div class="relative mr-10">
+          <div class="rounded-full py-5 px-5 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer"
             @click="handleClickLogin"
           >
             <div class="flex items-center mx-auto justify-center">
