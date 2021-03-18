@@ -56,10 +56,10 @@ import { getModule } from 'vuex-module-decorators';
 import CredentialModule from '~/store/credential';
 import Alert from '~/components/utilities/Alert.vue';
 
-  @Component({
-    layout: 'login',
-    components: { Alert },
-  })
+@Component({
+  layout: 'login',
+  components: { Alert },
+})
 export default class ClassLogin extends Vue {
     email: string = '';
 
