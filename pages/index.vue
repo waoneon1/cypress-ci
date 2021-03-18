@@ -20,7 +20,7 @@
         <h1 class="text-4xl font-black leading-tight text-primary mb-4">Know Your Best<br> Be The Best</h1>
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
-      <div class="flex justify-center md:my-10">
+      <div class="flex justify-center md:my-8">
         <div class="relative">
           <img class="absolute top-0 mt-8" src="~/static/img/login_achive.png" style="left: -60px;"/>
           <div class="rounded-3xl shadow-lg md:p-12 p-6 inline-block">
@@ -42,7 +42,7 @@
               <span class="font-bold">Sign in with Gmail</span>
             </div>
           </div>
-          <p class="flex items-center mx-auto justify-center mt-3 mb-3">
+          <p class="flex items-center mx-auto justify-center mt-3 mb-10">
             <span class="text-sm font-light text-primary pt-2 mr-2">Product by</span>
             <img src="~/static/img/logo_alterra.png" alt="alterra rrs" style="width:57px; height:20px;"/>
           </p>
