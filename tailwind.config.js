@@ -5,7 +5,7 @@
  ** Default: https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
  */
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
-const { colors } = require('tailwindcss/defaultTheme');
+// const { colors } = require('tailwindcss/defaultTheme');
 
 module.exports = {
   theme: {
@@ -20,45 +20,6 @@ module.exports = {
       zIndex: {
         '-10': '-10',
       },
-      // custom position (used in circle bg headings & circle bg on hero image)
-      // <10 = kelipatan 8
-      // kelipatan 10 = persentase
-      inset: {
-        1: '8px',
-        2: '16px',
-        3: '24px',
-        4: '32px',
-        5: '40px',
-        6: '48px',
-        7: '56px',
-        8: '64px',
-        9: '72px',
-        '-1': '-8px',
-        '-2': '-16px',
-        '-3': '-24px',
-        '-4': '-32px',
-        '-5': '-40px',
-        '-6': '-48px',
-        '-7': '-56px',
-        '-8': '-64px',
-        '-9': '72px',
-        '-10': '-10%',
-        '-20': '-20%',
-      },
-      // custom width & height (used in hero images)
-      width: {
-        72: '18rem',
-        700: '700px',
-        350: '350px',
-      },
-      height: {
-        700: '700px',
-      },
-      // list type
-      listStyleType: {
-        'low-alpha': 'lower-alpha',
-        'upper-alpha': 'upper-alpha',
-      },
     },
     fontFamily: {
       mulish: ['Mulish', 'sans-serif'],
@@ -66,7 +27,6 @@ module.exports = {
     },
   },
   variants: {
-    borderWidth: ['responsive', 'last'],
     extend: {
       backgroundColor: ['even', 'odd'],
     },
