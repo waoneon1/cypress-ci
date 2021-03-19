@@ -3,23 +3,30 @@ import ClassLogin from '@/pages/index.vue';
 import {
   expect, it, describe, beforeEach,
 } from '@jest/globals';
-import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils';
+import { shallowMount, Wrapper } from '@vue/test-utils';
 
 let wrapper: Wrapper<ClassLogin>;
 
-describe('Layouts > default.vue', () => {
+describe('Pages > index.vue', () => {
   beforeEach(() => {
     const props = {
       alert: false,
+      email: 'rizky@alterra.id',
     };
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
       propsData: props,
     });
   });
+
   // mounting component
   it('berhasil mounting komponen', () => {
     expect(wrapper.vm).toBeTruthy();
+  });
+
+  // mounting component
+  it('berhasil mounting komponen', () => {
+    expect(wrapper.vm.validateEmail()).toBeTruthy();
   });
 });
 
