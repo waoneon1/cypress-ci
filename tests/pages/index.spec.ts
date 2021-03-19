@@ -6,6 +6,18 @@ import {
 import { shallowMount, Wrapper } from '@vue/test-utils';
 
 let wrapper: Wrapper<any>;
+const googleUser = {
+  getBasicProfile: function() { 
+    return {
+      nt: 'dharmawan@alterra.id'
+    }
+  },
+  getAuthResponse: function() {
+    return {
+      id_token: 'fdlksjaflkdsjklfds'
+    }
+  }
+};
 
 describe('Pages > index.vue', () => {
   beforeEach(() => {
@@ -16,7 +28,11 @@ describe('Pages > index.vue', () => {
           // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
           alert: false,
           email: 'rizky@alterra.id',
-          $gAuth: jest.fn(),
+          $gAuth: {
+            signIn: function() {
+              return jest.fn()
+            }
+          }
         };
       },
     });
@@ -55,8 +71,12 @@ describe('Pages > index.vue', () => {
   });
 
   // mounting component
-  it('Handle click login', () => {
-    wrapper.vm.handleClickLogin()
+  it('Handle click login', async () => {
+    await wrapper.vm.handleClickLogin()
+    wrapper.setData({ 
+      googleUser
+    })
+
     //expect(wrapper.emitted().handleClickLogin).toBeTruthy();
     //wrapper.vm.email = 'dharmawan@alterra.id'
     //wrapper.vm.validateEmail()
