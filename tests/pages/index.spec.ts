@@ -27,12 +27,7 @@ describe('Pages > index.vue', () => {
         return {
           // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
           alert: false,
-          email: 'rizky@alterra.id',
-          $gAuth: {
-            signIn: function() {
-              return jest.fn()
-            }
-          }
+          email: 'rizky@alterra.id'
         };
       },
     });
@@ -72,10 +67,38 @@ describe('Pages > index.vue', () => {
 
   // mounting component
   it('Handle click login', async () => {
+    const gauthMock = jest.fn();
+    wrapper = shallowMount(ClassLogin, {
+      stubs: ['Alert'],
+      data() {
+        return {
+          // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
+          alert: false,
+          email: 'rizky@alterra.id'
+        };
+      },
+      mocks: {
+        $gAuth: {
+            signIn: function() {
+              return gauthMock.mockResolvedValue('123')
+            },
+            // getBasicProfile: function() { 
+            //   return jest.fn().mockResolvedValue({
+            //     nt: 'dharmawan@alterra.id'
+            //   });
+            // },
+            // getAuthResponse: function() {
+            //   return jest.fn().mockResolvedValue({
+            //     id_token: 'fdlksjaflkdsjklfds'
+            //   });
+            // }
+          }
+      }
+    });
     await wrapper.vm.handleClickLogin()
-    wrapper.setData({ 
-      googleUser
-    })
+    // wrapper.setData({ 
+    //   googleUser
+    // })
 
     //expect(wrapper.emitted().handleClickLogin).toBeTruthy();
     //wrapper.vm.email = 'dharmawan@alterra.id'
@@ -83,5 +106,11 @@ describe('Pages > index.vue', () => {
     
     //expect(wrapper.vm.$gAuth.signIn()).toHaveBeenCalled();
   }); 
+
+  test('async test', async () => {
+  const asyncMock = jest.fn().mockResolvedValue(43);
+  await asyncMock(); // 43
+  console.log(asyncMock)
+});
   
 });
