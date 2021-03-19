@@ -22,8 +22,6 @@ module.exports = {
     '<rootDir>/components/**/*.vue',
     '<rootDir>/components/**/*.js',
     '<rootDir>/pages/**/*.vue',
-    '<rootDir>/plugins/**/*.js',
-    '<rootDir>/plugins/**/*.ts',
     '<rootDir>/store/**/*.ts',
   ],
   coverageReporters: ['lcov'],
