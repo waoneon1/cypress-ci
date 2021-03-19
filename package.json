@@ -1,6 +1,6 @@
 {
-  "name": "affro",
-  "version": "1.0.0",
+  "name": "rrs",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
