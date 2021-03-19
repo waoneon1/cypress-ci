@@ -9,6 +9,7 @@ Vue.use(Vuex)
 /**
  * Factory function returns a new store instance
  */
+
 const credentialsModule = () => {
   const store = new Vuex.Store({
     modules: {
@@ -22,9 +23,10 @@ const credentialsModule = () => {
  * The test case
  */
 describe('TodosStore', () => {
-  it('has to get a store instance', async (done) => {
+
+  it('Mutation > setToken', async () => {
     const service = credentialsModule()
-    expect(service).toBeInstanceOf(Object)
-    done()
+    service.setToken('123')
+    expect(service.token).toBe('123')
   })
 })
