@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "npm run clean && nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "lint": "eslint --ext .js,.vue,.ts .",
