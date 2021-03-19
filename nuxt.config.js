@@ -31,15 +31,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-<<<<<<< HEAD
   plugins: [
     './plugins/vue-google-oauth2',
     './plugins/accessor',
   ],
-=======
-  plugins: ['./plugins/vue-google-oauth2', './plugins/accecor'],
->>>>>>> 934c3649178ed1fd51f2ee0e66417a97346c5acd
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
