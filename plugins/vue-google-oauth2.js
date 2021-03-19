@@ -5,7 +5,7 @@ import Vue from 'vue';
 import GAuth from 'vue-google-oauth2';
 
 const gauthOption = {
-  clientId: '683508409958-qqcru8m9d0bfvher3vk8ltc8gqe2fs4q.apps.googleusercontent.com',
+  clientId: '646531528446-136mfhgvkfp4bpdem8n8cririv4oqm60.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'consent',
 };

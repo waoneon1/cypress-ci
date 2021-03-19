@@ -48,7 +48,7 @@ export default {
   modules: ['@nuxtjs/axios'],
 
   axios: {
-    baseURL: 'https://pobox.sumpahpalapa.com/api',
+    baseURL: 'https://rrs-api.sumpahpalapa.com/api/v1',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
