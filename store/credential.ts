@@ -20,9 +20,10 @@ export default class CredentialModule extends VuexModule implements CredentialIn
 
   @Action
   async getToken(payload: string): Promise<void> {
-    const token = await $axios.$post('/credentials', {
-      idToken: payload,
+    const token = await $axios.$post('/auth/login/google_oauth', {
+      id_token: payload,
     });
+    console.log(token, 'from be')
     // const dummy: any = JSON.parse('{"response_code" : "0000","message":"OK","data":{"access_token":"xxxxxx"}}');
     // return token;
     this.setToken(token);
