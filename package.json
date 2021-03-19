@@ -10,7 +10,7 @@
     "lintfix": "eslint --fix --ext .js,.vue,.ts .",
     "generate": "nuxt-ts generate",
     "clean": "shx rm -rf dist/ coverage/",
-    "test": "npm run clean && jest --coverage"
+    "test": "npm run clean && jest"
   },
   "dependencies": {
     "@nuxt/types": "^2.14.12",

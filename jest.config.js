@@ -16,4 +16,15 @@ module.exports = {
     '.*\\.(vue)$': 'vue-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/layouts/*.vue',
+    '<rootDir>/components/**/*.vue',
+    '<rootDir>/components/**/*.js',
+    '<rootDir>/pages/**/*.vue',
+    '<rootDir>/plugins/**/*.js',
+    '<rootDir>/plugins/**/*.ts',
+    '<rootDir>/store/**/*.ts',
+  ],
+  coverageReporters: ['lcov'],
 };
