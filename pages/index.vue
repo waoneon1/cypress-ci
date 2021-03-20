@@ -97,10 +97,11 @@ import { Vue, Component } from "vue-property-decorator";
 import { getModule } from "vuex-module-decorators";
 import CredentialModule from "~/store/credential";
 import Alert from "~/components/utilities/Alert.vue";
+import ComponentsRandomPict from "~/components/ComponentsRandomPict.vue";
 
 @Component({
   layout: "login",
-  components: { Alert },
+  components: { Alert, ComponentsRandomPict }
 })
 export default class ClassLogin extends Vue {
   email: string = "";
