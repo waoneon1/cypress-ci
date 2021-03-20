@@ -13,8 +13,8 @@ describe('Components > Utilities > Alert.vue', () => {
       propsData: {
         title: 'Ini Judul',
         description: 'Ini Description',
-        theme: 'Ini Theme'
-      }
+        theme: 'Ini Theme',
+      },
     });
   });
 

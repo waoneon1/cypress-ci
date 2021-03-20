@@ -7,16 +7,16 @@ import { shallowMount, Wrapper } from '@vue/test-utils';
 
 let wrapper: Wrapper<any>;
 const googleUser = {
-  getBasicProfile: function() { 
+  getBasicProfile() {
     return {
-      nt: 'dharmawan@alterra.id'
-    }
+      nt: 'dharmawan@alterra.id',
+    };
   },
-  getAuthResponse: function() {
+  getAuthResponse() {
     return {
-      id_token: 'fdlksjaflkdsjklfds'
-    }
-  }
+      id_token: 'fdlksjaflkdsjklfds',
+    };
+  },
 };
 
 describe('Pages > index.vue', () => {
@@ -27,7 +27,7 @@ describe('Pages > index.vue', () => {
         return {
           // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
           alert: false,
-          email: 'rizky@alterra.id'
+          email: 'rizky@alterra.id',
         };
       },
     });
@@ -44,25 +44,24 @@ describe('Pages > index.vue', () => {
   });
 
   // mounting component
-  it('Function Alert login status', () => {    
-    const successTitle = 'Your Login Success'
-    const successDescription = 'Welcome'
-    const successTheme = 'success'
-    
-    const failTitle = 'Your Login Failed'
-    const failDescription = 'Try again using alterra email'
-    const failTheme = 'danger'
+  it('Function Alert login status', () => {
+    const successTitle = 'Your Login Success';
+    const successDescription = 'Welcome';
+    const successTheme = 'success';
 
-    wrapper.vm.loginStatus(true)
+    const failTitle = 'Your Login Failed';
+    const failDescription = 'Try again using alterra email';
+    const failTheme = 'danger';
+
+    wrapper.vm.loginStatus(true);
     expect(wrapper.vm.alertTitle).toEqual(successTitle);
     expect(wrapper.vm.alertDescription).toEqual(successDescription);
     expect(wrapper.vm.alertTheme).toEqual(successTheme);
 
-    wrapper.vm.loginStatus(false)
+    wrapper.vm.loginStatus(false);
     expect(wrapper.vm.alertTitle).toEqual(failTitle);
     expect(wrapper.vm.alertDescription).toEqual(failDescription);
     expect(wrapper.vm.alertTheme).toEqual(failTheme);
-    
   });
 
   // mounting component
@@ -74,43 +73,42 @@ describe('Pages > index.vue', () => {
         return {
           // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
           alert: false,
-          email: 'rizky@alterra.id'
+          email: 'rizky@alterra.id',
         };
       },
       mocks: {
         $gAuth: {
-            signIn: function() {
-              return gauthMock.mockResolvedValue('123')
-            },
-            // getBasicProfile: function() { 
-            //   return jest.fn().mockResolvedValue({
-            //     nt: 'dharmawan@alterra.id'
-            //   });
-            // },
-            // getAuthResponse: function() {
-            //   return jest.fn().mockResolvedValue({
-            //     id_token: 'fdlksjaflkdsjklfds'
-            //   });
-            // }
-          }
-      }
+          signIn() {
+            return gauthMock.mockResolvedValue('123');
+          },
+          // getBasicProfile: function() {
+          //   return jest.fn().mockResolvedValue({
+          //     nt: 'dharmawan@alterra.id'
+          //   });
+          // },
+          // getAuthResponse: function() {
+          //   return jest.fn().mockResolvedValue({
+          //     id_token: 'fdlksjaflkdsjklfds'
+          //   });
+          // }
+        },
+      },
     });
-    await wrapper.vm.handleClickLogin()
-    // wrapper.setData({ 
-    //   googleUser
-    // })
+    await wrapper.vm.handleClickLogin();
+    wrapper.setData({
+      googleUser,
+    });
 
-    //expect(wrapper.emitted().handleClickLogin).toBeTruthy();
-    //wrapper.vm.email = 'dharmawan@alterra.id'
-    //wrapper.vm.validateEmail()
-    
-    //expect(wrapper.vm.$gAuth.signIn()).toHaveBeenCalled();
-  }); 
+    // expect(wrapper.emitted().handleClickLogin).toBeTruthy();
+    // wrapper.vm.email = 'dharmawan@alterra.id'
+    // wrapper.vm.validateEmail()
+
+    // expect(wrapper.vm.$gAuth.signIn()).toHaveBeenCalled();
+  });
 
   test('async test', async () => {
-  const asyncMock = jest.fn().mockResolvedValue(43);
-  await asyncMock(); // 43
-  console.log(asyncMock)
-});
-  
+    const asyncMock = jest.fn().mockResolvedValue(43);
+    await asyncMock(); // 43
+    // console.log(asyncMock)
+  });
 });
