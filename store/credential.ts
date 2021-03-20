@@ -3,8 +3,14 @@ import {
 } from 'vuex-module-decorators';
 import { $axios } from '~/utils/api';
 
+export interface CredentialInterface {
+  token?: string
+  setToken: (value: string) => void
+  getToken: (payload: string) => Promise<void>
+}
+
 @Module({ namespaced: true, name: 'credential' })
-export default class CredentialModule extends VuexModule {
+export default class CredentialModule extends VuexModule implements CredentialInterface {
   public token: string = '';
 
   @Mutation

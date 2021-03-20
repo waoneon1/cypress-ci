@@ -18,7 +18,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class ClassDashboard extends Vue {
-  title: string = 'RRS Dashboard';
+  title: string = 'RSS Dashboard';
 
   message: string = 'Content here';
 }
