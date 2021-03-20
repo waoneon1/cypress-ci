@@ -22,7 +22,7 @@ module.exports = {
     '<rootDir>/components/**/*.vue',
     '<rootDir>/components/**/*.js',
     '<rootDir>/pages/**/*.vue',
-    // '<rootDir>/store/**/*.ts',
+    '<rootDir>/store/**/*.ts',
   ],
   coverageReporters: ['lcov'],
 };
