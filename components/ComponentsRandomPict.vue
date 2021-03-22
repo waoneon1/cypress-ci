@@ -6,16 +6,9 @@
         src="~/static/img/login_achive.png"
       />
       <div class="rounded-3xl shadow-lg p-3 md:p-10 inline-block">
-        <div v-for="(empl, index) in shuffle(emplList)" :key="index">
-          <img :src="empl.src" :width="empl.width" :class="empl.class" />
+        <div v-for="(empl, index) in shuffle(dataShuffle)" :key="index">
+          <img :src="emplList[empl].src" :width="emplList[index].width" :class="emplList[index].class" />
         </div>
-
-        <!-- <img :src="emplList[0].src" width="75px" class="ml-16" />
-        <img :src="emplList[1].src" width="50px" class="ml-1 -mt-5" />
-        <img :src="emplList[2].src" width="40px" class="ml-32 -mt-8" />
-        <img :src="emplList[3].src" width="35px" class="ml-12 -mt-3" />
-        <img :src="emplList[4].src" width="35px" class="ml-24 -mt-4" />
-        <img :src="emplList[5].src" width="15px" class="ml-20" /> -->
 
         <p
           class="mt-2 font-medium text-xs md:text-sm text-primary w-full text-center"
@@ -74,6 +67,8 @@ export default class ComponentsRandomPict extends Vue {
       class: 'ml-20',
     },
   ];
+
+  dataShuffle = [0, 1, 2, 3, 4, 5];
 
   shuffle(dataRdm: any): string {
     let currentIndex = dataRdm.length;
