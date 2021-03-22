@@ -6,8 +6,8 @@
       :description="alertDescription"
       :theme="alertTheme"
     />
-    <div class="relative my-0 mx-auto h-full max-w-lg bg-white p-8">
-      <div class="flex items-center mb-10">
+    <div class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10">
+      <div class="flex items-center mb-5">
         <svg
           width="44"
           height="44"
@@ -45,38 +45,38 @@
           <p class="text-xs">Relative Ranking System</p>
         </div>
       </div>
-      <div class="font-roboto md:pb-20 pb-5">
-        <h1 class="text-4xl font-black leading-tight text-primary mb-4">
+      <div class="font-roboto mb-10">
+        <h1
+          class="text-3xl md:text-4xl font-black leading-tight text-primary mb-2"
+        >
           Know Your Best<br />
           Be The Best
         </h1>
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
       <ComponentsRandomPict />
-      <div class="bottom-0 absolute w-full">
-        <div class="relative mr-16 ">
+      <div class="bottom-0 absolute left-0 right-0">
+        <div class="px-5 md:px-10 mb-2">
           <div
-            class="rounded-full py-5 px-5 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer"
+            class="rounded-full py-3 mb-2 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
             @click="handleClickLogin"
           >
-            <div class="flex items-center mx-auto justify-center">
-              <svg
-                class="mr-3"
-                width="22"
-                height="24"
-                viewBox="0 0 22 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M22 11.8969C22 18.5297 17.6316 23.25 11.1803 23.25C4.99508 23.25 0 18.0562 0 11.625C0 5.19375 4.99508 0 11.1803 0C14.1918 0 16.7254 1.14844 18.6775 3.04219L15.6344 6.08438C11.6537 2.09063 4.25123 5.09063 4.25123 11.625C4.25123 15.6797 7.36639 18.9656 11.1803 18.9656C15.6074 18.9656 17.2664 15.6656 17.5279 13.9547H11.1803V9.95625H21.8242C21.9279 10.5516 22 11.1234 22 11.8969Z"
-                  fill="white"
-                />
-              </svg>
-              <span class="font-bold">Sign in with Gmail</span>
-            </div>
+            <svg
+              class="mr-3"
+              width="22"
+              height="24"
+              viewBox="0 0 22 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22 11.8969C22 18.5297 17.6316 23.25 11.1803 23.25C4.99508 23.25 0 18.0562 0 11.625C0 5.19375 4.99508 0 11.1803 0C14.1918 0 16.7254 1.14844 18.6775 3.04219L15.6344 6.08438C11.6537 2.09063 4.25123 5.09063 4.25123 11.625C4.25123 15.6797 7.36639 18.9656 11.1803 18.9656C15.6074 18.9656 17.2664 15.6656 17.5279 13.9547H11.1803V9.95625H21.8242C21.9279 10.5516 22 11.1234 22 11.8969Z"
+                fill="white"
+              />
+            </svg>
+            <span class="font-bold">Sign in with Gmail</span>
           </div>
-          <p class="flex items-center mx-auto justify-center mt-3 mb-10">
+          <p class="flex items-center mx-auto justify-center">
             <span class="text-sm font-light text-primary pt-2 mr-2"
               >Product by</span
             >
@@ -93,55 +93,50 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { getModule } from "vuex-module-decorators";
-import CredentialModule from "~/store/credential";
-import Alert from "~/components/utilities/Alert.vue";
-import ComponentsRandomPict from "~/components/ComponentsRandomPict.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
+import CredentialModule from '~/store/credential';
+import Alert from '~/components/utilities/Alert.vue';
+import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
 
 @Component({
-  layout: "login",
-  components: { Alert, ComponentsRandomPict }
+  layout: 'login',
+  components: { Alert, ComponentsRandomPict },
 })
 export default class ClassLogin extends Vue {
-  email: string = "";
+  email: string = '';
 
-  title: string = "RRS";
+  title: string = 'RRS';
 
-  message: string = "Present by alterra";
+  message: string = 'Present by alterra';
 
   $gAuth: any;
 
   // alert
   alert: boolean = false;
 
-  alertTitle: string = "title";
+  alertTitle: string = 'title';
 
-  alertDescription: string = "description";
+  alertDescription: string = 'description';
 
-  alertTheme: string = "success";
+  alertTheme: string = 'success';
+
+  googleUser: any = '';
 
   async handleClickLogin() {
     try {
-      const googleUser = await this.$gAuth.signIn();
-      // console.log('googleUser', googleUser);
-      // console.log('getId', googleUser.getId());
-      // console.log('getBasicProfile', googleUser.getBasicProfile());
-      // console.log('getAuthResponse', googleUser.getAuthResponse());
-      // console.log(
-      //   'getAuthResponse',
-      //   this.$gAuth.GoogleAuth.currentUser.get().getAuthResponse(),
-      // );
-
-      const profile = googleUser.getBasicProfile();
+      this.googleUser = await this.$gAuth.signIn();
+      // console.log(this.googleUser);
+      const profile = this.googleUser.getBasicProfile();
       this.email = profile.nt;
+
       if (this.validateEmail()) {
         if (this.$gAuth.isAuthorized) {
           const CredentialInstance = getModule(CredentialModule, this.$store);
 
           // Do stuff with module
           await CredentialInstance.getToken(
-            googleUser.getAuthResponse().id_token
+            this.googleUser.getAuthResponse().id_token,
           );
 
           // If success redirect to dashboard
@@ -149,10 +144,10 @@ export default class ClassLogin extends Vue {
             // success
             this.loginStatus(true);
             // set localstorage
-            localStorage.setItem("token", CredentialInstance.token);
+            localStorage.setItem('token', CredentialInstance.token);
             // redirect . . .
             setTimeout(() => {
-              this.$router.push("/dashboard");
+              this.$router.push('/dashboard');
             }, 1000);
           }
         }
@@ -169,21 +164,21 @@ export default class ClassLogin extends Vue {
   }
 
   validateEmail() {
-    const validEmail = "alterra.id";
-    const domain = this.email.split("@");
-    return !!(typeof this.email !== "undefined" && domain[1] === validEmail);
+    const validEmail = 'alterra.id';
+    const domain = this.email.split('@');
+    return !!(typeof this.email !== 'undefined' && domain[1] === validEmail);
   }
 
   loginStatus(value: boolean): void {
     this.alert = true;
     if (value) {
-      this.alertTitle = "Your Login Success";
-      this.alertDescription = "Welcome";
-      this.alertTheme = "success";
+      this.alertTitle = 'Your Login Success';
+      this.alertDescription = 'Welcome';
+      this.alertTheme = 'success';
     } else {
-      this.alertTitle = "Your Login Failed";
-      this.alertDescription = "Try again using alterra email";
-      this.alertTheme = "danger";
+      this.alertTitle = 'Your Login Failed';
+      this.alertDescription = 'Try again using alterra email';
+      this.alertTheme = 'danger';
     }
   }
 }

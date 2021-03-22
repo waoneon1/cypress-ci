@@ -1,5 +1,8 @@
 <template>
-  <div class="font-mulish fixed w-full z-50" v-show="showAlert">
+  <div
+    class="font-mulish fixed max-w-md left-0 right-0 m-auto z-50"
+    v-show="showAlert"
+  >
     <div :class="`flex justify-between px-6 py-4 items-center bg-${theme}`">
       <div
         :class="
