@@ -143,14 +143,8 @@ export default class ClassLogin extends Vue {
 
   async handleClickLogin() {
     try {
-<<<<<<< HEAD
       const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
-=======
-      this.googleUser = await this.$gAuth.signIn();
-      // console.log(this.googleUser);
-      const profile = this.googleUser.getBasicProfile();
->>>>>>> 29b900bb00b51a6e24561ba96821bf09fc496a80
       this.email = profile.nt;
 
       if (this.validateEmail()) {
