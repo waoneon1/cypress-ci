@@ -8,10 +8,7 @@
           style="left: -60px;"
         />
         <div class="rounded-3xl shadow-lg md:p-12 p-6 inline-block">
-          <div 
-            v-for="(empl, index) in emplList"
-            :key="index"
-          >
+          <div v-for="(empl, index) in shuffle(emplList)" :key="index">
             <img :src="empl.src" :width="empl.width" :class="empl.class" />
           </div>
           <p class="font-medium text-sm text-primary w-full text-center">
@@ -29,49 +26,68 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 interface emplType {
-  src: string,
-  width: string,
-  class: string
+  src: string;
+  width: string;
+  class: string;
 }
 
 @Component
 export default class ComponentsRandomPict extends Vue {
-  emplList: emplType[] =
-  [
+  emplList: emplType[] = [
     {
-      src: '/img/img-01.png',
-      width: '75px',
-      class: 'ml-16'
+      src: "/img/img-01.png",
+      width: "75px",
+      class: "ml-16"
     },
     {
-      src: '/img/img-02.png',
-      width: '50px',
-      class: 'ml-1 -mt-5'
+      src: "/img/img-02.png",
+      width: "50px",
+      class: "ml-1 -mt-5"
     },
     {
-      src: '/img/img-03.png',
-      width: '40px',
-      class: 'ml-32 -mt-8'
+      src: "/img/img-03.png",
+      width: "40px",
+      class: "ml-32 -mt-8"
     },
     {
-      src: '/img/img-04.png',
-      width: '35px',
-      class: 'ml-12 -mt-3'
+      src: "/img/img-04.png",
+      width: "35px",
+      class: "ml-12 -mt-3"
     },
     {
-      src: '/img/img-05.png',
-      width: '35px',
-      class: 'ml-24 -mt-4'
+      src: "/img/img-05.png",
+      width: "35px",
+      class: "ml-24 -mt-4"
     },
     {
-      src: '/img/img-06.png',
-      width: '15px',
-      class: 'ml-20'
-    },
-  ]
+      src: "/img/img-06.png",
+      width: "15px",
+      class: "ml-20"
+    }
+  ];
+
+  shuffle(dataRdm: any): string {
+    var currentIndex = dataRdm.length,
+      temporaryValue,
+      randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = dataRdm[currentIndex];
+      dataRdm[currentIndex] = dataRdm[randomIndex];
+      dataRdm[randomIndex] = temporaryValue;
+    }
+
+    return dataRdm;
+  }
 }
 </script>
 
