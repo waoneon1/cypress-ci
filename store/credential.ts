@@ -20,7 +20,7 @@ export default class CredentialModule extends VuexModule {
     this.token = value;
   }
 
-  @Action
+  @Action({ rawError: true })
   async getToken(payload: string): Promise<void> {
     const token = await $axios.$post('/auth/login/google_oauth', {
       id_token: payload,
