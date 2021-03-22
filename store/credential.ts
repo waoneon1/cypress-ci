@@ -3,31 +3,44 @@ import {
 } from 'vuex-module-decorators';
 import { $axios } from '~/utils/api';
 
-// export interface CredentialInterface {
-//   token?: string;
-//   setToken: (value: string) => void;
-//   getToken: (payload: string) => Promise<void>;
-// }
-
+export interface credentialResponse {
+  responseCode: string,
+  message: string,
+  data: {
+    accessToken: string
+  }
+}
 @Module({ namespaced: true, name: 'credential' })
-// export default class CredentialModule extends VuexModule
-//   implements CredentialInterface {
 export default class CredentialModule extends VuexModule {
-  public token: string = '';
+  public dataCredential: credentialResponse = {
+    responseCode: '0000',
+    message: '',
+    data: {
+      accessToken: '',
+    },
+  }
 
   @Mutation
-  setToken(value: string): void {
-    this.token = value;
+  setToken(value: credentialResponse): void {
+    this.dataCredential = value;
   }
 
   @Action({ rawError: true })
   async getToken(payload: string): Promise<void> {
-    const token = await $axios.$post('/auth/login/google_oauth', {
+    const response = await $axios.$post('/auth/login/google_oauth', {
       id_token: payload,
     });
-    // console.log(token, 'from be');
-    // const dummy: any = JSON.parse('{"response_code" : "0000","message":"OK","data":{"access_token":"xxxxxx"}}');
-    // return token;
-    this.setToken(token);
+    const data: credentialResponse = {
+      responseCode: '0000',
+      message: '',
+      data: {
+        accessToken: '',
+      },
+    };
+
+    data.responseCode = response.response_code;
+    data.data.accessToken = response.data.access_token;
+
+    this.setToken(data);
   }
 }
