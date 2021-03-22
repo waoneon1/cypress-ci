@@ -1,4 +1,3 @@
-
 // import Vuex from 'vuex';
 // import { createLocalVue } from '@vue/test-utils';
 // import { getModule } from 'vuex-module-decorators';
@@ -30,7 +29,6 @@
 //  * The test case
 //  */
 // describe('Credential Store', () => {
-  
 
 //   it('setToken', () => {
 //     const service = credentialModule();

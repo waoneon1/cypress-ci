@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class ClassLogout extends Vue {
@@ -14,8 +14,8 @@ export default class ClassLogout extends Vue {
   }
 
   init() {
-    localStorage.removeItem("token");
-    this.$router.push("/");
+    localStorage.removeItem('token');
+    this.$router.push('/');
   }
 }
 </script>
