@@ -139,10 +139,18 @@ export default class ClassLogin extends Vue {
 
   alertTheme: string = 'success';
 
+  googleUser: any = '';
+
   async handleClickLogin() {
     try {
+<<<<<<< HEAD
       const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
+=======
+      this.googleUser = await this.$gAuth.signIn();
+      // console.log(this.googleUser);
+      const profile = this.googleUser.getBasicProfile();
+>>>>>>> 29b900bb00b51a6e24561ba96821bf09fc496a80
       this.email = profile.nt;
 
       if (this.validateEmail()) {
@@ -151,7 +159,7 @@ export default class ClassLogin extends Vue {
 
           // Do stuff with module
           await CredentialInstance.getToken(
-            googleUser.getAuthResponse().id_token,
+            this.googleUser.getAuthResponse().id_token,
           );
 
           // If success redirect to dashboard
