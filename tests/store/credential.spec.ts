@@ -29,6 +29,6 @@ describe('Credential Store', () => {
     //   isComplete: false
     // };
     service.setToken('123');
-    expect(service.token).toBe('123');
+    expect(service.dataCredential).toBe('123');
   });
 });
