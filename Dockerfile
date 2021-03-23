@@ -34,8 +34,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 STOPSIGNAL SIGQUIT
 
 # Change to port 8000
-ENV NGINX_PORT=3000
-EXPOSE 3000
+ENV NGINX_PORT=8000
+EXPOSE 8000
 
 
 # There are 2 different method how docker run our program
