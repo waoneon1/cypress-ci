@@ -1,0 +1,115 @@
+name: Build then Push to Docker Registry
+
+# Trigger on push to master or merge to master from PR
+on:
+  push:
+    branches: [ staging ]
+    
+# A workflow run is made up of one or more jobs that can run sequentially (with needs) or in parallel
+jobs:
+  # We use 2 jobs: continous-integrations and docker-build
+  # docker-build will run after continous-integrations success
+
+  continous-integrations:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Run your CI script before build docker image  
+      - name: Build and Test
+        run: # make install && \
+             # make test && \
+             # make coverage && \
+             # make cleanup \
+             echo "Simulate install, test and build"
+
+  docker-build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Make sure the code is tested before build docker
+    needs: continous-integrations
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+ 
+      # Create and gather metadata
+      - name: Get Repo metadata
+        id: repo
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const repo = await github.repos.get(context.repo)
+            return repo.data
+
+      - name: Prepare Version and Tag
+        id: prep
+        env:
+          ORGANIZATION: alterra.id # example 
+          APP_NAME: rrs-web # example 
+        run: |
+          set -e
+          VERSION=$(git describe --tags --abbrev=0) # will fail if never tagged
+          DOCKER_IMAGE=${ORGANIZATION}/${APP_NAME}
+          
+          if [[ ${GITHUB_REF#refs/heads/} == 'master' ]]; then # Check by branch name
+            TAGS=${DOCKER_IMAGE}:$VERSION
+            # e.g: sepulsa.com/chital:0.1.0
+          else # if not master, e.g: PR (if enabled in trigger)
+            TAGS=${DOCKER_IMAGE}:$VERSION-dev-${GITHUB_SHA::8}
+            # e.g: sepulsa.com/chital:0.1.0-dev-1234abcd
+          fi
+          
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          
+      # Deploy to docker registry
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to Docker Registry
+        # if: github.event_name == 'release'
+        uses: docker/login-action@v1 
+        with:
+          registry: ${{ secrets.GSA_KEY }}
+          username: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}
+          password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          # push: ${{ github.event_name == 'release' }} 
+          push: true
+          tags: ${{ secrets.GSA_KEY }}/${{ steps.prep.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          labels: |
+            org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
+            org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
+            org.opencontainers.image.url=${{ fromJson(steps.repo.outputs.result).html_url }}
+            org.opencontainers.image.source=${{ fromJson(steps.repo.outputs.result).clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
