@@ -1,8 +1,10 @@
 import {
-  Module, VuexModule, Mutation, Action,
+  Module, VuexModule, Mutation, Action, getModule,
 } from 'vuex-module-decorators';
-import { $axios } from '~/utils/api';
 import axios from 'axios';
+import Vuex from 'vuex';
+import Vue from 'vue';
+
 export interface credentialResponse {
   responseCode: string,
   message: string,
@@ -27,7 +29,7 @@ export default class CredentialModule extends VuexModule {
 
   @Action({ rawError: true })
   async getToken(payload: string): Promise<void> {
-    let response = await axios.post('https://rrs-api.sumpahpalapa.com/api/v1/auth/login/google_oauth', {
+    const response = await axios.post('https://rrs-api.sumpahpalapa.com/api/v1/auth/login/google_oauth', {
       id_token: payload,
     });
 
@@ -38,10 +40,17 @@ export default class CredentialModule extends VuexModule {
         accessToken: '',
       },
     };
-    //console.log(response);
     data.responseCode = response.data.response_code;
     data.data.accessToken = response.data.data.access_token;
 
     this.setToken(data);
   }
 }
+
+Vue.use(Vuex);
+const store = new Vuex.Store({
+  modules: {
+    credential: CredentialModule,
+  },
+});
+export const credentialModule = getModule(CredentialModule, store);

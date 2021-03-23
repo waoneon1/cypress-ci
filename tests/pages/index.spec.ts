@@ -3,21 +3,43 @@ import ClassLogin from '@/pages/index.vue';
 import {
   expect, it, describe, beforeEach,
 } from '@jest/globals';
-import { shallowMount, Wrapper } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { getModule } from 'vuex-module-decorators';
+import CredentialStore from '@/store/credential';
+import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils';
+import axios, { AxiosResponse } from 'axios';
 
 let wrapper: Wrapper<any>;
-const googleUser = {
-  getBasicProfile() {
-    return {
-      nt: 'dharmawan@alterra.id',
-    };
-  },
-  getAuthResponse() {
-    return {
-      id_token: 'fdlksjaflkdsjklfds',
-    };
-  },
+
+const Vue = createLocalVue();
+Vue.use(Vuex);
+
+const credentialModule: any = () => {
+  const store = new Vuex.Store({
+    modules: {
+      credential: CredentialStore,
+    },
+  });
+  return getModule(CredentialStore, store);
 };
+
+// Mock axios
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedResponse: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: {
+      access_token: 'dummy_akses_token',
+    },
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+mockedAxios.post.mockResolvedValue(mockedResponse);
 
 describe('Pages > index.vue', () => {
   beforeEach(() => {
@@ -66,6 +88,7 @@ describe('Pages > index.vue', () => {
 
   // mounting component
   it('Handle click login', async () => {
+    const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
       data() {
@@ -76,21 +99,24 @@ describe('Pages > index.vue', () => {
         };
       },
       mocks: {
+        $router: {
+          push: router,
+        },
         $gAuth: {
           signIn() {
             const signin = jest.fn();
             signin.mockReturnValue({
-              Aa: "113687123356909921492",
+              Aa: '113687123356909921492',
               Qs: {
-                EI: "https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg",
-                ER: "113687123356909921492",
-                Te: "Rizky Maulana",
-                kR: "Maulana",
-                oT: "Rizky",
-                zt: "rmaulana@alterra.id",
+                EI: 'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
+                ER: '113687123356909921492',
+                Te: 'Rizky Maulana',
+                kR: 'Maulana',
+                oT: 'Rizky',
+                zt: 'rmaulana@alterra.id',
               },
               tc: {
-                id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA"
+                id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
               },
             });
             return signin();
@@ -105,23 +131,14 @@ describe('Pages > index.vue', () => {
         },
       },
     });
+
     await wrapper.vm.handleClickLogin();
-    // const myMock = jest.fn();
-    // console.log(myMock());
-    // // > undefined
 
-    // myMock.mockReturnValueOnce(10).mockReturnValueOnce('x').mockReturnValue(true);
+    const service = credentialModule();
+    const token = 'token';
 
-    // console.log(myMock(), myMock(), myMock(), myMock());
-    // wrapper.setData({
-    //   googleUser,
-    // });
-
-    // expect(wrapper.emitted().handleClickLogin).toBeTruthy();
-    // wrapper.vm.email = 'dharmawan@alterra.id'
-    // wrapper.vm.validateEmail()
-
-    // expect(wrapper.vm.$gAuth.signIn()).toHaveBeenCalled();
+    await service.getToken(token);
+    expect(axios.post).toHaveBeenCalled();
   });
 
   test('async test', async () => {
