@@ -1,45 +1,66 @@
 
-// import Vuex from 'vuex';
-// import { createLocalVue } from '@vue/test-utils';
-// import { getModule } from 'vuex-module-decorators';
-// import { expect, it, describe } from '@jest/globals';
-// import CredentialStore from '@/store/credential';
-// // import { $axios } from '~/utils/api';
+import Vuex from 'vuex';
+import { createLocalVue } from '@vue/test-utils';
+import { getModule } from 'vuex-module-decorators';
+import { expect, it, describe } from '@jest/globals';
+import CredentialStore from '@/store/credential';
+import axios, { AxiosResponse } from "axios";
 
-// let mockAxiosResult: any;
-// jest.mock('', () => ({
-//   $post: jest.fn(() => Promise.resolve(mockAxiosResult)),
-// }));
+// import { $axios } from '~/utils/api';
 
-// // let action: any;
-// // const testedAction: any = (context = {}, payload = {}) => CredentialStore.actions[action].bind({$axios: axios})(context, payload);
+// let action: any;
+// const testedAction: any = (context = {}, payload = {}) => CredentialStore.actions[action].bind({$axios: axios})(context, payload);
 
-// const Vue = createLocalVue();
-// Vue.use(Vuex);
+const Vue = createLocalVue();
+Vue.use(Vuex);
 
-// const credentialModule: any = () => {
-//   const store = new Vuex.Store({
-//     modules: {
-//       credential: CredentialStore,
-//     },
-//   });
-//   return getModule(CredentialStore, store);
-// };
+const credentialModule: any = () => {
+  const store = new Vuex.Store({
+    modules: {
+      credential: CredentialStore,
+    },
+  });
+  return getModule(CredentialStore, store);
+};
 
-// /**
-//  * The test case
-//  */
-// describe('Credential Store', () => {
-  
+// Mock axios
+jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>
+const mockedResponse: AxiosResponse = {
+  data: {
+    response_code: '9999',
+    message: 'test success',
+    data: {
+      access_token: 'dummy_akses_token',  
+    },
+  },
+  status: 200,
+  statusText: "OK",
+  headers: {},
+  config: {},
+};
+mockedAxios.post.mockResolvedValue(mockedResponse);
+/**
+ * The test case
+ */
+describe('Credential Store', () => {
 
-//   it('setToken', () => {
-//     const service = credentialModule();
-//     service.setToken('123');
-//     expect(service.token).toBe('123');
-//   });
-//   it('getToken', async () => {
-//     const service = credentialModule();
-//     console.log(await service.getToken('123'));
-//     // expect(service.getToken('123'))
-//   })
-// });
+  it('Mutation - setToken', () => {
+    const service = credentialModule();
+    service.setToken('123');
+    expect(service.dataCredential).toBe('123');
+  });
+
+  it("Action - getToken", async () => {
+    const service = credentialModule();
+    const token = 'token'
+
+    expect(axios.post).not.toHaveBeenCalled()
+    const actual = await service.getToken(token)
+    expect(axios.post).toHaveBeenCalled()
+    
+    // expect(actual.data.responseCode).toBe('9999')
+    // expect(actual.data.data.accessToken).toBe('dummy_akses_token')
+  });
+
+});

@@ -2,7 +2,7 @@ import {
   Module, VuexModule, Mutation, Action,
 } from 'vuex-module-decorators';
 import { $axios } from '~/utils/api';
-
+import axios from 'axios';
 export interface credentialResponse {
   responseCode: string,
   message: string,
@@ -27,9 +27,10 @@ export default class CredentialModule extends VuexModule {
 
   @Action({ rawError: true })
   async getToken(payload: string): Promise<void> {
-    const response = await $axios.$post('/auth/login/google_oauth', {
+    let response = await axios.post('https://rrs-api.sumpahpalapa.com/api/v1/auth/login/google_oauth', {
       id_token: payload,
     });
+
     const data: credentialResponse = {
       responseCode: '0000',
       message: '',
@@ -37,9 +38,9 @@ export default class CredentialModule extends VuexModule {
         accessToken: '',
       },
     };
-
-    data.responseCode = response.response_code;
-    data.data.accessToken = response.data.access_token;
+    //console.log(response);
+    data.responseCode = response.data.response_code;
+    data.data.accessToken = response.data.data.access_token;
 
     this.setToken(data);
   }
