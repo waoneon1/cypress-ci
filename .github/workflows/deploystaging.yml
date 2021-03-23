@@ -103,15 +103,15 @@ jobs:
           platforms: linux/amd64
           # push: ${{ github.event_name == 'release' }}
           push: true
-          # tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
-          # cache-from: type=local,src=/tmp/.buildx-cache
-          # cache-to: type=local,dest=/tmp/.buildx-cache
-          # labels: |
-          #   org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
-          #   org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
-          #   org.opencontainers.image.url=${{ fromJson(steps.repo.outputs.result).html_url }}
-          #   org.opencontainers.image.source=${{ fromJson(steps.repo.outputs.result).clone_url }}
-          #   org.opencontainers.image.version=${{ steps.prep.outputs.version }}
-          #   org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-          #   org.opencontainers.image.revision=${{ github.sha }}
-          #   org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
+          tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          labels: |
+            org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
+            org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
+            org.opencontainers.image.url=${{ fromJson(steps.repo.outputs.result).html_url }}
+            org.opencontainers.image.source=${{ fromJson(steps.repo.outputs.result).clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
