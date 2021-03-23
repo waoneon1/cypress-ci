@@ -1,4 +1,4 @@
-name: Build then Push to Docker Registry
+name: Build then Push Dev to Docker Registry
 
 # Trigger on push to master or merge to master from PR
 on:
@@ -90,7 +90,7 @@ jobs:
         # if: github.event_name == 'release'
         uses: docker/login-action@v1
         with:
-          registry: ${{ secrets.GSA_KEY }}
+          registry: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}
           username: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}
           password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
 
@@ -103,7 +103,7 @@ jobs:
           platforms: linux/amd64
           # push: ${{ github.event_name == 'release' }}
           push: true
-          tags: ${{ secrets.GSA_KEY }}/${{ steps.prep.outputs.tags }}
+          tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
