@@ -52,4 +52,4 @@ EXPOSE 3000
 # we can use it to execute our program.
 
 # CMD ["nginx", "-g", "daemon off;"]
-CMD [ "npx", "nuxt", "start" ]
+CMD [ "npm", "nuxt", "start" ]
