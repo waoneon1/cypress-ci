@@ -51,5 +51,5 @@ EXPOSE 3000
 # CMD is the default param and can be replaced by docker params, even though
 # we can use it to execute our program.
 
-# CMD ["nginx", "-g", "daemon off;"]
-CMD [ "npm", "nuxt", "start" ]
+CMD ["nginx", "-g", "daemon off;"]
+# CMD [ "npm", "nuxt", "start" ]
