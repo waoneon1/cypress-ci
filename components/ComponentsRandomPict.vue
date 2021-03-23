@@ -63,7 +63,7 @@ export default class ComponentsRandomPict extends Vue {
     },
     {
       src: '/img/img-06.png',
-      width: '15px',
+      width: '20px',
       class: 'ml-20',
     },
   ];
