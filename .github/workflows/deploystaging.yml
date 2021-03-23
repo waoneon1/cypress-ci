@@ -53,8 +53,8 @@ jobs:
       - name: Prepare Version and Tag
         id: prep
         env:
-          ORGANIZATION: alterra.id # example
-          APP_NAME: rrs-web # example
+          ORGANIZATION: sepulsa # example
+          APP_NAME: relative-ranking-system # example
 
         # VERSION=$(git describe --tags --abbrev=0) # will fail if never tagged
         run: |
