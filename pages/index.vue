@@ -54,26 +54,7 @@
         </h1>
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
-      <div class="flex justify-center">
-        <div class="relative -ml-3">
-          <img
-            class="absolute top-0 mt-4 md:mt-8 -ml-16"
-            src="~/static/img/login_achive.png"
-          />
-          <div class="rounded-3xl shadow-lg p-3 md:p-10 inline-block">
-            <img src="~/static/img/login_image.png" />
-            <p
-              class="mt-2 font-medium text-xs md:text-sm text-primary w-full text-center"
-            >
-              Relative Ranking System
-            </p>
-          </div>
-          <img
-            class="absolute top-0 right-0 mt-16 -mr-20"
-            src="~/static/img/login_grap.png"
-          />
-        </div>
-      </div>
+      <ComponentsRandomPict />
       <div class="bottom-0 absolute left-0 right-0">
         <div class="px-5 md:px-10 mb-2">
           <div
@@ -116,10 +97,11 @@ import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import CredentialModule from '~/store/credential';
 import Alert from '~/components/utilities/Alert.vue';
+import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
 
 @Component({
   layout: 'login',
-  components: { Alert },
+  components: { Alert, ComponentsRandomPict },
 })
 export default class ClassLogin extends Vue {
   email: string = '';
@@ -144,25 +126,21 @@ export default class ClassLogin extends Vue {
   async handleClickLogin() {
     try {
       this.googleUser = await this.$gAuth.signIn();
-      // console.log(this.googleUser);
-      const profile = this.googleUser.getBasicProfile();
-      this.email = profile.nt;
-
+      const profile = this.googleUser.Qs;
+      this.email = profile.zt ? profile.zt : '';
       if (this.validateEmail()) {
         if (this.$gAuth.isAuthorized) {
           const CredentialInstance = getModule(CredentialModule, this.$store);
-
           // Do stuff with module
           await CredentialInstance.getToken(
-            this.googleUser.getAuthResponse().id_token,
+            this.googleUser.tc.id_token,
           );
-
           // If success redirect to dashboard
-          if (CredentialInstance.token) {
+          if (CredentialInstance.dataCredential.responseCode === '0000') {
             // success
             this.loginStatus(true);
             // set localstorage
-            localStorage.setItem('token', CredentialInstance.token);
+            localStorage.setItem('token', CredentialInstance.dataCredential.data.accessToken);
             // redirect . . .
             setTimeout(() => {
               this.$router.push('/dashboard');
