@@ -1,7 +1,7 @@
 // import { shallowMount } from 'ts-jest/utils';
 import ComponentsRandomPict from '@/components/ComponentsRandomPict.vue';
 import { expect, it, describe } from '@jest/globals';
-import { shallowMount, Wrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 const wrapper: any = shallowMount(ComponentsRandomPict);
 
