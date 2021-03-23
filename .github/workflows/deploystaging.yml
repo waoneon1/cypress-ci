@@ -105,7 +105,7 @@ jobs:
           platforms: linux/amd64
           # push: ${{ github.event_name == 'release' }}
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.version }}
+          tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
