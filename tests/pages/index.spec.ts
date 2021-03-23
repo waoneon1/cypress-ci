@@ -3,21 +3,43 @@ import ClassLogin from '@/pages/index.vue';
 import {
   expect, it, describe, beforeEach,
 } from '@jest/globals';
-import { shallowMount, Wrapper } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { getModule } from 'vuex-module-decorators';
+import CredentialStore from '@/store/credential';
+import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils';
+import axios, { AxiosResponse } from 'axios';
 
 let wrapper: Wrapper<any>;
-// const googleUser = {
-//   getBasicProfile() {
-//     return {
-//       nt: 'dharmawan@alterra.id',
-//     };
-//   },
-//   getAuthResponse() {
-//     return {
-//       id_token: 'fdlksjaflkdsjklfds',
-//     };
-//   },
-// };
+
+const Vue = createLocalVue();
+Vue.use(Vuex);
+
+const credentialModule: any = () => {
+  const store = new Vuex.Store({
+    modules: {
+      credential: CredentialStore,
+    },
+  });
+  return getModule(CredentialStore, store);
+};
+
+// Mock axios
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedResponse: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: {
+      access_token: 'dummy_akses_token',
+    },
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+mockedAxios.post.mockResolvedValue(mockedResponse);
 
 describe('Pages > index.vue', () => {
   beforeEach(() => {
@@ -66,6 +88,7 @@ describe('Pages > index.vue', () => {
 
   // mounting component
   it('Handle click login', async () => {
+    const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
       data() {
@@ -76,6 +99,9 @@ describe('Pages > index.vue', () => {
         };
       },
       mocks: {
+        $router: {
+          push: router,
+        },
         $gAuth: {
           signIn() {
             const signin = jest.fn();
@@ -107,23 +133,14 @@ describe('Pages > index.vue', () => {
         },
       },
     });
+
     await wrapper.vm.handleClickLogin();
-    // const myMock = jest.fn();
-    // console.log(myMock());
-    // // > undefined
 
-    // myMock.mockReturnValueOnce(10).mockReturnValueOnce('x').mockReturnValue(true);
+    const service = credentialModule();
+    const token = 'token';
 
-    // console.log(myMock(), myMock(), myMock(), myMock());
-    // wrapper.setData({
-    //   googleUser,
-    // });
-
-    // expect(wrapper.emitted().handleClickLogin).toBeTruthy();
-    // wrapper.vm.email = 'dharmawan@alterra.id'
-    // wrapper.vm.validateEmail()
-
-    // expect(wrapper.vm.$gAuth.signIn()).toHaveBeenCalled();
+    await service.getToken(token);
+    expect(axios.post).toHaveBeenCalled();
   });
 
   test('async test', async () => {

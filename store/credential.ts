@@ -1,7 +1,13 @@
 import {
-  Module, VuexModule, Mutation, Action,
+  Module,
+  VuexModule,
+  Mutation,
+  Action,
+  getModule,
 } from 'vuex-module-decorators';
 import axios from 'axios';
+import Vuex from 'vuex';
+import Vue from 'vue';
 
 export interface credentialResponse {
   responseCode: string;
@@ -41,10 +47,17 @@ export default class CredentialModule extends VuexModule {
         accessToken: '',
       },
     };
-    // console.log(response);
     data.responseCode = response.data.response_code;
     data.data.accessToken = response.data.data.access_token;
 
     this.setToken(data);
   }
 }
+
+Vue.use(Vuex);
+const store = new Vuex.Store({
+  modules: {
+    credential: CredentialModule,
+  },
+});
+export const credentialModule = getModule(CredentialModule, store);
