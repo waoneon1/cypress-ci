@@ -1,4 +1,4 @@
-name: Build then Push to Docker Registry
+name: Build then Push to Staging
 
 # Trigger on push to master or merge to master from PR
 on:
