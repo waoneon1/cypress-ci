@@ -1,0 +1,50 @@
+<template>
+  <div class="bg-gray-100 h-screen overflow-x-hidden">
+    <Alert
+      v-show="alert"
+      title="Your Login Success"
+      description="Welcome"
+      theme="success"
+    />
+    <div
+      class="my-0 mx-auto min-h-screen flex justify-center items-center text-center"
+    >
+      <div>
+        <div class="mb-10">
+          <h1 class="text-primary text-5xl font-bold">
+            {{ title }}
+          </h1>
+          <p class="text-lg">{{ message }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import Alert from '~/components/utilities/Alert.vue';
+
+@Component({
+  components: { Alert },
+})
+export default class ClassDashboard extends Vue {
+  title: string = 'RRS Dashboard';
+
+  message: string = 'Content here';
+
+  alert: boolean = false;
+
+  init() {
+    if (typeof this.$route !== 'undefined' && this.$route.query.success === '1') {
+      this.alert = true;
+    }
+  }
+
+  mounted() {
+    this.init();
+  }
+}
+</script>
+
+<style></style>
