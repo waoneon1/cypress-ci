@@ -1,12 +1,13 @@
 <template>
-  <div class="my-0 mx-auto min-h-screen flex justify-center items-center text-center">
-  </div>
+  <div
+    class="my-0 mx-auto min-h-screen flex justify-center items-center text-center"
+  ></div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-  @Component
+@Component
 export default class ClassLogout extends Vue {
   mounted() {
     this.init();
@@ -19,5 +20,4 @@ export default class ClassLogout extends Vue {
 }
 </script>
 
-<style>
-</style>
+<style></style>
