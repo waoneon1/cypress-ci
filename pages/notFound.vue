@@ -30,10 +30,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
-  layout: "login"
+  layout: 'login',
 })
 export default class NotFound extends Vue {}
 </script>
