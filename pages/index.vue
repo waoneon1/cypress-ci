@@ -146,7 +146,7 @@ export default class ClassLogin extends Vue {
       const profile = this.googleUser.Qs;
       this.email = profile.zt ? profile.zt : profile.nt;
       if (this.validateEmail()) {
-        if (this.$gAuth.isAuthorized) {
+        if (await this.$gAuth.isAuthorized) {
           // Do stuff with module
           await credentialModule.getToken(
             this.googleUser.tc.id_token,
@@ -158,8 +158,12 @@ export default class ClassLogin extends Vue {
             // set localstorage
             localStorage.setItem('token', credentialModule.dataCredential.data.accessToken);
             // redirect . . .
-            this.$router.push('/dashboard');
+            this.$router.push('/dashboard?success=1');
+          } else {
+            this.loginStatus(false);
           }
+        } else {
+          this.loginStatus(false);
         }
       } else {
         // fail
