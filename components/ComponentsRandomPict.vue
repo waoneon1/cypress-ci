@@ -70,7 +70,9 @@ export default class ComponentsRandomPict extends Vue {
 
   dataShuffle = [0, 1, 2, 3, 4, 5];
 
-  shuffleImg(dataRdm: any): string {
+  shuffleImg = (dataEmpl: any) => {
+    const dataRdm = dataEmpl;
+
     let currentIndex = dataRdm.length;
     let temporaryValue;
     let randomIndex;
