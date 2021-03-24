@@ -1,4 +1,4 @@
-# affro
+# RRS | Relative Ranking System
 
 ## Build Setup
 
