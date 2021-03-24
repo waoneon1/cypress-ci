@@ -11,7 +11,7 @@ import { Vue, Component } from 'vue-property-decorator';
   middleware: 'authenticated',
 })
 
-export default class Default extends Vue {}
+export default class LayoutDefault extends Vue {}
 </script>
 
 <style scoped></style>

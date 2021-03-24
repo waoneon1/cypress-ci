@@ -35,7 +35,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component({
   layout: 'error',
 })
-export default class NotFound extends Vue {
+export default class LayoutError extends Vue {
   @Prop() readonly error!: string
 }
 </script>
