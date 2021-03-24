@@ -8,7 +8,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
-  // middleware: 'maintenance',
+  middleware: 'maintenance',
 })
 
 export default class LayoutLogin extends Vue {}

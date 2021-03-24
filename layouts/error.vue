@@ -18,7 +18,7 @@
             the link incorrectly.
           </p>
 
-          <a href="dashboard"
+          <a href="/"
             class="mt-6 rounded-full py-3 px-8 mb-2 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
           >
             <span class="font-bold text-sm">Go Back</span>
