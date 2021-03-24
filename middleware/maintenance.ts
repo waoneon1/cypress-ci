@@ -1,13 +1,12 @@
-// import { Middleware } from '@nuxt/types';
+import { Middleware } from '@nuxt/types';
 
-// const maintenance: Middleware = ({ redirect, route }) => {
-//   const isMaintenance = true;
-//   if (isMaintenance) {
-//     redirect('/maintenance');
-//   }
-//   if (!isMaintenance && route.path === '/maintenance') {
-//     redirect('/');
-//   }
-// };
+const maintenance: Middleware = ({ redirect, error, route }) => {
+  const isMaintenance: boolean = true;
+  if (isMaintenance) {
+    redirect('/maintenance');
+  } else if (!error || route.path === '/maintenance') {
+    redirect('/');
+  }
+};
 
-// export default maintenance;
+export default maintenance;

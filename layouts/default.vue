@@ -5,11 +5,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from 'vue-property-decorator';
 
-export default Vue.extend({
+@Component({
   middleware: 'authenticated',
-});
+})
+
+export default class Default extends Vue {}
 </script>
 
 <style scoped></style>
