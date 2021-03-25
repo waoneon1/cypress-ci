@@ -1,5 +1,5 @@
 <template>
-  <div class="error-404 bg-gray-100 h-screen overflow-x-hidden ">
+  <div class="bg-gray-100 h-screen overflow-x-hidden ">
     <div
       class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10 flex items-center justify-center"
     >
@@ -12,7 +12,7 @@
             Page Not Found
           </p>
           <p
-            class="mt-2 font-light text-xs md:text-sm text-gray-300 w-full text-center"
+            class="mt-2 font-light text-xs md:text-sm text-gray-500 w-full text-center"
           >
             The page is missing or you assembled<br />
             the link incorrectly.
@@ -30,14 +30,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
-  name: 'error-404',
   layout: 'login',
 })
 export default class Class404 extends Vue {
-  @Prop({ type: Object, default: () => {} }) readonly error!: string
 }
 </script>
 

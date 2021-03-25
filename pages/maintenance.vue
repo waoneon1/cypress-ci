@@ -10,7 +10,7 @@
             Under Maintenance
           </p>
           <p
-            class="mt-2 font-light text-xs md:text-sm text-gray-300 w-full text-center"
+            class="mt-2 font-light text-xs md:text-sm text-gray-500 w-full text-center"
           >
             The page you’re looking for is currently<br />
             under maintenance and will be back soon
