@@ -133,4 +133,4 @@ jobs:
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          kubectl -n ${{ secrets.APP_K8S_NAMESPACE_STAGING }} set image deployment/${{ secrets.APP_K8S_DEPLOYMENT_NAME }} ${{ secrets.APP_K8S_CONTAINER_NAME }}=${{ needs.docker-build.outputs.tags }}
+          kubectl -n ${{ secrets.APP_K8S_NAMESPACE_STAGING }} set image deployment/${{ secrets.APP_K8S_DEPLOYMENT_NAME }} ${{ secrets.APP_K8S_CONTAINER_NAME }}=sepulsa/relative-ranking-system:rrs-web-v0.1.0
