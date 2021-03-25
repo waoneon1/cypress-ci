@@ -1,14 +1,14 @@
 {
-  "name": "rrs",
+  "name": "rrs-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run clean && nuxt-ts",
-    "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
+    "dev": "npm run clean && nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
     "lint": "eslint --ext .js,.vue,.ts .",
     "lintfix": "eslint --fix --ext .js,.vue,.ts .",
-    "generate": "nuxt-ts generate",
+    "generate": "nuxt generate",
     "clean": "shx rm -rf dist/ coverage/",
     "test": "npm run clean && jest"
   },

@@ -94,8 +94,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { getModule } from 'vuex-module-decorators';
-import CredentialModule from '~/store/credential';
+import { credentialModule } from '@/store/credential';
 import Alert from '~/components/utilities/Alert.vue';
 import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
 
@@ -127,25 +126,26 @@ export default class ClassLogin extends Vue {
     try {
       this.googleUser = await this.$gAuth.signIn();
       const profile = this.googleUser.Qs;
-      this.email = profile.zt ? profile.zt : '';
+      this.email = profile.zt ? profile.zt : profile.nt;
       if (this.validateEmail()) {
-        if (this.$gAuth.isAuthorized) {
-          const CredentialInstance = getModule(CredentialModule, this.$store);
+        if (await this.$gAuth.isAuthorized) {
           // Do stuff with module
-          await CredentialInstance.getToken(
+          await credentialModule.getToken(
             this.googleUser.tc.id_token,
           );
           // If success redirect to dashboard
-          if (CredentialInstance.dataCredential.responseCode === '0000') {
+          if (credentialModule.dataCredential.responseCode === '0000') {
             // success
             this.loginStatus(true);
             // set localstorage
-            localStorage.setItem('token', CredentialInstance.dataCredential.data.accessToken);
+            localStorage.setItem('token', credentialModule.dataCredential.data.accessToken);
             // redirect . . .
-            setTimeout(() => {
-              this.$router.push('/dashboard');
-            }, 1000);
+            this.$router.push('/dashboard?success=1');
+          } else {
+            this.loginStatus(false);
           }
+        } else {
+          this.loginStatus(false);
         }
       } else {
         // fail
