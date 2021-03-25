@@ -96,7 +96,8 @@ jobs:
           # push: ${{ github.event_name == 'release' }}
           push: true
           # tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
-          tags: ${{ steps.prep.outputs.tags }}
+          #tags: ${{ steps.prep.outputs.tags }}
+          tags: sepulsa/relative-ranking-system:rrs-web-${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
@@ -133,4 +134,4 @@ jobs:
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          kubectl -n ${{ secrets.APP_K8S_NAMESPACE_STAGING }} set image deployment/${{ secrets.APP_K8S_DEPLOYMENT_NAME }} ${{ secrets.APP_K8S_CONTAINER_NAME }}=sepulsa/relative-ranking-system:rrs-web-v0.1.0
+          kubectl -n ${{ secrets.APP_K8S_NAMESPACE_STAGING }} set image deployment/${{ secrets.APP_K8S_DEPLOYMENT_NAME }} ${{ secrets.APP_K8S_CONTAINER_NAME }}=sepulsa/relative-ranking-system:rrs-web-${{ github.sha }}
