@@ -12,7 +12,7 @@
             Page Not Found
           </p>
           <p
-            class="mt-2 font-light text-xs md:text-sm text-gray-300 w-full text-center"
+            class="mt-2 font-light text-xs md:text-sm text-gray-400 w-full text-center"
           >
             The page is missing or you assembled<br />
             the link incorrectly.

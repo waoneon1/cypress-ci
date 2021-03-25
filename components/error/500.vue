@@ -12,7 +12,7 @@
             Opps, something went wrong
           </p>
           <p
-            class="mt-2 font-light text-xs md:text-sm text-gray-500 w-full text-center"
+            class="mt-2 font-light text-xs md:text-sm text-gray-400 w-full text-center"
           >
             Server Error 500. We apologise and are fixing the problem.
             Please try again at a later stage.
