@@ -14,10 +14,11 @@ import error500 from '~/components/error/500.vue';
   layout: 'error',
 })
 export default class LayoutError extends Vue {
-  @Prop({ type: Object, default: () => {} }) readonly error!: string
+  @Prop({ type: Object, default: () => {} }) readonly error!: any
 
-  statusCode: string = '';
+  // statusCode: string = '';
 
+  // computed
   get errorPage() {
     if (this.error.statusCode === 404) {
       return error404;
