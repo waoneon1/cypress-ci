@@ -32,12 +32,16 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
+interface errorType {
+  statusCode: number;
+}
+
 @Component({
   name: 'error-404',
   layout: 'login',
 })
 export default class Class404 extends Vue {
-  @Prop({ type: Object, default: () => {} }) readonly error!: string
+  @Prop({ type: Object, default: () => {} }) readonly error!: errorType
 }
 </script>
 
