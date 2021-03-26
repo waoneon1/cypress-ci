@@ -3,10 +3,13 @@
     class="font-mulish fixed max-w-md left-0 right-0 m-auto z-50"
     v-show="showAlert"
   >
-    <div :class="`flex justify-between px-6 py-4 items-center bg-${theme}`">
+    <div
+      class="flex justify-between px-6 py-4 items-center"
+      :class="theme == 'success' ? 'bg-success' : 'bg-danger'"
+    >
       <div
         :class="
-          `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer text-${theme}`
+          `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`
         "
       >
         <img
@@ -23,7 +26,7 @@
       <div
         @click="showAlert = false"
         :class="
-          `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer text-${theme}`
+          `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`
         "
       >
         <img src="~/static/img/svg/cross.svg" alt="" />
