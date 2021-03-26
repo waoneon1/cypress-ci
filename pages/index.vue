@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 h-screen overflow-x-hidden">
+  <div class="bg-gray-100 md:h-screen overflow-x-hidden">
     <Alert
       v-show="alert"
       :title="alertTitle"
@@ -45,7 +45,7 @@
           <p class="text-xs">Relative Ranking System</p>
         </div>
       </div>
-      <div class="font-roboto mb-10">
+      <div class="font-roboto mb-12">
         <h1
           class="text-3xl md:text-4xl font-black leading-tight text-primary mb-2"
         >
@@ -55,10 +55,10 @@
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
       <ComponentsRandomPict />
-      <div class="bottom-0 absolute left-0 right-0">
-        <div class="px-5 md:px-10 mb-2">
+      <div class="fixed bottom-0 left-0 right-0">
+        <div class="mx-auto max-w-md bg-white pb-2 px-5 md:px-10">
           <div
-            class="rounded-full py-3 mb-2 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
+            class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
             @click="handleClickLogin"
           >
             <svg
@@ -130,15 +130,16 @@ export default class ClassLogin extends Vue {
       if (this.validateEmail()) {
         if (await this.$gAuth.isAuthorized) {
           // Do stuff with module
-          await credentialModule.getToken(
-            this.googleUser.tc.id_token,
-          );
+          await credentialModule.getToken(this.googleUser.tc.id_token);
           // If success redirect to dashboard
           if (credentialModule.dataCredential.responseCode === '0000') {
             // success
             this.loginStatus(true);
             // set localstorage
-            localStorage.setItem('token', credentialModule.dataCredential.data.accessToken);
+            localStorage.setItem(
+              'token',
+              credentialModule.dataCredential.data.accessToken,
+            );
             // redirect . . .
             this.$router.push('/dashboard?success=1');
           } else {

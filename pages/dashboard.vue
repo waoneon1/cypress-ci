@@ -7,15 +7,13 @@
       theme="success"
     />
     <div
-      class="my-0 mx-auto min-h-screen flex justify-center items-center text-center"
+      class="relative bg-white mx-auto max-w-md min-h-screen flex justify-center items-center text-center"
     >
       <div>
-        <div class="mb-10">
-          <h1 class="text-primary text-5xl font-bold">
-            {{ title }}
-          </h1>
-          <p class="text-lg">{{ message }}</p>
-        </div>
+        <h1 class="text-primary text-5xl font-bold">
+          {{ title }}
+        </h1>
+        <p class="text-lg">{{ message }}</p>
       </div>
     </div>
   </div>
@@ -36,7 +34,10 @@ export default class ClassDashboard extends Vue {
   alert: boolean = false;
 
   init() {
-    if (typeof this.$route !== 'undefined' && this.$route.query.success === '1') {
+    if (
+      typeof this.$route !== 'undefined'
+      && this.$route.query.success === '1'
+    ) {
       this.alert = true;
     }
   }
