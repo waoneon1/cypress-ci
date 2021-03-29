@@ -9,7 +9,7 @@ describe('layout > Error.vue', () => {
   beforeEach(() => {
     wrapper = shallowMount(Error, {
       propsData: {
-        error: '404',
+        error: 'error404',
       },
     });
   });

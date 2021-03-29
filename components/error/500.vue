@@ -24,14 +24,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
   name: 'error-500',
   layout: 'login',
 })
 export default class Class500 extends Vue {
-  @Prop({ type: Object, default: () => {} }) readonly error!: string
 }
 </script>
 

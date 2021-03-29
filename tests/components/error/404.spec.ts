@@ -1,18 +1,10 @@
-// import { shallowMount } from 'ts-jest/utils';
 import Error404 from '@/components/error/404.vue';
 import { expect, it, describe } from '@jest/globals';
-import { shallowMount, Wrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
-let wrapper: Wrapper<any>;
+const wrapper: any = shallowMount(Error404);
 
-describe('layout > Error.vue', () => {
-  beforeEach(() => {
-    wrapper = shallowMount(Error404, {
-      propsData: {
-        error
-      },
-    });
-  });
+describe('components > Error404.vue', () => {
   // mounting component
   it('berhasil mounting komponen', () => {
     expect(wrapper.vm).toBeTruthy();
