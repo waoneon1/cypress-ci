@@ -93,34 +93,34 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { credentialModule } from '@/store/credential';
-import Alert from '~/components/utilities/Alert.vue';
-import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
+import { Vue, Component } from "vue-property-decorator";
+import { credentialModule } from "@/store/credential";
+import Alert from "~/components/utilities/Alert.vue";
+import ComponentsRandomPict from "~/components/ComponentsRandomPict.vue";
 
 @Component({
-  layout: 'login',
-  components: { Alert, ComponentsRandomPict },
+  layout: "login",
+  components: { Alert, ComponentsRandomPict }
 })
 export default class ClassLogin extends Vue {
-  email: string = '';
+  email: string = "";
 
-  title: string = 'RRS';
+  title: string = "RRS";
 
-  message: string = 'Present by alterra';
+  message: string = "Present by alterra";
 
   $gAuth: any;
 
   // alert
   alert: boolean = false;
 
-  alertTitle: string = 'title';
+  alertTitle: string = "title";
 
-  alertDescription: string = 'description';
+  alertDescription: string = "description";
 
-  alertTheme: string = 'success';
+  alertTheme: string = "success";
 
-  googleUser: any = '';
+  googleUser: any = "";
 
   async handleClickLogin() {
     try {
@@ -132,16 +132,16 @@ export default class ClassLogin extends Vue {
           // Do stuff with module
           await credentialModule.getToken(this.googleUser.tc.id_token);
           // If success redirect to dashboard
-          if (credentialModule.dataCredential.responseCode === '0000') {
+          if (credentialModule.dataCredential.responseCode === "0000") {
             // success
             this.loginStatus(true);
             // set localstorage
             localStorage.setItem(
-              'token',
-              credentialModule.dataCredential.data.accessToken,
+              "token",
+              credentialModule.dataCredential.data.accessToken
             );
             // redirect . . .
-            this.$router.push('/dashboard?success=1');
+            this.$router.push("/dashboard?success=1");
           } else {
             this.loginStatus(false);
           }
@@ -161,21 +161,21 @@ export default class ClassLogin extends Vue {
   }
 
   validateEmail() {
-    const validEmail = 'alterra.id';
-    const domain = this.email.split('@');
-    return !!(typeof this.email !== 'undefined' && domain[1] === validEmail);
+    const validEmail = "alterra.id";
+    const domain = this.email.split("@");
+    return !!(typeof this.email !== "undefined" && domain[1] === validEmail);
   }
 
   loginStatus(value: boolean): void {
     this.alert = true;
     if (value) {
-      this.alertTitle = 'Your Login Success';
-      this.alertDescription = 'Welcome';
-      this.alertTheme = 'success';
+      this.alertTitle = "Your Login Success";
+      this.alertDescription = "Welcome";
+      this.alertTheme = "success";
     } else {
-      this.alertTitle = 'Your Login Failed';
-      this.alertDescription = 'Try again using alterra email';
-      this.alertTheme = 'danger';
+      this.alertTitle = "Your Login Failed";
+      this.alertDescription = "Try again using alterra email";
+      this.alertTheme = "danger";
     }
   }
 }
