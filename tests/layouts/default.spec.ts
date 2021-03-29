@@ -1,10 +1,16 @@
 import Default from '@/layouts/default.vue';
 import { expect, it, describe } from '@jest/globals';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, Wrapper } from '@vue/test-utils';
 
-const wrapper: any = shallowMount(Default);
+let wrapper: Wrapper<any>;
 
 describe('layout > Default.vue', () => {
+  beforeEach(() => {
+    wrapper = shallowMount(Default, {
+      stubs: ['Nuxt'],
+    });
+  });
+  // mounting component
   it('berhasil mounting komponen', () => {
     expect(wrapper.vm).toBeTruthy();
   });
