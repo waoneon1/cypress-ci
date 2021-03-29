@@ -20,23 +20,23 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import Alert from "~/components/utilities/Alert.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import Alert from '~/components/utilities/Alert.vue';
 
 @Component({
-  components: { Alert }
+  components: { Alert },
 })
 export default class ClassDashboard extends Vue {
-  title: string = "RRS Dashboard";
+  title: string = 'RRS Dashboard';
 
-  message: string = "Content here";
+  message: string = 'Content here';
 
   alert: boolean = false;
 
   init() {
     if (
-      typeof this.$route !== "undefined" &&
-      this.$route.query.success === "1"
+      typeof this.$route !== 'undefined'
+      && this.$route.query.success === '1'
     ) {
       this.alert = true;
     }
