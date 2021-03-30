@@ -3,9 +3,12 @@
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-7 font-secondary pb-28"
     >
+      <!-- TODO: Q ? yg dikirim kebackend per next / per page (10 page) -->
+      <!-- TODO: Q ? snakecase to camelcase -->
       <!-- TODO: Delete this setelah integrasi ke BE -->
-      <!-- {{ allSelectedAnswer }}
-      {{ selectedAnswer }} -->
+      {{ answers }}
+      {{ selectedAnswer }}
+      <!-- {{ answersObject }} -->
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
         <svg class="fill-current text-red-500 absolute left-0 w-5 h-5" viewBox="0 0 8 12" fill="none">
@@ -32,12 +35,12 @@
         <p class="text-xs text-gray-300 mb-5">Select 3 recommended Alterrans</p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-6">
           <div
-            v-for="(item, i) in answers()" :key="i"
-            @click="answerAdd(item.id)"
+            v-for="(item, i) in answersObject" :key="i"
+            @click="answerAdd(item.email)"
           >
-            <div :class="`${selectedAnswerClass(item.id)} rounded-xl overflow-hidden cursor-pointer hover:opacity-50`">
+            <div :class="`${selectedAnswerClass(item.email)} rounded-xl overflow-hidden cursor-pointer hover:opacity-50`">
               <div class="bg-gray-50 flex justify-center pt-4">
-                <img class="" src="~/static/img/img-01.png" />
+                <img class="" src="~/static/img/img-01.png" alt=""/>
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-2">
                 <small class="text-primary">{{ item.name }}</small>
@@ -58,7 +61,7 @@
                   v-for="(item, i) in selectedAnswer" :key="i"
                   @click="answerAdd(item)"
                 >
-                  <img :class="`w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`" src="~/static/img/img-01.png" />
+                  <img :class="`w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`" src="~/static/img/img-01.png" alt=""/>
                 </div>
               </div>
             </div>
@@ -79,14 +82,46 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { qnaModule } from '@/store/qna';
+
+export interface QnaResponseData {
+  criteria_id?: string,
+  criteria_name?: string,
+  employee_name_x?: string,
+  employee_name_y?: string,
+  employee_email_x?: string,
+  employee_email_y?: string,
+  employee_image_url_x?: string,
+  employee_image_url_y?: string
+}
+export interface QnaResponse {
+  response_code: string,
+  message: string,
+  data: QnaResponseData[]
+}
+export interface QnaSubmit {
+  criteria_id?: string | undefined,
+  selected_employee_email?: string | undefined,
+  employee_email_x?: string | undefined,
+  employee_email_y?: string | undefined,
+}
 
 @Component({})
 export default class ClassDashboard extends Vue {
   domain: string = ''
 
-  selectedAnswer: number[] = []
+  domainId: string = ''
 
-  allSelectedAnswer: number[][] = []
+  employees: QnaResponseData[] = []
+
+  // data answer
+  selectedAnswer: string[] = []
+
+  allSelectedAnswer: string[][] = []
+
+  answers: string[] = []
+
+  answersObject: {name?: string, email?: string }[] = []
 
   maxSelectedAnswer = 3
 
@@ -97,19 +132,62 @@ export default class ClassDashboard extends Vue {
 
   currentPages: number = 1
 
-  answers = () => [
-    { id: 1, img: 'img', name: 'Ekky' },
-    { id: 2, img: 'img', name: 'Wawan' },
-    { id: 3, img: 'img', name: 'Rizky' },
-    { id: 4, img: 'img', name: 'Alan' },
-    { id: 5, img: 'img', name: 'Agus' },
-    { id: 6, img: 'img', name: 'Linggar' },
-    { id: 7, img: 'img', name: 'Herman' },
-    { id: 8, img: 'img', name: 'Kevin' },
-    { id: 9, img: 'img', name: 'Doni' },
-  ]
+  getUniqueEmployees() {
+    // buat array unique employee
+    this.employees.forEach((e) => {
+      // check employee x
+      if (typeof e.employee_email_x !== 'undefined') {
+        if (!this.answers.includes(e.employee_email_x)) {
+          // add data
+          this.answers.push(e.employee_email_x);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_x,
+            email: e.employee_email_x,
+          });
+        }
+      }
+      // check employee y
+      if (typeof e.employee_email_y !== 'undefined') {
+        if (!this.answers.includes(e.employee_email_y)) {
+          // add data
+          this.answers.push(e.employee_email_y);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_y,
+            email: e.employee_email_y,
+          });
+        }
+      }
+    });
+    // cek jika belum mendapatkan 9 unique employee
+    if (this.answers.length < 9) {
+      // TODO: Tanya ke Backend > saat tembak data lagi apakah dapat data yang beda?
+    } else {
+      this.answers = this.answers.slice(0, 9);
+      this.answersObject = this.answersObject.slice(0, 9);
+    }
+  }
+
+  prepareSubmit(): QnaSubmit[] {
+    const data: QnaSubmit[] = [];
+    this.selectedAnswer.forEach((email_x) => {
+      this.answers.forEach((email_y) => {
+        if (!this.selectedAnswer.includes(email_y)) {
+          data.push({
+            criteria_id: this.domainId,
+            selected_employee_email: email_x,
+            employee_email_x: email_x,
+            employee_email_y: email_y,
+          });
+        }
+      });
+    });
+    return data;
+  }
 
   nextPage(): void {
+    // console.log(this.prepareSubmit());
     this.allSelectedAnswer.push(this.selectedAnswer);
     this.selectedAnswer = [];
     if (this.currentPages !== this.pages) {
@@ -135,23 +213,31 @@ export default class ClassDashboard extends Vue {
     return q[this.currentPages - 1] ? q[this.currentPages - 1] : '- no content -';
   }
 
-  selectedAnswerClass(id: number): string {
-    return this.selectedAnswer.includes(id) ? 'opacity-30 shadow-md' : 'shadow-lg';
+  selectedAnswerClass(email: string): string {
+    return this.selectedAnswer.includes(email) ? 'opacity-30 shadow-md' : 'shadow-lg';
   }
 
-  answerAdd(id: number): void {
-    const index = this.selectedAnswer.indexOf(id);
+  answerAdd(email: string): void {
+    const index = this.selectedAnswer.indexOf(email);
     if (index === -1) {
       if (this.selectedAnswer.length < this.maxSelectedAnswer) {
-        this.selectedAnswer.push(id);
+        this.selectedAnswer.push(email);
       }
     } else {
       this.selectedAnswer.splice(index, 1);
     }
   }
 
-  init() {
+  async init() {
     this.domain = this.$route.params.domain ? this.$route.params.domain : 'No Title';
+    this.domainId = '6062d4c9dd3acd0959261f51';
+    // TODO: Masih static dari doni { criteria_id : "6062d4c9dd3acd0959261f51", limit : 10 }
+    await qnaModule.getQna({
+      criteria_id: this.domainId,
+      limit: 10,
+    });
+    this.employees = qnaModule.dataQna.data;
+    this.getUniqueEmployees();
   }
 
   mounted() {
