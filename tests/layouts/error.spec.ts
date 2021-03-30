@@ -19,14 +19,14 @@ describe('layout > Error.vue', () => {
   });
 
   it('Function Error Page', () => {
-    const successTitle = 'Your Login Success';
+    const error404 = 'error404';
 
-    const failTitle = 'Your Login Failed';
+    const error500 = 'error500';
 
     wrapper.vm.errorPage(404);
-    expect(wrapper.vm.alertTitle).toBe(successTitle);
+    expect(wrapper.vm.error404).toBe(error404);
 
     wrapper.vm.errorPage(500);
-    expect(wrapper.vm.alertTitle).toBe(failTitle);
+    expect(wrapper.vm.error500).toBe(error500);
   });
 });
