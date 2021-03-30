@@ -3,8 +3,9 @@
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-7 font-secondary pb-28"
     >
-      {{ allSelectedAnswer }}
-      {{ selectedAnswer }}
+      <!-- TODO: Delete this setelah integrasi ke BE -->
+      <!-- {{ allSelectedAnswer }}
+      {{ selectedAnswer }} -->
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
         <svg class="fill-current text-red-500 absolute left-0 w-5 h-5" viewBox="0 0 8 12" fill="none">
@@ -21,7 +22,7 @@
           <span>Question</span>
           <span>{{ currentPages }} of {{ pages }}</span>
         </div>
-        <div class="bg-primary text-white font-bold rounded-xl p-6 mb-10 h-32">
+        <div class="bg-primary text-white font-bold rounded-xl p-6 mb-10">
           {{ questions() }}
         </div>
       </div>
