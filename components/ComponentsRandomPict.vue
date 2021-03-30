@@ -4,11 +4,10 @@
       <img
         class="absolute top-0 mt-4 md:mt-8 -ml-16"
         src="~/static/img/login_achive.png"
-        alt="Login Achive"
       />
       <div class="rounded-3xl shadow-lg p-3 md:p-10 inline-block">
         <div v-for="(empl, index) in shuffleImg(dataShuffle)" :key="index">
-          <img :src="emplList[empl].src" :width="emplList[index].width" :class="emplList[index].class" alt=""/>
+          <img :src="emplList[empl].src" :width="emplList[index].width" :class="emplList[index].class" />
         </div>
 
         <p
@@ -20,7 +19,6 @@
       <img
         class="absolute top-0 right-0 mt-16 -mr-20"
         src="~/static/img/login_grap.png"
-        alt="Login Grap"
       />
     </div>
   </div>
