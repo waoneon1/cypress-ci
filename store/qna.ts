@@ -25,7 +25,7 @@ export interface QnaResponse {
   /* eslint-disable-next-line camelcase */
   response_code: string;
   message: string;
-  data: QnaResponseData[];
+  data: QnaResponseData[] | string | number;
 }
 
 const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
@@ -47,6 +47,33 @@ export default class QnaModule extends VuexModule {
   async getQna(payload: object): Promise<void> {
     try {
       const response = await axios.post(`${url}pair_data/get_next`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data) {
+        this.setQna(response.data);
+      } else {
+        this.setQna({
+          response_code: '404',
+          message: 'notfound',
+          data: [],
+        });
+      }
+    } catch {
+      this.setQna({
+        response_code: '401',
+        message: 'unautorized',
+        data: [],
+      });
+    }
+  }
+
+  @Action({ rawError: true })
+  async submitQna(payload: object[]): Promise<void> {
+    try {
+      const response = await axios.post(`${url}pair_data/submit`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

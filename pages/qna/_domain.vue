@@ -6,7 +6,7 @@
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
         <svg
-          class="fill-current text-red-500 absolute left-0 w-5 h-5"
+          class="fill-current text-gray-400 absolute left-0 w-4 h-4"
           viewBox="0 0 8 12"
           fill="none"
         >
@@ -57,8 +57,9 @@
 
       <!-- Navigation Footer -->
       <div class="fixed bottom-0 left-0 right-0">
+        <div class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-5 transform rotate-180"></div>
         <div
-          class="mx-auto max-w-md bg-white pb-2 px-7 py-4 bg-white rounded-t-xl shadow-lg"
+          class="mx-auto max-w-md bg-white px-7 pb-4 bg-white rounded-t-xl shadow-lg"
         >
           <div class="flex justify-between items-center">
             <div class="relative">
@@ -83,9 +84,10 @@
             </div>
             <div class="inline-block">
               <div
+                @click="nextPage()"
                 class="rounded-full py-3 px-10 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center inline-block"
               >
-                <span @click="nextPage()" class="font-bold text-sm">
+                <span class="font-bold text-sm">
                   {{ buttonLabel() }}
                 </span>
               </div>
@@ -117,7 +119,7 @@ export interface QnaResponse {
   /* eslint-disable-next-line camelcase */
   response_code: string;
   message: string;
-  data: QnaResponseData[];
+  data: QnaResponseData[] | string | number;
 }
 export interface QnaSubmit {
   /* eslint-disable camelcase */
@@ -134,7 +136,7 @@ export default class Qna extends Vue {
 
   domainId: string = '';
 
-  employees: QnaResponseData[] = [];
+  employees: QnaResponseData[] | string | number= [];
 
   // data answer
   selectedAnswer: string[] = [];
@@ -154,46 +156,48 @@ export default class Qna extends Vue {
 
   currentPages: number = 1;
 
-  getUniqueEmployees() {
+  async getUniqueEmployees() {
     // buat array unique employee
-    this.employees.forEach((e) => {
-      // check employee x
-      if (typeof e.employee_email_x !== 'undefined') {
-        if (!this.answers.includes(e.employee_email_x)) {
-          // add data
-          this.answers.push(e.employee_email_x);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_x,
-            email: e.employee_email_x,
-          });
+    if (typeof this.employees === 'object') {
+      this.employees.forEach((e) => {
+        // check employee x
+        if (typeof e.employee_email_x !== 'undefined') {
+          if (!this.answers.includes(e.employee_email_x)) {
+            // add data
+            this.answers.push(e.employee_email_x);
+            // add detail data
+            this.answersObject.push({
+              name: e.employee_name_x,
+              email: e.employee_email_x,
+            });
+          }
         }
-      }
-      // check employee y
-      if (typeof e.employee_email_y !== 'undefined') {
-        if (!this.answers.includes(e.employee_email_y)) {
-          // add data
-          this.answers.push(e.employee_email_y);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_y,
-            email: e.employee_email_y,
-          });
+        // check employee y
+        if (typeof e.employee_email_y !== 'undefined') {
+          if (!this.answers.includes(e.employee_email_y)) {
+            // add data
+            this.answers.push(e.employee_email_y);
+            // add detail data
+            this.answersObject.push({
+              name: e.employee_name_y,
+              email: e.employee_email_y,
+            });
+          }
         }
+      });
+      // cek jika belum mendapatkan 9 unique employee
+      if (this.answers.length < 9) {
+        // get 3 data lagi sampai dapat 9 unique employee
+        await this.loadEmployeeData();
+      } else {
+        this.answers.splice(9);
+        this.answersObject.splice(9);
       }
-    });
-    // cek jika belum mendapatkan 9 unique employee
-    if (this.answers.length < 9) {
-      // TODO: get 3 data lagi sampai dapat 9 unique employee
-    } else {
-      this.answers = this.answers.slice(0, 9);
-      this.answersObject = this.answersObject.slice(0, 9);
     }
   }
 
   prepareSubmit(): QnaSubmit[] {
     const data: QnaSubmit[] = [];
-
     this.selectedAnswer.forEach((emailX) => {
       this.answers.forEach((emailY) => {
         if (!this.selectedAnswer.includes(emailY)) {
@@ -209,8 +213,15 @@ export default class Qna extends Vue {
     return data;
   }
 
-  nextPage(): void {
-    // console.log(this.prepareSubmit());
+  async nextPage(): Promise<void> {
+    // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
+    await this.submitEmployeeData();
+    // success : console.log(response.response_code === '0000')
+    // reload data
+    this.answers.splice(0);
+    this.answersObject.splice(0);
+    await this.loadEmployeeData();
+    // go to the next page
     this.allSelectedAnswer.push(this.selectedAnswer);
     this.selectedAnswer = [];
     if (this.currentPages !== this.pages) {
@@ -255,22 +266,36 @@ export default class Qna extends Vue {
     }
   }
 
-  async init() {
+  init() {
     this.domain = this.$route.params.domain
       ? this.$route.params.domain
       : 'No Title';
     // TODO: Masih static dari doni { criteria_id : "6062d4c9dd3acd0959261f51", limit : 10 }
     this.domainId = '6062d4c9dd3acd0959261f51';
+  }
+
+  async loadEmployeeData(): Promise<void> {
     await qnaModule.getQna({
       criteria_id: this.domainId,
       limit: 10,
     });
     this.employees = qnaModule.dataQna.data;
+    // if (typeof this.employees === 'object')
+    // this.employees.splice(1)
     this.getUniqueEmployees();
+  }
+
+  async submitEmployeeData(): Promise<QnaResponse | object> {
+    if (this.prepareSubmit().length) {
+      await qnaModule.submitQna(this.prepareSubmit());
+      return qnaModule.dataQna;
+    }
+    return {};
   }
 
   mounted() {
     this.init();
+    this.loadEmployeeData();
   }
 }
 </script>
