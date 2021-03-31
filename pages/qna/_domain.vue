@@ -3,12 +3,6 @@
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-7 font-secondary pb-28"
     >
-      <!-- TODO: Q ? yg dikirim kebackend per next / per page (10 page) -->
-      <!-- TODO: Q ? snakecase to camelcase -->
-      <!-- TODO: Delete this setelah integrasi ke BE -->
-      {{ answers }}
-      {{ selectedAnswer }}
-      <!-- {{ answersObject }} -->
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
         <svg
@@ -190,7 +184,7 @@ export default class Qna extends Vue {
     });
     // cek jika belum mendapatkan 9 unique employee
     if (this.answers.length < 9) {
-      // TODO: Tanya ke Backend > saat tembak data lagi apakah dapat data yang beda?
+      // TODO: get 3 data lagi sampai dapat 9 unique employee
     } else {
       this.answers = this.answers.slice(0, 9);
       this.answersObject = this.answersObject.slice(0, 9);
@@ -267,8 +261,8 @@ export default class Qna extends Vue {
     this.domain = this.$route.params.domain
       ? this.$route.params.domain
       : 'No Title';
-    this.domainId = '6062d4c9dd3acd0959261f51';
     // TODO: Masih static dari doni { criteria_id : "6062d4c9dd3acd0959261f51", limit : 10 }
+    this.domainId = '6062d4c9dd3acd0959261f51';
     await qnaModule.getQna({
       criteria_id: this.domainId,
       limit: 10,

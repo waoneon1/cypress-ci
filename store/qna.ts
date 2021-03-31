@@ -28,6 +28,8 @@ export interface QnaResponse {
   data: QnaResponseData[];
 }
 
+const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
+const token: string | null = localStorage.getItem('token');
 @Module({ namespaced: true, name: 'qna' })
 export default class QnaModule extends VuexModule {
   public dataQna: QnaResponse = {
@@ -43,9 +45,6 @@ export default class QnaModule extends VuexModule {
 
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
-    const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
-    const token: string | null = localStorage.getItem('token');
-
     try {
       const response = await axios.post(`${url}pair_data/get_next`, payload, {
         headers: {
@@ -69,6 +68,11 @@ export default class QnaModule extends VuexModule {
         data: [],
       });
     }
+  }
+
+  @Action({ rawError: true })
+  async postQna(payload: object): Promise<void> {
+
   }
 }
 
