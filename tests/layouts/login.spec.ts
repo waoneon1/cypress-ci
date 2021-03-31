@@ -5,11 +5,6 @@ import { shallowMount, Wrapper } from '@vue/test-utils';
 let wrapper: Wrapper<any>;
 
 describe('layout > Login.vue', () => {
-  // beforeEach(() => {
-  //   wrapper = shallowMount(LayoutLogin, {
-  //     stubs: ['Nuxt'],
-  //   });
-  // });
   it('Handle click login normal case', async () => {
     const router = jest.fn();
     wrapper = shallowMount(LayoutLogin, {
@@ -20,6 +15,11 @@ describe('layout > Login.vue', () => {
         },
       },
     });
-    await wrapper.vm.checkMaintenance();
+
+    wrapper.vm.pageStatus = true;
+    wrapper.vm.checkMaintenance();
+
+    wrapper.vm.pageStatus = false;
+    wrapper.vm.checkMaintenance();
   });
 });
