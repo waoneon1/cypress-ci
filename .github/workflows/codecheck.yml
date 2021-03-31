@@ -55,7 +55,8 @@ jobs:
           path: coverage
   sonarcloud:
     needs: unittest
-    if: success() && github.ref == 'refs/heads/master'
+    # if: success() && github.ref == 'refs/heads/master'
+    if: success()
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
