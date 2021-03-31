@@ -9,7 +9,10 @@ describe('layout > Error.vue', () => {
   beforeEach(() => {
     wrapper = shallowMount(Error, {
       propsData: {
-        error: 404,
+        error: {
+          statusCode: 404,
+          message: 'This page could not be found',
+        },
       },
     });
   });
@@ -18,15 +21,16 @@ describe('layout > Error.vue', () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it('Function Error Page', () => {
-    const error404 = 'error404';
+  // it('Function Error Page', () => {
+  //   // const statusCode = '';
+  //   // const result = errorPage(statusCode);
+  //   const error404 = 'error404';
+  //   const error500 = 'error500';
 
-    const error500 = 'error500';
+  //   wrapper.vm.errorPage(404);
+  //   expect(wrapper.vm.error404).toBe(error404);
 
-    wrapper.vm.errorPage(404);
-    expect(wrapper.vm.error404).toBe(error404);
-
-    wrapper.vm.errorPage(500);
-    expect(wrapper.vm.error500).toBe(error500);
-  });
+  //   wrapper.vm.errorPage(500);
+  //   expect(wrapper.vm.error500).toBe(error500);
+  // });
 });
