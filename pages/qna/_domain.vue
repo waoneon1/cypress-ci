@@ -11,8 +11,12 @@
       <!-- {{ answersObject }} -->
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
-        <svg class="fill-current text-red-500 absolute left-0 w-5 h-5" viewBox="0 0 8 12" fill="none">
-          <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z"/>
+        <svg
+          class="fill-current text-red-500 absolute left-0 w-5 h-5"
+          viewBox="0 0 8 12"
+          fill="none"
+        >
+          <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
         </svg>
         <h1 class="text-primary text-sm">
           {{ domain }}
@@ -35,12 +39,19 @@
         <p class="text-xs text-gray-300 mb-5">Select 3 recommended Alterrans</p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-6">
           <div
-            v-for="(item, i) in answersObject" :key="i"
+            v-for="(item, i) in answersObject"
+            :key="i"
             @click="answerAdd(item.email)"
           >
-            <div :class="`${selectedAnswerClass(item.email)} rounded-xl overflow-hidden cursor-pointer hover:opacity-50`">
+            <div
+              :class="
+                `${selectedAnswerClass(
+                  item.email
+                )} rounded-xl overflow-hidden cursor-pointer hover:opacity-50`
+              "
+            >
               <div class="bg-gray-50 flex justify-center pt-4">
-                <img class="" src="~/static/img/img-01.png" alt=""/>
+                <img class="" src="~/static/img/img-01.png" alt="" />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-2">
                 <small class="text-primary">{{ item.name }}</small>
@@ -52,21 +63,34 @@
 
       <!-- Navigation Footer -->
       <div class="fixed bottom-0 left-0 right-0">
-        <div class="mx-auto max-w-md bg-white pb-2 px-7 py-4 bg-white rounded-t-xl shadow-lg">
+        <div
+          class="mx-auto max-w-md bg-white pb-2 px-7 py-4 bg-white rounded-t-xl shadow-lg"
+        >
           <div class="flex justify-between items-center">
             <div class="relative">
-              <p class="text-xs text-gray-300 mb-2">Select {{ selectedAnswer.length }} of {{ maxSelectedAnswer }}</p>
+              <p class="text-xs text-gray-300 mb-2">
+                Select {{ selectedAnswer.length }} of {{ maxSelectedAnswer }}
+              </p>
               <div class="flex h-10">
                 <div
-                  v-for="(item, i) in selectedAnswer" :key="i"
+                  v-for="(item, i) in selectedAnswer"
+                  :key="i"
                   @click="answerAdd(item)"
                 >
-                  <img :class="`w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`" src="~/static/img/img-01.png" alt=""/>
+                  <img
+                    :class="
+                      `w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`
+                    "
+                    src="~/static/img/img-01.png"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
             <div class="inline-block">
-              <div class="rounded-full py-3 px-10 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center inline-block">
+              <div
+                class="rounded-full py-3 px-10 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center inline-block"
+              >
                 <span @click="nextPage()" class="font-bold text-sm">
                   {{ buttonLabel() }}
                 </span>
@@ -75,7 +99,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -85,52 +108,57 @@ import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 
 export interface QnaResponseData {
-  criteria_id?: string,
-  criteria_name?: string,
-  employee_name_x?: string,
-  employee_name_y?: string,
-  employee_email_x?: string,
-  employee_email_y?: string,
-  employee_image_url_x?: string,
-  employee_image_url_y?: string
+  /* eslint-disable camelcase */
+  criteria_id?: string;
+  criteria_name?: string;
+  employee_name_x?: string;
+  employee_name_y?: string;
+  employee_email_x?: string;
+  employee_email_y?: string;
+  employee_image_url_x?: string;
+  employee_image_url_y?: string;
+  /* eslint-enable camelcase */
 }
 export interface QnaResponse {
-  response_code: string,
-  message: string,
-  data: QnaResponseData[]
+  /* eslint-disable-next-line camelcase */
+  response_code: string;
+  message: string;
+  data: QnaResponseData[];
 }
 export interface QnaSubmit {
-  criteria_id?: string | undefined,
-  selected_employee_email?: string | undefined,
-  employee_email_x?: string | undefined,
-  employee_email_y?: string | undefined,
+  /* eslint-disable camelcase */
+  criteria_id?: string | undefined;
+  selected_employee_email?: string | undefined;
+  employee_email_x?: string | undefined;
+  employee_email_y?: string | undefined;
+  /* eslint-enable camelcase */
 }
 
 @Component({})
 export default class ClassDashboard extends Vue {
-  domain: string = ''
+  domain: string = '';
 
-  domainId: string = ''
+  domainId: string = '';
 
-  employees: QnaResponseData[] = []
+  employees: QnaResponseData[] = [];
 
   // data answer
-  selectedAnswer: string[] = []
+  selectedAnswer: string[] = [];
 
-  allSelectedAnswer: string[][] = []
+  allSelectedAnswer: string[][] = [];
 
-  answers: string[] = []
+  answers: string[] = [];
 
-  answersObject: {name?: string, email?: string }[] = []
+  answersObject: { name?: string; email?: string }[] = [];
 
-  maxSelectedAnswer = 3
+  maxSelectedAnswer = 3;
 
-  indenClass: string[] = ['', '-left-2', '-left-3.5']
+  indenClass: string[] = ['', '-left-2', '-left-3.5'];
 
   // pagination
-  pages: number = 10
+  pages: number = 10;
 
-  currentPages: number = 1
+  currentPages: number = 1;
 
   getUniqueEmployees() {
     // buat array unique employee
@@ -171,7 +199,10 @@ export default class ClassDashboard extends Vue {
 
   prepareSubmit(): QnaSubmit[] {
     const data: QnaSubmit[] = [];
+
+    /* eslint-disable-next-line camelcase */
     this.selectedAnswer.forEach((email_x) => {
+      /* eslint-disable-next-line camelcase */
       this.answers.forEach((email_y) => {
         if (!this.selectedAnswer.includes(email_y)) {
           data.push({
@@ -210,11 +241,15 @@ export default class ClassDashboard extends Vue {
       'If you need help with Design, 3',
       'If you need help with Design, 4',
     ];
-    return q[this.currentPages - 1] ? q[this.currentPages - 1] : '- no content -';
+    return q[this.currentPages - 1]
+      ? q[this.currentPages - 1]
+      : '- no content -';
   }
 
   selectedAnswerClass(email: string): string {
-    return this.selectedAnswer.includes(email) ? 'opacity-30 shadow-md' : 'shadow-lg';
+    return this.selectedAnswer.includes(email)
+      ? 'opacity-30 shadow-md'
+      : 'shadow-lg';
   }
 
   answerAdd(email: string): void {
@@ -229,7 +264,9 @@ export default class ClassDashboard extends Vue {
   }
 
   async init() {
-    this.domain = this.$route.params.domain ? this.$route.params.domain : 'No Title';
+    this.domain = this.$route.params.domain
+      ? this.$route.params.domain
+      : 'No Title';
     this.domainId = '6062d4c9dd3acd0959261f51';
     // TODO: Masih static dari doni { criteria_id : "6062d4c9dd3acd0959261f51", limit : 10 }
     await qnaModule.getQna({

@@ -10,19 +10,22 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 
 export interface QnaResponseData {
-  criteria_id?: string,
-  criteria_name?: string,
-  employee_name_x?: string,
-  employee_name_y?: string,
-  employee_email_x?: string,
-  employee_email_y?: string,
-  employee_image_url_x?: string,
-  employee_image_url_y?: string
+  /* eslint-disable camelcase */
+  criteria_id?: string;
+  criteria_name?: string;
+  employee_name_x?: string;
+  employee_name_y?: string;
+  employee_email_x?: string;
+  employee_email_y?: string;
+  employee_image_url_x?: string;
+  employee_image_url_y?: string;
+  /* eslint-enable camelcase */
 }
 export interface QnaResponse {
-  response_code: string,
-  message: string,
-  data: QnaResponseData[]
+  /* eslint-disable-next-line camelcase */
+  response_code: string;
+  message: string;
+  data: QnaResponseData[];
 }
 
 @Module({ namespaced: true, name: 'qna' })
@@ -39,7 +42,6 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-
   async getQna(payload: object): Promise<void> {
     const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
     const token: string | null = localStorage.getItem('token');
