@@ -11,5 +11,3 @@ export default Vue.extend({
   middleware: 'authenticated',
 });
 </script>
-
-<style scoped></style>

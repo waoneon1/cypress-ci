@@ -135,7 +135,7 @@ export interface QnaSubmit {
 }
 
 @Component({})
-export default class ClassDashboard extends Vue {
+export default class Qna extends Vue {
   domain: string = '';
 
   domainId: string = '';
@@ -282,5 +282,3 @@ export default class ClassDashboard extends Vue {
   }
 }
 </script>
-
-<style></style>

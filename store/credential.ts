@@ -9,7 +9,7 @@ import axios from 'axios';
 import Vuex from 'vuex';
 import Vue from 'vue';
 
-export interface credentialResponse {
+export interface CredentialResponse {
   responseCode: string;
   message: string;
   data: {
@@ -18,7 +18,7 @@ export interface credentialResponse {
 }
 @Module({ namespaced: true, name: 'credential' })
 export default class CredentialModule extends VuexModule {
-  public dataCredential: credentialResponse = {
+  public dataCredential: CredentialResponse = {
     responseCode: '0000',
     message: '',
     data: {
@@ -27,7 +27,7 @@ export default class CredentialModule extends VuexModule {
   };
 
   @Mutation
-  setToken(value: credentialResponse): void {
+  setToken(value: CredentialResponse): void {
     this.dataCredential = value;
   }
 
@@ -40,7 +40,7 @@ export default class CredentialModule extends VuexModule {
       },
     );
 
-    const data: credentialResponse = {
+    const data: CredentialResponse = {
       responseCode: '0000',
       message: '',
       data: {
