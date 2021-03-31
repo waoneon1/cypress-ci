@@ -194,16 +194,14 @@ export default class Qna extends Vue {
   prepareSubmit(): QnaSubmit[] {
     const data: QnaSubmit[] = [];
 
-    /* eslint-disable-next-line camelcase */
-    this.selectedAnswer.forEach((email_x) => {
-      /* eslint-disable-next-line camelcase */
-      this.answers.forEach((email_y) => {
-        if (!this.selectedAnswer.includes(email_y)) {
+    this.selectedAnswer.forEach((emailX) => {
+      this.answers.forEach((emailY) => {
+        if (!this.selectedAnswer.includes(emailY)) {
           data.push({
             criteria_id: this.domainId,
-            selected_employee_email: email_x,
-            employee_email_x: email_x,
-            employee_email_y: email_y,
+            selected_employee_email: emailX,
+            employee_email_x: emailX,
+            employee_email_y: emailY,
           });
         }
       });

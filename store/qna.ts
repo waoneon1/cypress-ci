@@ -69,11 +69,6 @@ export default class QnaModule extends VuexModule {
       });
     }
   }
-
-  @Action({ rawError: true })
-  async postQna(payload: object): Promise<void> {
-
-  }
 }
 
 Vue.use(Vuex);
