@@ -80,7 +80,8 @@ export default class ComponentsRandomPict extends Vue {
     let randomIndex;
 
     while (currentIndex !== 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
+      const val = Math.random();
+      randomIndex = Math.floor(val * currentIndex);
       currentIndex -= 1;
 
       temporaryValue = dataRdm[currentIndex];

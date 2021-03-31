@@ -24,17 +24,6 @@ interface errorType {
 
 export default class LayoutError extends Vue {
   @Prop({ type: Object }) readonly error!: errorType
-
-  // statusCode: string = '';
-
-  // computed
-  // get errorPage() {
-  //   if (this.error.statusCode === 404) {
-  //     return error404;
-  //   }
-  //   // catch everything else
-  //   return error500;
-  // }
 }
 </script>
 
