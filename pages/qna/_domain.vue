@@ -24,7 +24,7 @@
           <span>{{ currentPages }} of {{ pages }}</span>
         </div>
         <div class="bg-primary text-white font-bold rounded-xl p-6 mb-10">
-          {{ questions() }}
+          {{ questions.length ? questions[this.currentPages - 1] : '- no content -' }}
         </div>
       </div>
 
@@ -138,6 +138,8 @@ export default class Qna extends Vue {
 
   employees: QnaResponseData[] | string | number= [];
 
+  questions: string[] = [];
+
   // data answer
   selectedAnswer: string[] = [];
 
@@ -236,19 +238,6 @@ export default class Qna extends Vue {
     return this.currentPages === this.pages ? 'Finish' : 'Skip';
   }
 
-  questions(): string {
-    const q = [
-      'If you need help with Design, would you rather ask?',
-      'If you need help with Design, 1',
-      'If you need help with Design, 2',
-      'If you need help with Design, 3',
-      'If you need help with Design, 4',
-    ];
-    return q[this.currentPages - 1]
-      ? q[this.currentPages - 1]
-      : '- no content -';
-  }
-
   selectedAnswerClass(email: string): string {
     return this.selectedAnswer.includes(email)
       ? 'opacity-30 shadow-md'
@@ -285,6 +274,13 @@ export default class Qna extends Vue {
     this.getUniqueEmployees();
   }
 
+  async loadQuestionData(): Promise<void> {
+    // TODO: Masih Static sebelum page doman/criteria di buat
+    await qnaModule.getQuestion('Design');
+    this.pages = qnaModule.dataQuestion.length;
+    this.questions = qnaModule.dataQuestion;
+  }
+
   async submitEmployeeData(): Promise<QnaResponse | object> {
     if (this.prepareSubmit().length) {
       await qnaModule.submitQna(this.prepareSubmit());
@@ -294,7 +290,11 @@ export default class Qna extends Vue {
   }
 
   mounted() {
+    // initial domain
     this.init();
+    // load question data
+    this.loadQuestionData();
+    // load employee data
     this.loadEmployeeData();
   }
 }

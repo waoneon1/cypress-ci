@@ -38,9 +38,16 @@ export default class QnaModule extends VuexModule {
     data: [],
   };
 
+  public dataQuestion: string[] = [];
+
   @Mutation
   setQna(value: QnaResponse): void {
     this.dataQna = value;
+  }
+
+  @Mutation
+  setQuestion(value: string[]): void {
+    this.dataQuestion = value;
   }
 
   @Action({ rawError: true })
@@ -95,6 +102,15 @@ export default class QnaModule extends VuexModule {
         data: [],
       });
     }
+  }
+
+  @Action({ rawError: true })
+  async getQuestion(domain: string): Promise<void> {
+    const response = await axios.get('/json/question.json', {
+      baseURL: window.location.origin,
+    });
+
+    this.setQuestion(response.data[domain]);
   }
 }
 
