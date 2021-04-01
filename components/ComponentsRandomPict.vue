@@ -8,7 +8,12 @@
       />
       <div class="rounded-3xl shadow-lg p-3 md:p-10 inline-block">
         <div v-for="(empl, index) in shuffleImg(dataShuffle)" :key="index">
-          <img :src="emplList[empl].src" :width="emplList[index].width" :class="emplList[index].class" alt=""/>
+          <img
+            :src="emplList[empl].src"
+            :width="emplList[index].width"
+            :class="emplList[index].class"
+            :alt="`random employee ${empl + 1}`"
+          />
         </div>
 
         <p
@@ -90,7 +95,7 @@ export default class ComponentsRandomPict extends Vue {
     }
 
     return dataRdm;
-  }
+  };
 }
 </script>
 
