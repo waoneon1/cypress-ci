@@ -7,13 +7,23 @@
       theme="success"
     />
     <div
-      class="relative bg-white mx-auto max-w-md min-h-screen flex justify-center items-center text-center"
+      class="relative bg-white mx-auto max-w-md md:min-h-screen flex justify-center items-center text-center"
     >
       <div>
         <h1 class="text-primary text-5xl font-bold">
           {{ title }}
         </h1>
         <p class="text-lg">{{ message }}</p>
+      </div>
+    </div>
+    <div class="fixed bottom-0 left-0 right-0">
+      <div class="mx-auto max-w-md bg-white pb-2 px-5 md:px-10">
+        <nuxt-link
+          to="qna/design"
+          class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
+        >
+          Begin
+        </nuxt-link>
       </div>
     </div>
   </div>
