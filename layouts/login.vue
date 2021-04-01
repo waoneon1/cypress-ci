@@ -15,11 +15,12 @@ export default class LayoutLogin extends Vue {
     if (this.pageStatus) {
       this.$router.push('/maintenance');
     } else {
-      this.$router.push('/logout');
+      localStorage.removeItem('token');
+      this.$router.push('/');
     }
   }
 
-  mounted() {
+  beforeMount() {
     this.checkMaintenance();
   }
 }
