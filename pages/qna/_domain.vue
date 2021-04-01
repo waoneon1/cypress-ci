@@ -24,7 +24,11 @@
           <span>{{ currentPages }} of {{ pages }}</span>
         </div>
         <div class="bg-primary text-white font-bold rounded-xl p-6 mb-10">
-          {{ questions.length ? questions[this.currentPages - 1] : '- no content -' }}
+          {{
+            questions.length
+              ? questions[this.currentPages - 1]
+              : "- no content -"
+          }}
         </div>
       </div>
 
@@ -38,14 +42,15 @@
             @click="answerAdd(item.email)"
           >
             <div
+              class="rounded-xl overflow-hidden cursor-pointer"
               :class="
-                `${selectedAnswerClass(
-                  item.email
-                )} rounded-xl overflow-hidden cursor-pointer hover:opacity-50`
+                selectedAnswer.length < 3
+                  ? `${selectedAnswerClass(item.email)} hover:opacity-50`
+                  : `${selectedAnswerClass(item.email)}`
               "
             >
-              <div class="bg-gray-50 flex justify-center pt-4">
-                <img class="" src="~/static/img/img-01.png" alt="" />
+              <div class="bg-gray-50 flex justify-center">
+                <img class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-2">
                 <small class="text-primary">{{ item.name }}</small>
@@ -57,7 +62,9 @@
 
       <!-- Navigation Footer -->
       <div class="fixed bottom-0 left-0 right-0">
-        <div class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-5 transform rotate-180"></div>
+        <div
+          class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-5 transform rotate-180"
+        ></div>
         <div
           class="mx-auto max-w-md bg-white px-7 pb-4 bg-white rounded-t-xl shadow-lg"
         >
@@ -76,8 +83,8 @@
                     :class="
                       `w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`
                     "
-                    src="~/static/img/img-01.png"
-                    alt=""
+                    src="~/static/img/blank.jpeg"
+                    :alt="item"
                   />
                 </div>
               </div>
@@ -136,7 +143,7 @@ export default class Qna extends Vue {
 
   domainId: string = '';
 
-  employees: QnaResponseData[] | string | number= [];
+  employees: QnaResponseData[] | string | number = [];
 
   questions: string[] = [];
 
