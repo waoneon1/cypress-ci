@@ -52,7 +52,7 @@
           Know Your Best<br />
           Be The Best
         </h1>
-        <p class="text-sm font-light text-primary">Learn from The Best :)</p>
+        <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
       <ComponentsRandomPict />
       <div class="fixed bottom-0 left-0 right-0">
