@@ -7,7 +7,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({
+  layout: 'login',
+})
 export default class Logout extends Vue {
   mounted() {
     this.init();
