@@ -2,6 +2,7 @@ name: Code Check
 on:
   push:
     branches:
+      - master
       - HOTI-120/page-qna
   pull_request:
     types: [opened, synchronize, reopened]
@@ -86,7 +87,7 @@ jobs:
           name: rrs-web-code-coverage-report
           path: coverage
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@HOTI-120/page-qna
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
