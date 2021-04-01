@@ -218,9 +218,9 @@ export default class Qna extends Vue {
 
   selectedAnswerImage(email: string) {
     const i = this.answersObject.filter(
-      (ao) => ao.email == email
-    )
-    return i[0]?.image
+      (ao) => ao.email === email,
+    );
+    return i[0]?.image;
   }
 
   prepareSubmit(): QnaSubmit[] {
