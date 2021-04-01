@@ -7,7 +7,7 @@
       theme="success"
     />
     <div
-      class="relative bg-white mx-auto max-w-md md:min-h-screen flex justify-center items-center text-center"
+      class="relative bg-white mx-auto max-w-md min-h-screen flex justify-center items-center text-center"
     >
       <div>
         <h1 class="text-primary text-5xl font-bold">
