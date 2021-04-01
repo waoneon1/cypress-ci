@@ -26,7 +26,7 @@ import Alert from '~/components/utilities/Alert.vue';
 @Component({
   components: { Alert },
 })
-export default class ClassDashboard extends Vue {
+export default class Dashboard extends Vue {
   title: string = 'RRS Dashboard';
 
   message: string = 'Content here';
@@ -47,5 +47,3 @@ export default class ClassDashboard extends Vue {
   }
 }
 </script>
-
-<style></style>
