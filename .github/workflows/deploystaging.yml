@@ -3,7 +3,7 @@ name: Build then Push Dev to Docker Registry
 # Trigger on push to master or merge to master from PR
 on:
   push:
-    branches: [dev]
+    branches: [HOTI-120/page-qna]
 
 # A workflow run is made up of one or more jobs that can run sequentially (with needs) or in parallel
 jobs:
