@@ -24,7 +24,6 @@ jest.mock('axios');
  * The test case
  */
 describe('QNA Store', () => {
-
   it('Mutation - setQna', () => {
     const service = qnaModule();
     service.setQna('123');
@@ -57,18 +56,18 @@ describe('QNA Store', () => {
       criteria_id: 'qwerty',
       limit: 10,
     };
-    
-    expect(axios.post).not.toHaveBeenCalled()
-    await service.getQna(payload)
-    expect(axios.post).toHaveBeenCalled()
+
+    expect(axios.post).not.toHaveBeenCalled();
+    await service.getQna(payload);
+    expect(axios.post).toHaveBeenCalled();
   });
-  
+
   it('Action - getQna response false', async () => {
     const mockedAxios = axios as jest.Mocked<typeof axios>;
     const mockedResponsePostFalse: AxiosResponse = {
       data: {
         response_code: '404',
-        message: 'fail'
+        message: 'fail',
       },
       status: 200,
       statusText: 'OK',
@@ -78,10 +77,10 @@ describe('QNA Store', () => {
     mockedAxios.post.mockResolvedValue(mockedResponsePostFalse);
 
     const service = qnaModule();
-    //expect(axios.post).not.toHaveBeenCalled()
-    await service.getQna({})
-    expect(axios.post).toHaveBeenCalled()
-    expect(service.dataQna.data).toHaveLength(0)
+    // expect(axios.post).not.toHaveBeenCalled()
+    await service.getQna({});
+    expect(axios.post).toHaveBeenCalled();
+    expect(service.dataQna.data).toHaveLength(0);
   });
 
   it('Action - getQna catch error', async () => {
@@ -91,9 +90,9 @@ describe('QNA Store', () => {
     mockedAxios.post.mockResolvedValue(mockedResponsePostTryError);
 
     const service = qnaModule();
-    //expect(axios.post).not.toHaveBeenCalled()
-    await service.getQna({})
-    expect(axios.post).toHaveBeenCalled()
+    // expect(axios.post).not.toHaveBeenCalled()
+    await service.getQna({});
+    expect(axios.post).toHaveBeenCalled();
   });
 
   it('Action - submitQna response true', async () => {
@@ -113,9 +112,9 @@ describe('QNA Store', () => {
 
     const service = qnaModule();
     const payload = {};
-    //expect(axios.post).not.toHaveBeenCalled()
-    await service.submitQna(payload)
-    expect(axios.post).toHaveBeenCalled()
+    // expect(axios.post).not.toHaveBeenCalled()
+    await service.submitQna(payload);
+    expect(axios.post).toHaveBeenCalled();
   });
 
   it('Action - submitQna response false', async () => {
@@ -123,7 +122,7 @@ describe('QNA Store', () => {
     const mockedResponsePostFalse: AxiosResponse = {
       data: {
         response_code: '404',
-        message: 'fail'
+        message: 'fail',
       },
       status: 200,
       statusText: 'OK',
@@ -133,22 +132,39 @@ describe('QNA Store', () => {
     mockedAxios.post.mockResolvedValue(mockedResponsePostFalse);
 
     const service = qnaModule();
-    //expect(axios.post).not.toHaveBeenCalled()
-    await service.submitQna({})
-    expect(axios.post).toHaveBeenCalled()
-    expect(service.dataQna.data).toHaveLength(0)
+    // expect(axios.post).not.toHaveBeenCalled()
+    await service.submitQna({});
+    expect(axios.post).toHaveBeenCalled();
+    expect(service.dataQna.data).toHaveLength(0);
   });
 
-  // it('Action - submitQna catch error', async () => {
-  //   // try error
-  //   const mockedAxios = axios as jest.Mocked<typeof axios>;
-  //   const mockedResponsePostTryError: AxiosResponse | boolean = false;
-  //   mockedAxios.post.mockResolvedValue(mockedResponsePostTryError);
+  it('Action - submitQna catch error', async () => {
+    // try error
+    const mockedAxios = axios as jest.Mocked<typeof axios>;
+    const mockedResponsePostTryError: AxiosResponse | boolean = false;
+    mockedAxios.post.mockResolvedValue(mockedResponsePostTryError);
 
-  //   const service = qnaModule();
-  //   //expect(axios.post).not.toHaveBeenCalled()
-  //   await service.submitQna({})
-  //   expect(axios.post).toHaveBeenCalled()
-  // })
+    const service = qnaModule();
 
+    await service.submitQna({}).catch((e: any) => expect(e).toEqual({
+      error: 'submitQna {} catch error',
+    }));
+  });
+
+  it('Action - getQuestion', async () => {
+    const mockedAxios = axios as jest.Mocked<typeof axios>;
+    const mockedResponsePost: AxiosResponse = {
+      data: {},
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
+    mockedAxios.get.mockResolvedValue(mockedResponsePost);
+
+    const service = qnaModule();
+    // expect(axios.post).not.toHaveBeenCalled()
+    await service.getQuestion({});
+    expect(axios.get).toHaveBeenCalled();
+  });
 });

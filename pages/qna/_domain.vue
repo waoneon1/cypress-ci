@@ -301,9 +301,18 @@ export default class Qna extends Vue {
 
   async loadQuestionData(): Promise<void> {
     // TODO: Masih Static sebelum page doman/criteria di buat
-    await qnaModule.getQuestion('Design');
-    this.pages = qnaModule.dataQuestion.length;
-    this.questions = qnaModule.dataQuestion;
+    // console.log(qnaModule, 'qnaModule')
+    // await qnaModule.getQuestion('Design');
+    // console.log(qnaModule.dataQuestion.length, 'leng')
+    const dataQuestion = [
+      'Siapa yang terbaik untuk Fundamentals?',
+      'Siapa yang terbaik untuk Strategies and Methods?',
+      'Siapa yang terbaik untuk Architectural Design?',
+      'Siapa yang terbaik untuk Quality Analysis & Evaluation?',
+    ];
+
+    this.pages = dataQuestion.length;
+    this.questions = dataQuestion;
   }
 
   async submitEmployeeData(): Promise<QnaResponse | object> {

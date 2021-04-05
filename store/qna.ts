@@ -80,7 +80,6 @@ export default class QnaModule extends VuexModule {
   @Action({ rawError: true })
   async submitQna(payload: object[]): Promise<void> {
     try {
-      console.log('submitQna try')
       const response = await axios.post(`${url}pair_data/submit`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -97,7 +96,6 @@ export default class QnaModule extends VuexModule {
         });
       }
     } catch {
-      console.log('submitQna catch')
       this.setQna({
         response_code: '401',
         message: 'unautorized',
@@ -111,7 +109,6 @@ export default class QnaModule extends VuexModule {
     const response = await axios.get('/json/question.json', {
       baseURL: window.location.origin,
     });
-
     this.setQuestion(response.data[domain]);
   }
 }
