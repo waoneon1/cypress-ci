@@ -28,6 +28,7 @@ jobs:
         run: npm ci
       - name: Run Lint
         run: npm run lint
+
   unittest:
     name: Unit Test
     runs-on: ubuntu-20.04
@@ -54,8 +55,11 @@ jobs:
         with:
           name: rrs-web-code-coverage-report
           path: coverage
+
   sonarcloud:
-    needs: unittest
+    needs:
+      - lint
+      - unittest
     # if: success() && github.ref == 'refs/heads/master'
     if: success()
     name: SonarCloud
@@ -93,13 +97,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker-build:
+    name: Docker Build
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Make sure the code is tested before build docker
-    needs:
-      - lint
-      - unittest
+    needs: sonarcloud
     if: success()
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -177,8 +181,9 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
+
   deploy-staging:
-    name: Deploy staging
+    name: Deploy Staging
     runs-on: ubuntu-latest
     needs: [docker-build]
     steps:
