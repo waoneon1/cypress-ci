@@ -20,7 +20,7 @@ const qnaModule: any = () => {
 // Mock axios
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-const mockedResponse: AxiosResponse = {
+const mockedResponsePost: AxiosResponse = {
   data: {
     response_code: '0000',
     message: 'test success',
@@ -40,7 +40,8 @@ const mockedResponse: AxiosResponse = {
   headers: {},
   config: {},
 };
-mockedAxios.post.mockResolvedValue(mockedResponse);
+mockedAxios.post.mockResolvedValue(mockedResponsePost);
+
 /**
  * The test case
  */
@@ -58,25 +59,53 @@ describe('QNA Store', () => {
     expect(service.dataQuestion).toBe('123');
   });
 
-  it('Action - getQna', async () => {
+  it('Action - getQna response true', async () => {
     const service = qnaModule();
     const payload = {
       criteria_id: 'qwerty',
       limit: 10,
     };
+    
     expect(axios.post).not.toHaveBeenCalled()
     await service.getQna(payload)
     expect(axios.post).toHaveBeenCalled()
-
-    expect(service.dataQna.data).toBeTruthy()
   });
-
-  it('Action - getQuestion', async () => {
+  
+  it('Action - getQna response false', async () => {
     const service = qnaModule();
-    const payload = 'Design';
-    expect(axios.get).not.toHaveBeenCalled()
-    await service.getQna(payload)
-    expect(axios.get).toHaveBeenCalled()
+    const mockedResponsePostFalse: AxiosResponse = {
+      data: {
+        response_code: '404',
+        message: 'fail'
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
+    mockedAxios.post.mockResolvedValue(mockedResponsePostFalse);
+    //expect(axios.post).not.toHaveBeenCalled()
+    await service.getQna({})
+    expect(axios.post).toHaveBeenCalled()
+    expect(service.dataQna.data).toHaveLength(0)
   });
+
+  it('Action - getQna catch error', async () => {
+    const service = qnaModule();
+    // try error
+    const mockedResponsePostTryError: AxiosResponse | boolean = false;
+    mockedAxios.post.mockResolvedValue(mockedResponsePostTryError);
+    //expect(axios.post).not.toHaveBeenCalled()
+    await service.getQna({})
+    expect(axios.post).toHaveBeenCalled()
+  });
+
+  // it('Action - getQuestion', async () => {
+  //   const service = qnaModule();
+  //   const payload = 'Design';
+  //   expect(axios.get).not.toHaveBeenCalled()
+  //   await service.getQna(payload)
+  //   expect(axios.get).toHaveBeenCalled()
+  // });
 
 });
