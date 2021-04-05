@@ -1,9 +1,5 @@
 name: Code Check
 on:
-  push:
-    branches:
-      - master
-      - HOTI-120/page-qna
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:

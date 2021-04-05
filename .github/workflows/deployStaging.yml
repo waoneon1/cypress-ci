@@ -1,10 +1,11 @@
 name: Auto Deploy Staging
 
 # on: repository_dispatch
-push:
-  branches:
-    - master
-    - HOTI-120/page-qna
+on
+  push:
+    branches:
+      - dev
+      - HOTI-120/page-qna
 
 jobs:
   docker-build:
@@ -13,7 +14,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    uses: ./.github/actions/codeCheck
+    uses: ./.github/actions/codecheck
 
     # Make sure the code is tested before build docker
     needs: sonarcloud
