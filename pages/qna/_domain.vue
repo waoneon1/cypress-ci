@@ -50,7 +50,8 @@
               "
             >
               <div class="bg-gray-50 flex justify-center">
-                <img class="" src="~/static/img/blank.jpeg" :alt="item.name" />
+                <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
+                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-2">
                 <small class="text-primary">{{ item.name }}</small>
@@ -79,6 +80,14 @@
                   :key="i"
                   @click="answerAdd(item)"
                 >
+                  <img
+                    v-if="selectedAnswerImage(item)"
+                    :class="
+                      `w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`
+                    "
+                    :src="selectedAnswerImage(item)"
+                    :alt="item"
+                  />
                   <img
                     :class="
                       `w-9 h-9 border border-gray-300 border-dashed rounded-full relative ${indenClass[i]}`
@@ -154,7 +163,7 @@ export default class Qna extends Vue {
 
   answers: string[] = [];
 
-  answersObject: { name?: string; email?: string }[] = [];
+  answersObject: { name?: string; email?: string; image?: string; }[] = [];
 
   maxSelectedAnswer = 3;
 
@@ -178,6 +187,7 @@ export default class Qna extends Vue {
             this.answersObject.push({
               name: e.employee_name_x,
               email: e.employee_email_x,
+              image: e.employee_image_url_x,
             });
           }
         }
@@ -190,6 +200,7 @@ export default class Qna extends Vue {
             this.answersObject.push({
               name: e.employee_name_y,
               email: e.employee_email_y,
+              image: e.employee_image_url_y,
             });
           }
         }
@@ -203,6 +214,13 @@ export default class Qna extends Vue {
         this.answersObject.splice(9);
       }
     }
+  }
+
+  selectedAnswerImage(email: string) {
+    const i = this.answersObject.filter(
+      (ao) => ao.email === email,
+    );
+    return i[0]?.image;
   }
 
   prepareSubmit(): QnaSubmit[] {
