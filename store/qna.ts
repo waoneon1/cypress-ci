@@ -59,11 +59,9 @@ export default class QnaModule extends VuexModule {
         },
       });
 
-      if (response.data) {
-        console.log('response.data true')
+      if (response.data.data) {
         this.setQna(response.data);
       } else {
-        console.log('response.data false')
         this.setQna({
           response_code: '404',
           message: 'notfound',
@@ -82,6 +80,7 @@ export default class QnaModule extends VuexModule {
   @Action({ rawError: true })
   async submitQna(payload: object[]): Promise<void> {
     try {
+      console.log('submitQna try')
       const response = await axios.post(`${url}pair_data/submit`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -98,6 +97,7 @@ export default class QnaModule extends VuexModule {
         });
       }
     } catch {
+      console.log('submitQna catch')
       this.setQna({
         response_code: '401',
         message: 'unautorized',
