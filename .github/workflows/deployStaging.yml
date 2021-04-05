@@ -1,10 +1,9 @@
 name: Auto Deploy Staging
-
-on
+on:
   push:
     branches:
-      - dev
-      - HOTI-120/page-qna #remove this after custom usage
+      - master
+      - HOTI-120/page-qna
 
 jobs:
   lint:
