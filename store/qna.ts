@@ -60,8 +60,10 @@ export default class QnaModule extends VuexModule {
       });
 
       if (response.data) {
+        console.log('response.data true')
         this.setQna(response.data);
       } else {
+        console.log('response.data false')
         this.setQna({
           response_code: '404',
           message: 'notfound',
