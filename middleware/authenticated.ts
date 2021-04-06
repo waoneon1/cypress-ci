@@ -5,11 +5,10 @@ const authenticated: Middleware = ({ redirect }) => {
   const check = localStorage.getItem('token');
   if (isMaintenance) {
     redirect('/maintenance');
-  } 
+  }
   if (!check) {
     redirect('/');
   }
- 
 };
 
 export default authenticated;

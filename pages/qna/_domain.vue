@@ -13,7 +13,8 @@
           <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
         </svg>
         <h1 class="text-primary text-sm">
-          {{ domain }}
+          <!-- domain -->
+          {{ questions[currentPages - 1].name }}
         </h1>
       </div>
 
@@ -23,17 +24,20 @@
           <span>Question</span>
           <span>{{ currentPages }} of {{ pages }}</span>
         </div>
-        <div class="bg-primary text-white font-bold rounded-xl p-6 mb-10">
+        <div class="bg-primary text-white font-bold rounded-xl p-4 mb-6">
           {{
             questions.length
-              ? questions[this.currentPages - 1]
+              ? questions[currentPages - 1].q
               : "- no content -"
           }}
         </div>
       </div>
 
       <!-- Content: Answer -->
-      <div class="relative">
+      <div class="relative flex justify-center items-center h-96 text-white text-xl rounded-xl bg-primary" v-if="thankyouPage">
+        <p>That's All.. Thank you</p>
+      </div>
+      <div class="relative" v-else>
         <p class="text-xs text-gray-300 mb-5">Select 3 recommended Alterrans</p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-6">
           <div
@@ -42,7 +46,7 @@
             @click="answerAdd(item.email)"
           >
             <div
-              class="rounded-xl overflow-hidden cursor-pointer"
+              class="rounded-xl overflow-hidden cursor-pointer relative"
               :class="
                 selectedAnswer.length < 3
                   ? `${selectedAnswerClass(item.email)} hover:opacity-50`
@@ -56,13 +60,16 @@
               <div class="flex justify-center bg-white text-sm px-2 py-2">
                 <small class="text-primary">{{ item.name }}</small>
               </div>
+              <!-- <div class="flex justify-center bg-white text-sm px-2 py-2 absolute w-full bottom-0 bg-opacity-70">
+                <small class="text-primary">{{ item.name }}</small>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
 
       <!-- Navigation Footer -->
-      <div class="fixed bottom-0 left-0 right-0">
+      <div class="fixed bottom-0 left-0 right-0" v-if="!thankyouPage">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-5 transform rotate-180"
         ></div>
@@ -98,15 +105,17 @@
                 </div>
               </div>
             </div>
-            <div class="inline-block">
-              <div
+            <div class="inline-block" >
+              <button
+                :disabled="selectedAnswer.length > 0 ? false : true"
                 @click="nextPage()"
-                class="rounded-full py-3 px-10 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center inline-block"
+                :class="`rounded-full py-3 px-10 border border-solid text-white focus:outline-none flex items-center mx-auto justify-center inline-block
+                ${ selectedAnswer.length > 0 ? 'bg-secondary border-secondary' : 'bg-gray-300 border-gray-300' }`"
               >
                 <span class="font-bold text-sm">
-                  {{ buttonLabel() }}
+                  Next
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -154,7 +163,7 @@ export default class Qna extends Vue {
 
   employees: QnaResponseData[] | string | number = [];
 
-  questions: string[] = [];
+  questions: { domain: string, name: string, q: string}[] = [{ domain: '', name: '', q: '' }];
 
   // data answer
   selectedAnswer: string[] = [];
@@ -173,6 +182,8 @@ export default class Qna extends Vue {
   pages: number = 10;
 
   currentPages: number = 1;
+
+  thankyouPage: boolean = false;
 
   async getUniqueEmployees() {
     // buat array unique employee
@@ -241,18 +252,22 @@ export default class Qna extends Vue {
   }
 
   async nextPage(): Promise<void> {
-    // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
-    await this.submitEmployeeData();
-    // success : console.log(response.response_code === '0000')
-    // reload data
-    this.answers.splice(0);
-    this.answersObject.splice(0);
-    await this.loadEmployeeData();
-    // go to the next page
-    this.allSelectedAnswer.push(this.selectedAnswer);
-    this.selectedAnswer = [];
-    if (this.currentPages !== this.pages) {
-      this.currentPages += 1;
+    if (this.pages > this.currentPages) {
+      // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
+      await this.submitEmployeeData();
+      // success : console.log(response.response_code === '0000')
+      // reload data
+      this.answers.splice(0);
+      this.answersObject.splice(0);
+      await this.loadEmployeeData();
+      // go to the next page
+      this.allSelectedAnswer.push(this.selectedAnswer);
+      this.selectedAnswer = [];
+      if (this.currentPages !== this.pages) {
+        this.currentPages += 1;
+      }
+    } else {
+      this.thankyouPage = true;
     }
   }
 
@@ -290,7 +305,7 @@ export default class Qna extends Vue {
 
   async loadEmployeeData(): Promise<void> {
     await qnaModule.getQna({
-      criteria_id: this.domainId,
+      criteria_id: this.questions[this.currentPages - 1].domain,
       limit: 10,
     });
     this.employees = qnaModule.dataQna.data;
@@ -301,14 +316,11 @@ export default class Qna extends Vue {
 
   async loadQuestionData(): Promise<void> {
     // TODO: Masih Static sebelum page doman/criteria di buat
-    // console.log(qnaModule, 'qnaModule')
-    // await qnaModule.getQuestion('Design');
-    // console.log(qnaModule.dataQuestion.length, 'leng')
     const dataQuestion = [
-      'Siapa yang terbaik untuk Fundamentals?',
-      'Siapa yang terbaik untuk Strategies and Methods?',
-      'Siapa yang terbaik untuk Architectural Design?',
-      'Siapa yang terbaik untuk Quality Analysis & Evaluation?',
+      { domain: '6062d4c9dd3acd0959261f51', name: 'Design', q: 'Siapa yang terbaik untuk domain Design?' },
+      { domain: '6062d4c9dd3acd0959261f51', name: 'Strategies', q: 'Siapa yang terbaik untuk domain Strategies?' },
+      { domain: '6062d4c9dd3acd0959261f51', name: 'Architectural', q: 'Siapa yang terbaik untuk domain Architectural?' },
+      { domain: '6062d4c9dd3acd0959261f51', name: 'Quality Analysis', q: 'Siapa yang terbaik untuk domain Quality Analysis?' },
     ];
 
     this.pages = dataQuestion.length;
