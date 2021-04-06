@@ -26,5 +26,3 @@ export default class LayoutError extends Vue {
   @Prop({ type: Object }) readonly error!: errorType
 }
 </script>
-
-<style scoped></style>

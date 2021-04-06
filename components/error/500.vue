@@ -36,5 +36,3 @@ import { Vue, Component } from 'vue-property-decorator';
 })
 export default class Class500 extends Vue {}
 </script>
-
-<style scoped></style>
