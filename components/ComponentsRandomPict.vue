@@ -98,5 +98,3 @@ export default class ComponentsRandomPict extends Vue {
   };
 }
 </script>
-
-<style scoped></style>

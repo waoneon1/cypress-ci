@@ -10,6 +10,5 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component({
   middleware: 'authenticated',
 })
-
-export default class LayoutDefault extends Vue {}
+export default class Default extends Vue {}
 </script>

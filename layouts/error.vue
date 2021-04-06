@@ -1,6 +1,5 @@
 <template>
   <div class="nuxt-error">
-    <!-- <component :is="errorPage" :error="error" /> -->
     <error404 v-if="error.statusCode === 404" />
     <error500 v-else />
   </div>
@@ -8,12 +7,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import error404 from '~/components/error/404.vue';
-import error500 from '~/components/error/500.vue';
+import error404 from '~/components/error/Error404.vue';
+import error500 from '~/components/error/Error500.vue';
 
-interface errorType {
-  statusCode: number,
-  massage: string,
+interface ErrorType {
+  statusCode: number;
+  massage: string;
 }
 
 @Component({
@@ -21,10 +20,7 @@ interface errorType {
   layout: 'error',
   components: { error404, error500 },
 })
-
-export default class LayoutError extends Vue {
-  @Prop({ type: Object }) readonly error!: errorType
+export default class Error extends Vue {
+  @Prop({ type: Object }) readonly error!: ErrorType;
 }
 </script>
-
-<style scoped></style>
