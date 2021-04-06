@@ -4,7 +4,11 @@
       class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10 flex items-center justify-center"
     >
       <div class="grid justify-items-center">
-        <img src="~/static/img/svg/404.svg" width="225px" />
+        <img
+          src="~/static/img/svg/404.svg"
+          width="225px"
+          alt="page not found"
+        />
         <div class="relative font-mulish">
           <p
             class="mt-5 font-bold text-sm md:text-base text-primary w-full text-center"
@@ -18,7 +22,8 @@
             the link incorrectly.
           </p>
 
-          <a href="/"
+          <a
+            href="/"
             class="mt-6 rounded-full py-3 px-8 mb-2 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
           >
             <span class="font-bold text-sm">Go Back</span>
@@ -36,8 +41,7 @@ import { Vue, Component } from 'vue-property-decorator';
   name: 'error-404',
   layout: 'login',
 })
-export default class Class404 extends Vue {
-}
+export default class Class404 extends Vue {}
 </script>
 
 <style scoped></style>

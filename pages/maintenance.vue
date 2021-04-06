@@ -1,8 +1,14 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden ">
-    <div class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10 flex items-center justify-center">
+    <div
+      class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10 flex items-center justify-center"
+    >
       <div class="grid justify-items-center">
-        <img src="~/static/img/svg/maintenance.svg" width="225px" />
+        <img
+          src="~/static/img/svg/maintenance.svg"
+          width="225px"
+          alt="page maintenance"
+        />
         <div class="relative font-mulish">
           <p
             class="mt-5 font-bold text-sm md:text-base text-primary w-full text-center"
