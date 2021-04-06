@@ -59,7 +59,7 @@ export default class QnaModule extends VuexModule {
         },
       });
 
-      if (response.data) {
+      if (response.data.data) {
         this.setQna(response.data);
       } else {
         this.setQna({
@@ -86,7 +86,7 @@ export default class QnaModule extends VuexModule {
         },
       });
 
-      if (response.data) {
+      if (response.data.data) {
         this.setQna(response.data);
       } else {
         this.setQna({
@@ -109,7 +109,6 @@ export default class QnaModule extends VuexModule {
     const response = await axios.get('/json/question.json', {
       baseURL: window.location.origin,
     });
-
     this.setQuestion(response.data[domain]);
   }
 }
