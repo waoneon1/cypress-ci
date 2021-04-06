@@ -8,7 +8,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
-export default class LayoutLogin extends Vue {
+export default class Login extends Vue {
   pageStatus: boolean = false;
 
   checkMaintenance() {

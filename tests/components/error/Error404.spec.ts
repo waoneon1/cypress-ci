@@ -1,10 +1,10 @@
-import Error500 from '@/components/error/500.vue';
+import Error404 from '@/components/error/Error404.vue';
 import { expect, it, describe } from '@jest/globals';
 import { shallowMount } from '@vue/test-utils';
 
-const wrapper: any = shallowMount(Error500);
+const wrapper: any = shallowMount(Error404);
 
-describe('components > Error500.vue', () => {
+describe('components > Error404.vue', () => {
   // mounting component
   it('berhasil mounting komponen', () => {
     expect(wrapper.vm).toBeTruthy();

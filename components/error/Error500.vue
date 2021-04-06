@@ -34,5 +34,5 @@ import { Vue, Component } from 'vue-property-decorator';
   name: 'error-500',
   layout: 'login',
 })
-export default class Class500 extends Vue {}
+export default class Error500 extends Vue {}
 </script>
