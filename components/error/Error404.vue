@@ -39,7 +39,6 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
   name: 'error-404',
-  layout: 'login',
 })
 export default class Error404 extends Vue {}
 </script>
