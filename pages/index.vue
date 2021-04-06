@@ -102,7 +102,7 @@ import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
   layout: 'login',
   components: { Alert, ComponentsRandomPict },
 })
-export default class ClassLogin extends Vue {
+export default class Login extends Vue {
   email: string = '';
 
   title: string = 'RRS';
@@ -180,5 +180,3 @@ export default class ClassLogin extends Vue {
   }
 }
 </script>
-
-<style></style>

@@ -25,5 +25,3 @@ export default class LayoutLogin extends Vue {
   }
 }
 </script>
-
-<style scoped></style>

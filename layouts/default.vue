@@ -13,5 +13,3 @@ import { Vue, Component } from 'vue-property-decorator';
 
 export default class LayoutDefault extends Vue {}
 </script>
-
-<style scoped></style>

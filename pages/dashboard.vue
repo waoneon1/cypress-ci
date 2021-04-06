@@ -16,6 +16,16 @@
         <p class="text-lg">{{ message }}</p>
       </div>
     </div>
+    <div class="fixed bottom-0 left-0 right-0">
+      <div class="mx-auto max-w-md bg-white pb-2 px-5 md:px-10">
+        <nuxt-link
+          to="qna/design"
+          class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
+        >
+          Begin
+        </nuxt-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,7 +36,7 @@ import Alert from '~/components/utilities/Alert.vue';
 @Component({
   components: { Alert },
 })
-export default class ClassDashboard extends Vue {
+export default class Dashboard extends Vue {
   title: string = 'RRS Dashboard';
 
   message: string = 'Content here';
@@ -47,5 +57,3 @@ export default class ClassDashboard extends Vue {
   }
 }
 </script>
-
-<style></style>

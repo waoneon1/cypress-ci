@@ -15,9 +15,13 @@
         <img
           v-if="theme == 'success'"
           src="~/static/img/svg/check.svg"
-          alt=""
+          alt="toast icon success"
         />
-        <img v-else src="~/static/img/svg/exclamation.svg" alt="" />
+        <img
+          v-else
+          src="~/static/img/svg/exclamation.svg"
+          alt="toast icon error"
+        />
       </div>
       <div class="flex-grow relative ml-5">
         <h4 class="text-sm font-bold text-white">{{ title }}</h4>
@@ -29,7 +33,7 @@
           `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`
         "
       >
-        <img src="~/static/img/svg/cross.svg" alt="" />
+        <img src="~/static/img/svg/cross.svg" alt="toast icon close" />
       </div>
     </div>
   </div>
@@ -39,15 +43,13 @@
 import { Vue, Prop, Component } from 'vue-property-decorator';
 
 @Component
-export default class ClassAlert extends Vue {
+export default class Alert extends Vue {
   @Prop({ required: true, type: String }) title!: string;
 
   @Prop({ required: true, type: String }) description!: string;
 
   @Prop({ required: true, type: String }) theme!: string;
 
-  showAlert: Boolean = true;
+  showAlert: boolean = true;
 }
 </script>
-
-<style></style>

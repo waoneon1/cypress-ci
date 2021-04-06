@@ -7,6 +7,7 @@ describe('Pages > dashboard.vue', () => {
   // mounting component
   it('berhasil mounting komponen', () => {
     const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
       mocks: {
         $route: {
           query: {
@@ -19,7 +20,9 @@ describe('Pages > dashboard.vue', () => {
     expect(wrapper.vm.alert).toBeTruthy();
   });
   it('berhasil mounting komponen', () => {
-    const wrapper: any = shallowMount(ClassDashboard);
+    const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
+    });
     expect(wrapper.vm.alert).toBeFalsy();
   });
 });
