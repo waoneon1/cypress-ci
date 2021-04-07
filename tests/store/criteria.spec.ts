@@ -36,7 +36,7 @@ const mockedResponse: AxiosResponse = {
   headers: {},
   config: {},
 };
-mockedAxios.post.mockResolvedValue(mockedResponse);
+mockedAxios.get.mockResolvedValue(mockedResponse);
 /**
  * The test case
  */
@@ -47,14 +47,48 @@ describe('Criteria Store', () => {
     expect(service.dataCriteria).toBe('123');
   });
 
-  it('Action - getCriteria', async () => {
+  it('Action - getCriteria true', async () => {
     const service = criteriaModule();
 
-    expect(axios.post).not.toHaveBeenCalled();
+    expect(axios.get).not.toHaveBeenCalled();
     await service.getCriteria();
-    expect(axios.post).toHaveBeenCalled();
+    expect(axios.get).toHaveBeenCalled();
 
     // expect(actual.data.responseCode).toBe('9999')
     // expect(actual.data.data.accessToken).toBe('dummy_akses_token')
   });
+
+  it('Action - getQna response false', async () => {
+    const mockedAxios = axios as jest.Mocked<typeof axios>;
+    const mockedResponsePostFalse: AxiosResponse = {
+      data: {
+        response_code: '404',
+        message: 'fail',
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
+    mockedAxios.get.mockResolvedValue(mockedResponsePostFalse);
+  
+    const service = criteriaModule();
+  
+    await service.getCriteria();
+    expect(axios.get).toHaveBeenCalled();
+  });
+  
+  it('Action - getQna catch error', async () => {
+    // try error
+    const mockedAxios = axios as jest.Mocked<typeof axios>;
+    const mockedResponsePostTryError: AxiosResponse | boolean = false;
+    mockedAxios.get.mockResolvedValue(mockedResponsePostTryError);
+  
+    const service = criteriaModule();
+  
+    await service.getCriteria({}).catch((e: any) => expect(e).toEqual({
+      error: 'getCriteria {} catch error',
+    }));
+  });
+  
 });

@@ -61,12 +61,15 @@ describe('Pages > index.vue', () => {
         },
       },
     };
-
     wrapper = shallowMount(Qna, {
       stubs: ['nuxt-link'],
       mocks: {
         $route: {
+          path: '/qna/design?c=606d1d5cf50eab8cb59f434c',
           params: { domain: 'design' },
+          query: {
+            c: '606d1d5cf50eab8cb59f434c',
+          },
         },
         $store: jest.fn(),
         getQuestion() {
@@ -82,7 +85,7 @@ describe('Pages > index.vue', () => {
       data() {
         return {
           domain: 'design',
-          domainId: '',
+          domainId: '606d1d5cf50eab8cb59f434c',
           employees: [
             {
               criteria_id: 'string',
@@ -211,21 +214,21 @@ describe('Pages > index.vue', () => {
 
   it('test buttonLabel()', () => {
     const buttonLabel1 = wrapper.vm.buttonLabel();
-    expect(buttonLabel1).toBe('Skip');
+    expect(buttonLabel1).toBe('Lewati');
 
     wrapper.setData({ currentPages: 10 });
     wrapper.setData({ pages: 10 });
     const buttonLabel2 = wrapper.vm.buttonLabel();
-    expect(buttonLabel2).toBe('Finish');
+    expect(buttonLabel2).toBe('Selesai');
 
     wrapper.setData({ currentPages: 1 });
     wrapper.setData({ selectedAnswer: ['1', '2'] });
     const buttonLabel3 = wrapper.vm.buttonLabel();
-    expect(buttonLabel3).toBe('Next');
+    expect(buttonLabel3).toBe('Selanjutnya');
 
     wrapper.setData({ currentPages: 10 });
     const buttonLabel4 = wrapper.vm.buttonLabel();
-    expect(buttonLabel4).toBe('Finish');
+    expect(buttonLabel4).toBe('Selesai');
   });
 
   it('test nextPage()', async () => {
@@ -248,7 +251,7 @@ describe('Pages > index.vue', () => {
   });
 
   it('test getUniqueEmployees()', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
     try {
       await wrapper.vm.getUniqueEmployees();
       expect(wrapper.vm.answers.length).toBe(2);
@@ -312,8 +315,7 @@ describe('Pages > index.vue', () => {
 
       ],
     });
-    
-    expect.assertions(1);
+
     try {
       await wrapper.vm.getUniqueEmployees();
       expect(wrapper.vm.answers.length).toBe(9);

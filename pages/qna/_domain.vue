@@ -194,43 +194,47 @@ export default class Qna extends Vue {
 
   async getUniqueEmployees() {
     // buat array unique employee
-    if (typeof this.employees === 'object') {
-      this.employees.forEach((e) => {
-        // check employee x
-        if (typeof e.employee_email_x !== 'undefined') {
-          if (!this.answers.includes(e.employee_email_x)) {
-            // add data
-            this.answers.push(e.employee_email_x);
-            // add detail data
-            this.answersObject.push({
-              name: e.employee_name_x,
-              email: e.employee_email_x,
-              image: e.employee_image_url_x,
-            });
+    try {
+      if (typeof this.employees === 'object') {
+        this.employees.forEach((e) => {
+          // check employee x
+          if (typeof e.employee_email_x !== 'undefined') {
+            if (!this.answers.includes(e.employee_email_x)) {
+              // add data
+              this.answers.push(e.employee_email_x);
+              // add detail data
+              this.answersObject.push({
+                name: e.employee_name_x,
+                email: e.employee_email_x,
+                image: e.employee_image_url_x,
+              });
+            }
           }
-        }
-        // check employee y
-        if (typeof e.employee_email_y !== 'undefined') {
-          if (!this.answers.includes(e.employee_email_y)) {
-            // add data
-            this.answers.push(e.employee_email_y);
-            // add detail data
-            this.answersObject.push({
-              name: e.employee_name_y,
-              email: e.employee_email_y,
-              image: e.employee_image_url_y,
-            });
+          // check employee y
+          if (typeof e.employee_email_y !== 'undefined') {
+            if (!this.answers.includes(e.employee_email_y)) {
+              // add data
+              this.answers.push(e.employee_email_y);
+              // add detail data
+              this.answersObject.push({
+                name: e.employee_name_y,
+                email: e.employee_email_y,
+                image: e.employee_image_url_y,
+              });
+            }
           }
+        });
+        // cek jika belum mendapatkan 9 unique employee
+        if (this.answers.length < 9) {
+          // get 3 data lagi sampai dapat 9 unique employee
+          await this.loadEmployeeData();
+        } else {
+          this.answers.splice(9);
+          this.answersObject.splice(9);
         }
-      });
-      // cek jika belum mendapatkan 9 unique employee
-      if (this.answers.length < 9) {
-        // get 3 data lagi sampai dapat 9 unique employee
-        await this.loadEmployeeData();
-      } else {
-        this.answers.splice(9);
-        this.answersObject.splice(9);
       }
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -302,7 +306,7 @@ export default class Qna extends Vue {
     }
   }
 
-  async init() {
+  init() {
     const domain = this.$route.params.domain
       ? this.$route.params.domain
       : 'No Title';
