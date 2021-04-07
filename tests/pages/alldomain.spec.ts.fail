@@ -1,4 +1,4 @@
-import Qna from '@/pages/qna/_domain.vue';
+import Qna from '@/pages/alldomain.vue';
 import {
   expect, it, describe, beforeEach, afterEach,
 } from '@jest/globals';
@@ -63,7 +63,6 @@ describe('Pages > index.vue', () => {
     };
 
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
       mocks: {
         $route: {
           params: { domain: 'design' },
@@ -81,8 +80,6 @@ describe('Pages > index.vue', () => {
       },
       data() {
         return {
-          domain: 'design',
-          domainId: '',
           employees: [
             {
               criteria_id: 'string',
@@ -126,7 +123,6 @@ describe('Pages > index.vue', () => {
 
   it('test init()', () => {
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
       mocks: {
         $route: {
           params: { domain: '' },
@@ -149,15 +145,8 @@ describe('Pages > index.vue', () => {
       criteria_id: 'qwerty',
       limit: 10,
     };
-    
-    expect.assertions(1);
-    try {
-      await service.getQna(payload);
-      expect(axios.post).toHaveBeenCalled();
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-   
+    await service.getQna(payload);
+    expect(axios.post).toHaveBeenCalled();
   });
 
   it('test loadQuestionData()', async () => {
@@ -172,41 +161,25 @@ describe('Pages > index.vue', () => {
     mockedAxios1.get.mockResolvedValue(mockedResponsePost1);
 
     const service = qnaModule();
-      
-    expect.assertions(1);
-    try {
-      await service.getQuestion('Design');
-      expect(axios.get).toHaveBeenCalled();
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await service.getQuestion('Design');
+    expect(axios.get).toHaveBeenCalled();
   });
 
   it('test submitEmployeeData()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.submitEmployeeData();
-      const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
-      expect(axios.post).toHaveBeenCalled();
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await wrapper.vm.submitEmployeeData();
+    const service = qnaModule();
+    await service.submitQna(wrapper.vm.prepareSubmit());
+    expect(axios.post).toHaveBeenCalled();
   });
 
   it('test answerAdd()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.answerAdd();
-      const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
-      expect(axios.post).toHaveBeenCalled();
-  
-      wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
-      await wrapper.vm.answerAdd('waone@alterra.id');
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await wrapper.vm.answerAdd();
+    const service = qnaModule();
+    await service.submitQna(wrapper.vm.prepareSubmit());
+    expect(axios.post).toHaveBeenCalled();
+
+    wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
+    await wrapper.vm.answerAdd('waone@alterra.id');
   });
 
   it('test buttonLabel()', () => {
@@ -229,13 +202,7 @@ describe('Pages > index.vue', () => {
   });
 
   it('test nextPage()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.nextPage();
-      expect('1').toBe('1');
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await wrapper.vm.nextPage();
   });
 
   it('test selectedAnswerClass()', async () => {
@@ -248,14 +215,9 @@ describe('Pages > index.vue', () => {
   });
 
   it('test getUniqueEmployees()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.answers.length).toBe(2);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-   
+    await wrapper.vm.getUniqueEmployees();
+    expect(wrapper.vm.answers.length).toBe(2);
+
     wrapper.setData({
       employees:
       [
@@ -312,15 +274,8 @@ describe('Pages > index.vue', () => {
 
       ],
     });
-    
-    expect.assertions(1);
-    try {
-      await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.answers.length).toBe(9);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-    
+    await wrapper.vm.getUniqueEmployees();
+    expect(wrapper.vm.answers.length).toBe(9);
   });
 
   it('test prepareSubmit()', () => {
