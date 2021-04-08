@@ -109,13 +109,11 @@
             </div>
             <div class="inline-block" >
               <button
-                :disabled="selectedAnswer.length > 0 ? false : true"
                 @click="nextPage()"
-                :class="`rounded-full py-2 px-4 border border-solid text-white focus:outline-none flex items-center mx-auto justify-center inline-block
-                ${ selectedAnswer.length > 0 ? 'bg-secondary border-secondary' : 'bg-gray-300 border-gray-300' }`"
+                class="rounded-full py-2 px-4 border border-solid text-white focus:outline-none flex items-center mx-auto justify-center inline-block bg-secondary border-secondary"
               >
                 <span class="font-bold text-sm">
-                  Selanjutnya
+                  {{ buttonLabel() }}
                 </span>
               </button>
             </div>
@@ -254,7 +252,12 @@ export default class Qna extends Vue {
   }
 
   async nextPage(): Promise<void> {
-    if (this.pages > this.currentPages) {
+    if (this.selectedAnswer.length > 0) {
+      // reload data
+      this.answers.splice(0);
+      this.answersObject.splice(0);
+      await this.loadEmployeeData();
+    } else if (this.pages > this.currentPages) {
       // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
       await this.submitEmployeeData();
       // success : console.log(response.response_code === '0000')
