@@ -25,7 +25,7 @@
           <span>{{ currentPages }} dari {{ pages }}</span>
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk criteria
+          Siapa yang kamu rekomendasikan untuk kriteria
           {{
             questions.length
               ? questions[currentPages - 1].name

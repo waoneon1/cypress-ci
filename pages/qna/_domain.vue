@@ -28,7 +28,7 @@
           <span>{{ currentPages }} dari {{ pages }}</span>
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk criteria {{ domain }}
+          Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
         </div>
       </div>
 
