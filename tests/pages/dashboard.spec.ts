@@ -1,9 +1,9 @@
 // import { shallowMount } from 'ts-jest/utils';
 import ClassDashboard from '@/pages/dashboard.vue';
 import { expect, it, describe } from '@jest/globals';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import { createLocalVue } from '@vue/test-utils';
+
 import { getModule } from 'vuex-module-decorators';
 import CriteriaModule from '@/store/criteria';
 import axios, { AxiosResponse } from 'axios';
@@ -63,18 +63,18 @@ describe('Pages > dashboard.vue', () => {
   it('test goToQnaPage()', () => {
     const mockRouterPush = jest.fn();
     const payload = {
-      criteria_name:"requirements",
-      id:"606d1d5cf50eab8cb59f434c"
-    }
+      criteria_name: 'requirements',
+      id: '606d1d5cf50eab8cb59f434c',
+    };
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
       mocks: {
         $router: {
           push: mockRouterPush,
-        }
-      }
+        },
+      },
     });
-    wrapper.vm.goToQnaPage(payload)
+    wrapper.vm.goToQnaPage(payload);
   });
 
   it('Action - getCriteria', async () => {
@@ -83,5 +83,4 @@ describe('Pages > dashboard.vue', () => {
     await service.getCriteria();
     expect(axios.get).toHaveBeenCalled();
   });
-
 });

@@ -314,7 +314,6 @@ describe('Pages > index.vue', () => {
   });
 });
 
-
 describe('Pages > index.vue : kondisi ke 2', () => {
   beforeEach(() => {
     const override = {
@@ -329,7 +328,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
       mocks: {
         $route: {
           params: { domain: 'requirements' },
-        },  
+        },
       },
       data() {
         return {
@@ -338,7 +337,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
           thankyouPage: false,
           employees: 'string',
           local: null,
-          selectedAnswer: [1,2,3],
+          selectedAnswer: [1, 2, 3],
           maxSelectedAnswer: 3,
           page: 10,
           currentPages: 10,
@@ -415,7 +414,7 @@ describe('Pages > index.vue : kondisi ke 3', () => {
       mocks: {
         $route: {
           params: { domain: 'requirements' },
-        },  
+        },
       },
       data() {
         return {
@@ -481,5 +480,4 @@ describe('Pages > index.vue : kondisi ke 4', () => {
   it('test prepareSubmit() selectedAnswer not include answer', () => {
     wrapper.vm.prepareSubmit();
   });
-
 });
