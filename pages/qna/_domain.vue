@@ -166,11 +166,13 @@ export interface QnaSubmit {
 export default class Qna extends Vue {
   domain: string = '';
 
-  domainId: string | (string | null)[] = '';
+  domainId: string | (string | null)[] = 'nodata';
 
   employees: QnaResponseData[] | string | number = [];
 
   questions: string = '';
+
+  local: string | null = localStorage.getItem('rss_criteria');
 
   // data answer
   selectedAnswer: string[] = [];
@@ -234,7 +236,7 @@ export default class Qna extends Vue {
         }
       }
     } catch (e) {
-      console.log(e)
+      // console.log(e);
     }
   }
 
@@ -274,9 +276,7 @@ export default class Qna extends Vue {
       // go to the next page
       this.allSelectedAnswer.push(this.selectedAnswer);
       this.selectedAnswer = [];
-      if (this.currentPages !== this.pages) {
-        this.currentPages += 1;
-      }
+      this.currentPages += 1;
     } else {
       this.thankyouPage = true;
     }
@@ -307,11 +307,14 @@ export default class Qna extends Vue {
   }
 
   init() {
-    const domain = this.$route.params.domain
-      ? this.$route.params.domain
-      : 'No Title';
-    this.domain = domain;
-    this.domainId = this.$route.query.c ? this.$route.query.c : 'nodata';
+    if (this.local) {
+      const domain = JSON.parse(this.local);
+      const url = this.$route.params.domain;
+      if (domain.criteria_name.toLowerCase() === url) {
+        this.domain = domain.criteria_name;
+        this.domainId = domain.id;
+      }
+    }
   }
 
   async loadEmployeeData(): Promise<void> {

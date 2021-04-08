@@ -26,11 +26,11 @@
       <div class="relative">
         <p class="text-xs text-primary mb-3">Criteria</p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
-          <nuxt-link
+          <div
             v-for="(item, i) in criteria"
             :key="i"
-            class="mb-4"
-            :to="`qna/${item.criteria_name.toLowerCase()}?c=${item.id}`"
+            class="mb-4 cursor-pointer"
+            @click="goToQnaPage(item)"
           >
             <div class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm ">
               <div class="bg-white text-primary justify-center px-3 py-3 hover:bg-primary hover:text-white">
@@ -40,7 +40,7 @@
                 <small class="h-10 block flex items-center">{{ item.criteria_name }}</small>
               </div>
             </div>
-          </nuxt-link>
+          </div>
         </div>
       </div>
     </div>
@@ -55,8 +55,8 @@ import Alert from '~/components/utilities/Alert.vue';
 
 export interface CriteriaResponseData {
   /* eslint-disable camelcase */
-  criteria_name?: string;
-  id?: string;
+  criteria_name: string;
+  id: string;
   /* eslint-enable camelcase */
 }
 export interface CriteriaResponse {
@@ -79,6 +79,12 @@ export default class Dashboard extends Vue {
   // Criteria
   criteria: CriteriaResponseData[] = []
 
+  goToQnaPage(payload: CriteriaResponseData): void {
+    // criteriaModule.setSelectedCriteria(payload);s
+    localStorage.setItem('rss_criteria', JSON.stringify(payload));
+    this.$router.push(`/qna/${payload.criteria_name.toLowerCase()}`);
+  }
+
   init() {
     if (
       typeof this.$route !== 'undefined'
@@ -91,58 +97,6 @@ export default class Dashboard extends Vue {
   async loadCriteriaData(): Promise<void> {
     await criteriaModule.getCriteria();
     this.criteria = criteriaModule.dataCriteria.data;
-    // this.criteria = [
-    //   {
-    //     criteria_name: 'Design',
-    //     id: '6062d4c9dd3acd0959261f51',
-    //   },
-    //   {
-    //     criteria_name: 'Requirements',
-    //     id: '606d1d5cf50eab8cb59f434c',
-    //   },
-    //   {
-    //     criteria_name: 'Construction',
-    //     id: '606d1d68f50eab8cb59f434d',
-    //   },
-    //   {
-    //     criteria_name: 'Testing',
-    //     id: '606d1d6df50eab8cb59f434e',
-    //   },
-    //   {
-    //     criteria_name: 'Sustainment',
-    //     id: '606d1d73f50eab8cb59f434f',
-    //   },
-    //   {
-    //     criteria_name: 'Process',
-    //     id: '606d1d78f50eab8cb59f4350',
-    //   },
-    //   {
-    //     criteria_name: 'Systems Engineering',
-    //     id: '606d1d7ff50eab8cb59f4351',
-    //   },
-    //   {
-    //     criteria_name: 'Quality',
-    //     id: '606d1d89f50eab8cb59f4352',
-    //   },
-    //   {
-    //     criteria_name: 'Security',
-    //     id: '606d1d8ef50eab8cb59f4353',
-    //   },
-    //   {
-    //     criteria_name: 'Config Management',
-    //     id: '606d1d95f50eab8cb59f4354',
-    //   },
-    //   {
-    //     criteria_name: 'Measurement',
-    //     id: '606d1d9ff50eab8cb59f4355',
-    //   },
-    //   {
-    //     criteria_name: 'HCI',
-    //     id: '606d1da5f50eab8cb59f4356',
-    //   },
-    // ];
-    // if (typeof this.employees === 'object')
-    // this.employees.splice(1)
   }
 
   mounted() {

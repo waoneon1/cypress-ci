@@ -11,8 +11,8 @@ import Vue from 'vue';
 
 export interface CriteriaResponseData {
     /* eslint-disable camelcase */
-    criteria_name?: string;
-    id?: string;
+    criteria_name: string;
+    id: string;
     /* eslint-enable camelcase */
   }
 export interface CriteriaResponse {
@@ -29,7 +29,7 @@ export default class CriteriaModule extends VuexModule {
       response_code: '',
       message: '',
       data: [],
-    };
+    }
 
     @Mutation
     setCriteria(value: CriteriaResponse): void {
