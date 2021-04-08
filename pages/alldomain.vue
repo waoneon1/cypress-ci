@@ -26,20 +26,21 @@
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
           Siapa yang kamu rekomendasikan untuk kriteria
-          {{
-            questions.length
-              ? questions[currentPages - 1].name
-              : "-"
-          }}
+          {{ questions.length ? questions[currentPages - 1].name : "-" }}
         </div>
       </div>
 
       <!-- Content: Answer -->
-      <div class="relative flex justify-center items-center h-96 text-white text-xl rounded-xl bg-primary" v-if="thankyouPage">
+      <div
+        class="relative flex justify-center items-center h-96 text-white text-xl rounded-xl bg-primary"
+        v-if="thankyouPage"
+      >
         <p>That's All.. Thank you</p>
       </div>
       <div class="relative" v-else>
-        <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
+        <p class="text-xs text-gray-300 mb-3">
+          Pilih 3 Alterrans rekomendasi kamu
+        </p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-5">
           <div
             v-for="(item, i) in answersObject"
@@ -55,8 +56,18 @@
               "
             >
               <div class="bg-gray-50 flex justify-center">
-                <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
-                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
+                <img
+                  v-if="item.image"
+                  class=""
+                  :src="item.image"
+                  :alt="item.name"
+                />
+                <img
+                  v-else
+                  class=""
+                  src="~/static/img/blank.jpeg"
+                  :alt="item.name"
+                />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-1">
                 <small class="text-primary">{{ item.name }}</small>
@@ -80,7 +91,8 @@
           <div class="flex justify-between items-center">
             <div class="relative">
               <p class="text-xs text-gray-300 mb-2">
-                Terpilih {{ selectedAnswer.length }} dari {{ maxSelectedAnswer }}
+                Terpilih {{ selectedAnswer.length }} dari
+                {{ maxSelectedAnswer }}
               </p>
               <div class="flex h-10">
                 <div
@@ -107,7 +119,7 @@
                 </div>
               </div>
             </div>
-            <div class="inline-block" >
+            <div class="inline-block">
               <button
                 @click="nextPage()"
                 class="rounded-full py-2 px-4 border border-solid text-white focus:outline-none flex items-center mx-auto justify-center inline-block bg-secondary border-secondary"
@@ -163,7 +175,7 @@ export default class Qna extends Vue {
 
   employees: QnaResponseData[] | string | number = [];
 
-  questions: { domain: string, name: string}[] = [{ domain: '', name: '' }];
+  questions: { domain: string; name: string }[] = [{ domain: '', name: '' }];
 
   // data answer
   selectedAnswer: string[] = [];
@@ -172,7 +184,7 @@ export default class Qna extends Vue {
 
   answers: string[] = [];
 
-  answersObject: { name?: string; email?: string; image?: string; }[] = [];
+  answersObject: { name?: string; email?: string; image?: string }[] = [];
 
   maxSelectedAnswer = 3;
 
@@ -228,9 +240,7 @@ export default class Qna extends Vue {
   }
 
   selectedAnswerImage(email: string) {
-    const i = this.answersObject.filter(
-      (ao) => ao.email === email,
-    );
+    const i = this.answersObject.filter((ao) => ao.email === email);
     return i[0]?.image;
   }
 
@@ -253,11 +263,6 @@ export default class Qna extends Vue {
 
   async nextPage(): Promise<void> {
     if (this.selectedAnswer.length > 0) {
-      // reload data
-      this.answers.splice(0);
-      this.answersObject.splice(0);
-      await this.loadEmployeeData();
-    } else if (this.pages > this.currentPages) {
       // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
       await this.submitEmployeeData();
       // success : console.log(response.response_code === '0000')
@@ -270,9 +275,14 @@ export default class Qna extends Vue {
       this.selectedAnswer = [];
       if (this.currentPages !== this.pages) {
         this.currentPages += 1;
+      } else {
+        this.thankyouPage = true;
       }
     } else {
-      this.thankyouPage = true;
+      // reload data
+      this.answers.splice(0);
+      this.answersObject.splice(0);
+      await this.loadEmployeeData();
     }
   }
 
@@ -280,7 +290,7 @@ export default class Qna extends Vue {
     if (this.selectedAnswer.length > 0) {
       return this.currentPages === this.pages ? 'Selesai' : 'Selanjutnya';
     }
-    return this.currentPages === this.pages ? 'Selesai' : 'Muat Ulang';
+    return 'Muat Ulang';
   }
 
   selectedAnswerClass(email: string): string {
