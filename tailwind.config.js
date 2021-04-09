@@ -6,6 +6,7 @@
  */
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 // const { colors } = require('tailwindcss/defaultTheme');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   theme: {
@@ -24,6 +25,10 @@ module.exports = {
     fontFamily: {
       mulish: ['Mulish', 'sans-serif'],
       roboto: ['Roboto', 'sans-serif'],
+    },
+    screens: {
+      xs: '320px',
+      ...defaultTheme.screens,
     },
   },
   variants: {

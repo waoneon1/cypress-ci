@@ -69,12 +69,9 @@
                   :alt="item.name"
                 />
               </div>
-              <div class="flex justify-center bg-white text-sm px-2 py-1">
+              <div class="autotrim flex justify-center bg-white text-sm px-2 py-1">
                 <small class="text-primary">{{ item.name }}</small>
               </div>
-              <!-- <div class="flex justify-center bg-white text-sm px-2 py-0 absolute w-full bottom-0 bg-opacity-70">
-                <small class="text-primary">{{ item.name }}</small>
-              </div> -->
             </div>
           </div>
         </div>
@@ -142,14 +139,14 @@ import { qnaModule } from '@/store/qna';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
-  criteria_id?: string;
-  criteria_name?: string;
-  employee_name_x?: string;
-  employee_name_y?: string;
-  employee_email_x?: string;
-  employee_email_y?: string;
-  employee_image_url_x?: string;
-  employee_image_url_y?: string;
+  criteria_id: string;
+  criteria_name: string;
+  employee_name_x: string;
+  employee_name_y: string;
+  employee_email_x: string;
+  employee_email_y: string;
+  employee_image_url_x: string;
+  employee_image_url_y: string;
   /* eslint-enable camelcase */
 }
 export interface QnaResponse {
@@ -160,10 +157,10 @@ export interface QnaResponse {
 }
 export interface QnaSubmit {
   /* eslint-disable camelcase */
-  criteria_id?: string | undefined;
-  selected_employee_email?: string | undefined;
-  employee_email_x?: string | undefined;
-  employee_email_y?: string | undefined;
+  criteria_id?: string;
+  selected_employee_email?: string;
+  employee_email_x?: string;
+  employee_email_y?: string;
   /* eslint-enable camelcase */
 }
 
@@ -173,7 +170,7 @@ export default class Qna extends Vue {
 
   domainId: string = '';
 
-  employees: QnaResponseData[] | string | number = [];
+  employees: QnaResponseData[] = [];
 
   questions: { domain: string; name: string }[] = [{ domain: '', name: '' }];
 
@@ -199,43 +196,45 @@ export default class Qna extends Vue {
 
   async getUniqueEmployees() {
     // buat array unique employee
-    if (typeof this.employees === 'object') {
+    try {
       this.employees.forEach((e) => {
         // check employee x
-        if (typeof e.employee_email_x !== 'undefined') {
-          if (!this.answers.includes(e.employee_email_x)) {
-            // add data
-            this.answers.push(e.employee_email_x);
-            // add detail data
-            this.answersObject.push({
-              name: e.employee_name_x,
-              email: e.employee_email_x,
-              image: e.employee_image_url_x,
-            });
-          }
+        if (!this.answers.includes(e.employee_email_x)) {
+          // add data
+          this.answers.push(e.employee_email_x);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_x,
+            email: e.employee_email_x,
+            image: e.employee_image_url_x,
+          });
         }
         // check employee y
-        if (typeof e.employee_email_y !== 'undefined') {
-          if (!this.answers.includes(e.employee_email_y)) {
-            // add data
-            this.answers.push(e.employee_email_y);
-            // add detail data
-            this.answersObject.push({
-              name: e.employee_name_y,
-              email: e.employee_email_y,
-              image: e.employee_image_url_y,
-            });
-          }
+        if (!this.answers.includes(e.employee_email_y)) {
+          // add data
+          this.answers.push(e.employee_email_y);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_y,
+            email: e.employee_email_y,
+            image: e.employee_image_url_y,
+          });
         }
       });
-      // cek jika belum mendapatkan 9 unique employee
-      if (this.answers.length < 9) {
-        // get 3 data lagi sampai dapat 9 unique employee
-        await this.loadEmployeeData();
-      } else {
-        this.answers.splice(9);
-        this.answersObject.splice(9);
-      }
+      await this.checkDataAnswer();
+    } catch (e) {
+      // error code
+    }
+  }
+
+  async checkDataAnswer() {
+    // cek jika belum mendapatkan 9 unique employee
+    if (this.answers.length < 9 && this.employees.length >= 10) {
+      // get 3 data lagi sampai dapat 9 unique employee
+      await this.loadEmployeeData();
+    } else {
+      this.answers.splice(9);
+      this.answersObject.splice(9);
     }
   }
 
@@ -314,7 +313,6 @@ export default class Qna extends Vue {
     this.domain = this.$route.params.domain
       ? this.$route.params.domain
       : 'No Title';
-    // TODO: Masih static dari doni { criteria_id : "6062d4c9dd3acd0959261f51", limit : 10 }
     this.domainId = '6062d4c9dd3acd0959261f51';
   }
 
@@ -324,13 +322,10 @@ export default class Qna extends Vue {
       limit: 10,
     });
     this.employees = qnaModule.dataQna.data;
-    // if (typeof this.employees === 'object')
-    // this.employees.splice(1)
     this.getUniqueEmployees();
   }
 
   async loadQuestionData(): Promise<void> {
-    // TODO: Masih Static sebelum page doman/criteria di buat
     const dataQuestion = [
       { domain: '6062d4c9dd3acd0959261f51', name: 'Design' },
       { domain: '606d1d5cf50eab8cb59f434c', name: 'Requirements' },
@@ -368,3 +363,15 @@ export default class Qna extends Vue {
   }
 }
 </script>
+
+<style>
+.autotrim {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  position: relative;
+  height: 28px;
+  min-height: 28px;
+}
+</style>

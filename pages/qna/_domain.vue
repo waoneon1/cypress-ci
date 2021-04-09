@@ -18,7 +18,6 @@
         <h1 v-else-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
       </div>
-
       <!-- Content: Question -->
       <div v-if="thankyouPage"></div>
       <div v-else-if="domainId === 'nodata'"></div>
@@ -41,7 +40,7 @@
       </div>
       <div class="relative" v-else>
         <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
-        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
           <div
             v-for="(item, i) in answersObject"
             :key="i"
@@ -59,7 +58,7 @@
                 <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
-              <div class="flex justify-center bg-white text-sm px-2 py-1">
+              <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
                 <small class="text-primary">{{ item.name }}</small>
               </div>
             </div>
@@ -138,14 +137,14 @@ import { qnaModule } from '@/store/qna';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
-  criteria_id?: string;
-  criteria_name?: string;
-  employee_name_x?: string;
-  employee_name_y?: string;
-  employee_email_x?: string;
-  employee_email_y?: string;
-  employee_image_url_x?: string;
-  employee_image_url_y?: string;
+  criteria_id: string;
+  criteria_name: string;
+  employee_name_x: string;
+  employee_name_y: string;
+  employee_email_x: string;
+  employee_email_y: string;
+  employee_image_url_x: string;
+  employee_image_url_y: string;
   /* eslint-enable camelcase */
 }
 export interface QnaResponse {
@@ -168,7 +167,7 @@ export default class Qna extends Vue {
 
   domainId: string | (string | null)[] = 'nodata';
 
-  employees: QnaResponseData[] | string | number = [];
+  employees: QnaResponseData[] = [];
 
   questions: string = '';
 
@@ -197,46 +196,44 @@ export default class Qna extends Vue {
   async getUniqueEmployees() {
     // buat array unique employee
     try {
-      if (typeof this.employees === 'object') {
-        this.employees.forEach((e) => {
-          // check employee x
-          if (typeof e.employee_email_x !== 'undefined') {
-            if (!this.answers.includes(e.employee_email_x)) {
-              // add data
-              this.answers.push(e.employee_email_x);
-              // add detail data
-              this.answersObject.push({
-                name: e.employee_name_x,
-                email: e.employee_email_x,
-                image: e.employee_image_url_x,
-              });
-            }
-          }
-          // check employee y
-          if (typeof e.employee_email_y !== 'undefined') {
-            if (!this.answers.includes(e.employee_email_y)) {
-              // add data
-              this.answers.push(e.employee_email_y);
-              // add detail data
-              this.answersObject.push({
-                name: e.employee_name_y,
-                email: e.employee_email_y,
-                image: e.employee_image_url_y,
-              });
-            }
-          }
-        });
-        // cek jika belum mendapatkan 9 unique employee
-        if (this.answers.length < 9) {
-          // get 3 data lagi sampai dapat 9 unique employee
-          await this.loadEmployeeData();
-        } else {
-          this.answers.splice(9);
-          this.answersObject.splice(9);
+      this.employees.forEach((e) => {
+        // check employee x
+        if (!this.answers.includes(e.employee_email_x)) {
+          // add data
+          this.answers.push(e.employee_email_x);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_x,
+            email: e.employee_email_x,
+            image: e.employee_image_url_x,
+          });
         }
-      }
+        // check employee y
+        if (!this.answers.includes(e.employee_email_y)) {
+          // add data
+          this.answers.push(e.employee_email_y);
+          // add detail data
+          this.answersObject.push({
+            name: e.employee_name_y,
+            email: e.employee_email_y,
+            image: e.employee_image_url_y,
+          });
+        }
+      });
+      await this.checkDataAnswer();
     } catch (e) {
-      // console.log(e);
+      // error code
+    }
+  }
+
+  async checkDataAnswer() {
+    // cek jika belum mendapatkan 9 unique employee
+    if (this.answers.length < 9 && this.employees.length >= 10) {
+      // get 3 data lagi sampai dapat 9 unique employee
+      await this.loadEmployeeData();
+    } else {
+      this.answers.splice(9);
+      this.answersObject.splice(9);
     }
   }
 
@@ -323,8 +320,6 @@ export default class Qna extends Vue {
       limit: 10,
     });
     this.employees = qnaModule.dataQna.data;
-    // if (typeof this.employees === 'object')
-    // this.employees.splice(1)
     this.getUniqueEmployees();
   }
 
@@ -339,13 +334,22 @@ export default class Qna extends Vue {
   mounted() {
     // initial domain
     this.init();
-
     if (this.domainId !== 'nodata' && typeof this.domainId !== 'undefined') {
-      // load question data
-      // this.loadQuestionData();
       // load employee data
       this.loadEmployeeData();
     }
   }
 }
 </script>
+
+<style>
+.autotrim {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  position: relative;
+  height: 28px;
+  min-height: 28px;
+}
+</style>
