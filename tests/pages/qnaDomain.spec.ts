@@ -439,7 +439,7 @@ describe('Pages > index.vue : kondisi ke 3', () => {
 
   it('test getUniqueEmployees() : employee_email_x === undefined && employee_email_y === undefined', async () => {
     await wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.employees.length).toBe(0);
+    expect(wrapper.vm.employees.length).toBe(1);
   });
 
   it('test prepareSubmit() selectedAnswer include answer', () => {
@@ -463,6 +463,96 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone1',
+              employee_name_y: 'dodi1',
+              employee_email_x: 'waone1@alterra.id',
+              employee_email_y: 'dodi1@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone2',
+              employee_name_y: 'dodi2',
+              employee_email_x: 'waone2@alterra.id',
+              employee_email_y: 'dodi2@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone3',
+              employee_name_y: 'dodi3',
+              employee_email_x: 'waone3@alterra.id',
+              employee_email_y: 'dodi3@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+            }, {
+              criteria_id: 'string',
+              criteria_name: 'design',
+              employee_name_x: 'waone',
+              employee_name_y: 'dodi',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
             },
           ],
           answers: ['waone@alterra.id', 'dodi@alterra.id'],
@@ -474,7 +564,7 @@ describe('Pages > index.vue : kondisi ke 4', () => {
 
   it('test getUniqueEmployees() : answers array memiliki employee x dan y', async () => {
     await wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.employees.length).toBe(0);
+    expect(wrapper.vm.employees).toBeTruthy();
   });
 
   it('test prepareSubmit() selectedAnswer not include answer', () => {
