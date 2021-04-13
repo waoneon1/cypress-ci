@@ -77,7 +77,7 @@ describe('Pages > criteria/_domain.vue kondisi 2', () => {
         return {
           domain: '',
           domainId: 'nodata',
-          local: '{"criteria_name":"xxx","id":"xxx"}',
+          local: '{"criteria_name":"xxx","id":"xxxx"}',
         };
       },
     });
