@@ -5,7 +5,7 @@
     >
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
-        <nuxt-link to="/dashboard">
+        <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
           <svg
             class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
             viewBox="0 0 8 12"
@@ -22,7 +22,7 @@
       <div v-if="thankyouPage"></div>
       <div v-else-if="domainId === 'nodata'"></div>
       <div v-else class="relative">
-        <div class="flex justify-between text-xs text-gray-300 mb-2">
+        <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
           <span>{{ currentPages }} dari {{ pages }}</span>
         </div>
@@ -115,14 +115,19 @@
               </div>
             </div>
             <div class="inline-block">
-              <div
+              <button
+                :disabled="loading"
                 @click="nextPage()"
-                class="rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-orange-500 text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center inline-block"
+                class="rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-orange-500 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
+                <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
                 <span class="font-bold text-sm">
                   {{ buttonLabel() }}
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -172,6 +177,8 @@ export default class Qna extends Vue {
   questions: string = '';
 
   local: string | null = localStorage.getItem('rss_criteria');
+
+  loading: boolean = true
 
   // data answer
   selectedAnswer: string[] = [];
@@ -262,6 +269,7 @@ export default class Qna extends Vue {
   }
 
   async nextPage(): Promise<void> {
+    this.loading = true;
     if (this.pages > this.currentPages) {
       // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
       await this.submitEmployeeData();
@@ -269,7 +277,7 @@ export default class Qna extends Vue {
       // reload data
       this.answers.splice(0);
       this.answersObject.splice(0);
-      await this.loadEmployeeData();
+      await this.loadEmployeeData().then(() => { this.loading = false; });
       // go to the next page
       this.allSelectedAnswer.push(this.selectedAnswer);
       this.selectedAnswer = [];
@@ -336,7 +344,7 @@ export default class Qna extends Vue {
     this.init();
     if (this.domainId !== 'nodata' && typeof this.domainId !== 'undefined') {
       // load employee data
-      this.loadEmployeeData();
+      this.loadEmployeeData().then(() => { this.loading = false; });
     }
   }
 }

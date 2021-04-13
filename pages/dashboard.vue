@@ -81,7 +81,7 @@ export default class Dashboard extends Vue {
 
   goToQnaPage(payload: CriteriaResponseData): void {
     localStorage.setItem('rss_criteria', JSON.stringify(payload));
-    this.$router.push(`/qna/${payload.criteria_name.toLowerCase()}`);
+    this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
   }
 
   init() {
