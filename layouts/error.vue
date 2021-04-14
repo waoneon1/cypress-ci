@@ -17,7 +17,7 @@ interface ErrorType {
 
 @Component({
   name: 'nuxtError',
-  layout: 'error',
+  layout: 'empty',
   components: { error404, error500 },
 })
 export default class Error extends Vue {

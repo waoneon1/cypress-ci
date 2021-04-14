@@ -11,25 +11,24 @@ import Vue from 'vue';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
-  criteria_id?: string;
-  criteria_name?: string;
-  employee_name_x?: string;
-  employee_name_y?: string;
-  employee_email_x?: string;
-  employee_email_y?: string;
-  employee_image_url_x?: string;
-  employee_image_url_y?: string;
+  criteria_id: string;
+  criteria_name: string;
+  employee_name_x: string;
+  employee_name_y: string;
+  employee_email_x: string;
+  employee_email_y: string;
+  employee_image_url_x: string;
+  employee_image_url_y: string;
   /* eslint-enable camelcase */
 }
 export interface QnaResponse {
   /* eslint-disable-next-line camelcase */
   response_code: string;
   message: string;
-  data: QnaResponseData[] | string | number;
+  data: QnaResponseData[];
 }
 
 const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
-const token: string | null = localStorage.getItem('token');
 @Module({ namespaced: true, name: 'qna' })
 export default class QnaModule extends VuexModule {
   public dataQna: QnaResponse = {
@@ -52,6 +51,7 @@ export default class QnaModule extends VuexModule {
 
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
+    const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.post(`${url}pair_data/get_next`, payload, {
         headers: {
@@ -79,6 +79,7 @@ export default class QnaModule extends VuexModule {
 
   @Action({ rawError: true })
   async submitQna(payload: object[]): Promise<void> {
+    const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.post(`${url}pair_data/submit`, payload, {
         headers: {

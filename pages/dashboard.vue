@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 h-screen overflow-x-hidden">
+  <div class="bg-gray-100 h-screen overflow-x-hidden font-mulish">
     <Alert
       v-show="alert"
       title="Your Login Success"
@@ -7,31 +7,64 @@
       theme="success"
     />
     <div
-      class="relative bg-white mx-auto max-w-md min-h-screen flex justify-center items-center text-center"
+      class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"
     >
-      <div>
-        <h1 class="text-primary text-5xl font-bold">
-          {{ title }}
-        </h1>
-        <p class="text-lg">{{ message }}</p>
+      <!-- Heading -->
+      <div class="flex justify-between items-center relative py-5 mb-5  ">
+        <div class="relative">
+          <p class="text-xs text-primary">Welcome,</p>
+          <h1 class="text-primary font-medium text-xl">
+            John doe
+          </h1>
+        </div>
+        <div class="rounded-full overflow-hidden h-7 w-7">
+          <img class="" src="~/static/img/blank.jpeg" alt="profile" />
+        </div>
+      </div>
+
+      <!-- Content: Criteria List -->
+      <div class="relative">
+        <p class="text-xs text-primary mb-3">Criteria</p>
+        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
+          <div
+            v-for="(item, i) in criteria"
+            :key="i"
+            class="mb-4 cursor-pointer"
+            @click="goToQnaPage(item)"
+          >
+            <div class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm ">
+              <div class="bg-white text-primary justify-center px-3 py-3 hover:bg-primary hover:text-white">
+                <div class="bg-gray-100 rounded-lg inline-block p-1">
+                  <img src="~/static/img/svg/requirement.svg" alt="criteria"/>
+                </div>
+                <small class="h-10 block flex items-center">{{ item.criteria_name }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="fixed bottom-0 left-0 right-0">
-      <div class="mx-auto max-w-md bg-white pb-2 px-5 md:px-10">
-        <nuxt-link
-          to="qna/design"
-          class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
-        >
-          Begin
-        </nuxt-link>
-      </div>
-    </div>
+
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { criteriaModule } from '@/store/criteria';
 import Alert from '~/components/utilities/Alert.vue';
+
+export interface CriteriaResponseData {
+  /* eslint-disable camelcase */
+  criteria_name: string;
+  id: string;
+  /* eslint-enable camelcase */
+}
+export interface CriteriaResponse {
+  /* eslint-disable-next-line camelcase */
+  response_code: string;
+  message: string;
+  data: CriteriaResponseData[];
+}
 
 @Component({
   components: { Alert },
@@ -43,6 +76,14 @@ export default class Dashboard extends Vue {
 
   alert: boolean = false;
 
+  // Criteria
+  criteria: CriteriaResponseData[] = []
+
+  goToQnaPage(payload: CriteriaResponseData): void {
+    localStorage.setItem('rss_criteria', JSON.stringify(payload));
+    this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
+  }
+
   init() {
     if (
       typeof this.$route !== 'undefined'
@@ -52,8 +93,15 @@ export default class Dashboard extends Vue {
     }
   }
 
+  async loadCriteriaData(): Promise<void> {
+    await criteriaModule.getCriteria();
+    this.criteria = criteriaModule.dataCriteria.data;
+  }
+
   mounted() {
     this.init();
+    // load criteria data
+    this.loadCriteriaData();
   }
 }
 </script>
