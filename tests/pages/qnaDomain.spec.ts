@@ -215,13 +215,8 @@ describe('Pages > index.vue', () => {
   });
 
   it('test nextPage()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.nextPage();
-      expect(wrapper.vm.thankyouPage).toBe(false);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await wrapper.vm.nextPage();
+    expect(wrapper.vm.thankyouPage).toBe(true);
   });
 
   it('test selectedAnswerClass()', async () => {

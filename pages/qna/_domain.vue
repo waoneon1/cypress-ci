@@ -235,6 +235,7 @@ export default class Qna extends Vue {
 
   async checkDataAnswer() {
     // cek jika belum mendapatkan 9 unique employee
+    if (this.employees.length === 0) { this.thankyouPage = true; }
     if (this.answers.length < 9 && this.employees.length >= 10) {
       // get 3 data lagi sampai dapat 9 unique employee
       await this.loadEmployeeData();
