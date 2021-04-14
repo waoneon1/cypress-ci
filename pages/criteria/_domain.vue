@@ -42,7 +42,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
-export default class CriteriaDomain extends Vue {
+export default class Criteria extends Vue {
   domain: string = '';
 
   domainId: string | (string | null)[] = 'nodata';
