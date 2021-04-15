@@ -88,6 +88,6 @@ describe('Pages > dashboard.vue', () => {
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
     });
-    wrapper.vm.criteriaProgress()
+    wrapper.vm.criteriaProgress();
   });
 });

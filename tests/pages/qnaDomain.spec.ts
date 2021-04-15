@@ -309,10 +309,7 @@ describe('Pages > index.vue', () => {
   });
 
   it('Criteria progress', async () => {
-    const wrapper: any = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
-    });
-    wrapper.vm.criteriaProgress()
+    wrapper.vm.criteriaProgress();
   });
 });
 
