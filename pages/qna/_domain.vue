@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
     <div
-      class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"
+      class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-36"
     >
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
@@ -45,7 +45,16 @@
             v-for="(item, i) in answersObject"
             :key="i"
             @click="answerAdd(item.email)"
+            class="relative"
           >
+            <div
+              class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
+              v-show="selectedAnswer.includes(item.email)"
+            >
+              <svg class="fill-current text-success" width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
+              </svg>
+            </div>
             <div
               class="rounded-xl overflow-hidden cursor-pointer"
               :class="
@@ -84,6 +93,15 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-2 bg-white rounded-t-xl shadow-lg"
         >
+          <p class="text-xs text-gray-300">Progress</p>
+          <div class="flex items-center justify-center mb-2">
+            <div class="relative pr-2 w-full">
+              <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+                <div :style="`width:${criteriaProgress(domainId).progress}%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+              </div>
+            </div>
+            <span class="text-xs inline-block text-primary">{{ criteriaProgress(domainId).progress }}%</span>
+          </div>
           <div class="flex justify-between items-center">
             <div class="relative">
               <p class="text-xs text-gray-300 mb-2">
@@ -347,6 +365,51 @@ export default class Qna extends Vue {
       // load employee data
       this.loadEmployeeData().then(() => { this.loading = false; });
     }
+  }
+
+  criteriaProgress = (id: string) => {
+    const criteria = [
+      {
+        criteria_name: 'Design', id: '6062d4c9dd3acd0959261f51', progress: 60, rebbon: false,
+      },
+      {
+        criteria_name: 'Requirements', id: '606d1d5cf50eab8cb59f434c', progress: 30, rebbon: true,
+      },
+      {
+        criteria_name: 'Construction', id: '606d1d68f50eab8cb59f434d', progress: 30, rebbon: false,
+      },
+      {
+        criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 44, rebbon: false,
+      },
+      {
+        criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 14, rebbon: false,
+      },
+      {
+        criteria_name: 'Process', id: '606d1d78f50eab8cb59f4350', progress: 100, rebbon: false,
+      },
+      {
+        criteria_name: 'Systems Engineering', id: '606d1d7ff50eab8cb59f4351', progress: 30, rebbon: false,
+      },
+      {
+        criteria_name: 'Quality', id: '606d1d89f50eab8cb59f4352', progress: 0, rebbon: false,
+      },
+      {
+        criteria_name: 'Security', id: '606d1d8ef50eab8cb59f4353', progress: 100, rebbon: false,
+      },
+      {
+        criteria_name: 'Config Management', id: '606d1d95f50eab8cb59f4354', progress: 30, rebbon: false,
+      },
+      {
+        criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 30, rebbon: false,
+      },
+      {
+        criteria_name: 'HCI', id: '606d1da5f50eab8cb59f4356', progress: 30, rebbon: false,
+      },
+    ];
+
+    return criteria.filter(
+      (arr) => arr.id === id,
+    )[0];
   }
 }
 </script>

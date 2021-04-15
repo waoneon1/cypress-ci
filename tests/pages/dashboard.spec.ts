@@ -83,4 +83,11 @@ describe('Pages > dashboard.vue', () => {
     await service.getCriteria();
     expect(axios.get).toHaveBeenCalled();
   });
+
+  it('Criteria progress', async () => {
+    const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
+    });
+    wrapper.vm.criteriaProgress()
+  });
 });

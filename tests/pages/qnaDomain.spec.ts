@@ -307,6 +307,13 @@ describe('Pages > index.vue', () => {
     const prepareSubmit = wrapper.vm.prepareSubmit();
     expect(prepareSubmit.length).toBe(2);
   });
+
+  it('Criteria progress', async () => {
+    const wrapper: any = shallowMount(Qna, {
+      stubs: ['nuxt-link'],
+    });
+    wrapper.vm.criteriaProgress()
+  });
 });
 
 describe('Pages > index.vue : kondisi ke 2', () => {
