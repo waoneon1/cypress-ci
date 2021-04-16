@@ -157,6 +157,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
+import { criteriaModule } from '@/store/criteria';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
@@ -368,45 +369,7 @@ export default class Qna extends Vue {
   }
 
   criteriaProgress = (id: string) => {
-    const criteria = [
-      {
-        criteria_name: 'Design', id: '6062d4c9dd3acd0959261f51', progress: 60, rebbon: false,
-      },
-      {
-        criteria_name: 'Requirements', id: '606d1d5cf50eab8cb59f434c', progress: 30, rebbon: true,
-      },
-      {
-        criteria_name: 'Construction', id: '606d1d68f50eab8cb59f434d', progress: 30, rebbon: false,
-      },
-      {
-        criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 44, rebbon: false,
-      },
-      {
-        criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 14, rebbon: false,
-      },
-      {
-        criteria_name: 'Process', id: '606d1d78f50eab8cb59f4350', progress: 100, rebbon: false,
-      },
-      {
-        criteria_name: 'Systems Engineering', id: '606d1d7ff50eab8cb59f4351', progress: 30, rebbon: false,
-      },
-      {
-        criteria_name: 'Quality', id: '606d1d89f50eab8cb59f4352', progress: 0, rebbon: false,
-      },
-      {
-        criteria_name: 'Security', id: '606d1d8ef50eab8cb59f4353', progress: 100, rebbon: false,
-      },
-      {
-        criteria_name: 'Config Management', id: '606d1d95f50eab8cb59f4354', progress: 30, rebbon: false,
-      },
-      {
-        criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 30, rebbon: false,
-      },
-      {
-        criteria_name: 'HCI', id: '606d1da5f50eab8cb59f4356', progress: 30, rebbon: false,
-      },
-    ];
-
+    const criteria = criteriaModule.dataCriteriaProgress;
     return criteria.filter(
       (arr) => arr.id === id,
     )[0];

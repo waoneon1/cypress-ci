@@ -311,6 +311,10 @@ describe('Pages > index.vue', () => {
   it('Criteria progress', async () => {
     wrapper.vm.criteriaProgress();
   });
+
+  it('test selectedAnswerImage()', () => {
+    wrapper.vm.selectedAnswerImage();
+  });
 });
 
 describe('Pages > index.vue : kondisi ke 2', () => {
