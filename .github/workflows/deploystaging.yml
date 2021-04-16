@@ -4,7 +4,7 @@ on:
     branches:
       - dev
       # use for testing in staging server, markdown this branch when PR
-      - HOTI-119/page-qna-010
+      - HOTI-223/page-qna-010
 
 jobs:
   lint:
