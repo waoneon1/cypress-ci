@@ -30,14 +30,34 @@
             v-for="(item, i) in criteria"
             :key="i"
             class="mb-4 cursor-pointer"
-            @click="goToQnaPage(item)"
+            @click="criteriaProgress( item.id ).progress !== 100 ? goToQnaPage(item) : null"
           >
             <div class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm ">
-              <div class="bg-white text-primary justify-center px-3 py-3 hover:bg-primary hover:text-white">
+              <div v-show="criteriaProgress(item.id).rebbon" class="absolute text-xs bg-yellow-300 text-white px-5 transform rotate-45" style="right: -25px; top: 25px;">
+                Rekomendasi
+              </div>
+              <div class="bg-white text-primary justify-center px-3 py-3 hover:bg-blue-100">
                 <div class="bg-gray-100 rounded-lg inline-block p-1">
                   <img src="~/static/img/svg/requirement.svg" alt="criteria"/>
                 </div>
                 <small class="h-10 block flex items-center">{{ item.criteria_name }}</small>
+                <div class="flex items-center justify-center mb-2">
+                  <div class="relative pr-2 w-full">
+                    <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+                      <div
+                        class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
+                        :style="`width:${ criteriaProgress( item.id ).progress }%`"
+                      ></div>
+                    </div>
+                  </div>
+                  <span v-if="criteriaProgress(item.id).progress !== 100" class="text-xs inline-block text-primary">{{ criteriaProgress(item.id).progress }}%</span>
+                  <div v-else class="bg-white rounded-full text-white flex items-center justify-center z-10">
+                    <svg class="fill-current text-success" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
+                    </svg>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
@@ -91,6 +111,13 @@ export default class Dashboard extends Vue {
     ) {
       this.alert = true;
     }
+  }
+
+  criteriaProgress = (id: string) => {
+    const criteria = criteriaModule.dataCriteriaProgress;
+    return criteria.filter(
+      (arr) => arr.id === id,
+    )[0];
   }
 
   async loadCriteriaData(): Promise<void> {

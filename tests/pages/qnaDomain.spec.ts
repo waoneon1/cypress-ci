@@ -307,6 +307,14 @@ describe('Pages > index.vue', () => {
     const prepareSubmit = wrapper.vm.prepareSubmit();
     expect(prepareSubmit.length).toBe(2);
   });
+
+  it('Criteria progress', async () => {
+    wrapper.vm.criteriaProgress();
+  });
+
+  it('test selectedAnswerImage()', () => {
+    wrapper.vm.selectedAnswerImage();
+  });
 });
 
 describe('Pages > index.vue : kondisi ke 2', () => {
