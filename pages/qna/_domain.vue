@@ -1,7 +1,8 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
     <div
-      class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-36"
+      class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
+      :class="thankyouPage || domainId === 'nodata' ? '' : 'pb-36'"
     >
       <!-- Heading -->
       <div class="flex justify-center relative py-5">
@@ -14,8 +15,7 @@
             <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
           </svg>
         </nuxt-link>
-        <h1 v-if="thankyouPage" class="text-primary text-sm">Selesai</h1>
-        <h1 v-else-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
+        <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
       </div>
       <!-- Content: Question -->
@@ -24,7 +24,7 @@
       <div v-else class="relative">
         <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
-          <span>{{ currentPages }} dari {{ pages }}</span>
+          <!-- <span>{{ currentPages }} dari {{ pages }}</span> -->
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
           Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
@@ -32,12 +32,33 @@
       </div>
 
       <!-- Content: Answer -->
-      <div class="relative flex justify-center items-center h-96 text-white text-xl rounded-xl bg-primary" v-if="thankyouPage">
-        <p>Terimakasih atas partisipasinya</p>
-      </div>
-      <div class="relative flex justify-center items-center h-96 text-white text-xl rounded-xl bg-primary" v-else-if="domainId === 'nodata'">
-        <p>Data tidak ditemukan</p>
-      </div>
+      <Thankyou
+        v-if="thankyouPage"
+        image="appreciation.svg"
+        :buttons="[{
+          label: 'Kembali',
+          url: '/dashboard',
+          theme: 'border-secondary bg-secondary text-white'
+        }]"
+      >
+        <h1 slot="title" class="text-lg text-white  mb-10">
+          Terimakasih
+        </h1>
+      </Thankyou>
+      <Thankyou
+        v-else-if="domainId === 'nodata'"
+        subtitle="Pertanyaan"
+        image="appreciation.svg"
+        :buttons="[{
+          label: 'kembali',
+          url: '/dashboard/',
+          theme: 'border-secondary bg-secondary text-white'
+        }]"
+      >
+        <h1 slot="title" class="text-lg text-white  mb-10">
+          Data dari criteria <span class="text-secondary">{{ domain }},</span> tidak ditemukan
+        </h1>
+      </Thankyou>
       <div class="relative" v-else>
         <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
         <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
@@ -76,16 +97,7 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div v-if="thankyouPage || domainId === 'nodata'" class="fixed bottom-0 left-0 right-0">
-        <div class="mx-auto max-w-md bg-white pb-2 px-5 md:px-10">
-          <nuxt-link
-            to="/dashboard"
-            class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
-          >
-            Kembali
-          </nuxt-link>
-        </div>
-      </div>
+      <div v-if="thankyouPage || domainId === 'nodata'" class="fixed bottom-0 left-0 right-0"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
@@ -132,19 +144,26 @@
                 </div>
               </div>
             </div>
-            <div class="inline-block">
+            <div class="inline-block flex">
               <button
                 :disabled="loading"
                 @click="nextPage()"
-                class="rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-orange-500 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="rounded-full py-2 px-4 border border-solid border-secondary bg-white hover:bg-secondary text-secondary hover:text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
-                <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 <span class="font-bold text-sm">
-                  {{ buttonLabel() }}
+                  <!-- {{ buttonLabel() }} -->
+                  Selanjutnya
                 </span>
+              </button>
+              <button
+                @click="thankyouPage = true"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+              >
+                <span class="font-bold text-sm">Selesai</span>
               </button>
             </div>
           </div>
@@ -158,6 +177,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
+import Thankyou from '~/components/utilities/Thankyou.vue';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
@@ -185,7 +205,9 @@ export interface QnaSubmit {
   employee_email_y?: string | undefined;
   /* eslint-enable camelcase */
 }
-@Component({})
+@Component({
+  components: { Thankyou },
+})
 export default class Qna extends Vue {
   domain: string = '';
 
