@@ -24,7 +24,6 @@
       <div v-else class="relative">
         <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
-          <!-- <span>{{ currentPages }} dari {{ pages }}</span> -->
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
           Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
