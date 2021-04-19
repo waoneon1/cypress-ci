@@ -84,7 +84,7 @@
                   : `${selectedAnswerClass(item.email)}`
               "
             >
-              <div class="bg-gray-50 flex justify-center">
+              <div class="bg-gray-50">
                 <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
