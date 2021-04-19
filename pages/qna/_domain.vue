@@ -24,7 +24,6 @@
       <div v-else class="relative">
         <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
-          <!-- <span>{{ currentPages }} dari {{ pages }}</span> -->
         </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
           Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
@@ -84,7 +83,7 @@
                   : `${selectedAnswerClass(item.email)}`
               "
             >
-              <div class="bg-gray-50 flex justify-center">
+              <div class="bg-gray-50">
                 <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
