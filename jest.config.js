@@ -24,6 +24,5 @@ module.exports = {
     '<rootDir>/pages/**/*.vue',
     '<rootDir>/store/**/*.ts',
   ],
-  modulePathIgnorePatterns: ['<rootDir>/pages/alldomain.vue'],
   coverageReporters: ['lcov'],
 };
