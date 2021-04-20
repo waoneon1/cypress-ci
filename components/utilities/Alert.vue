@@ -1,7 +1,7 @@
 <template>
   <div
     class="font-mulish fixed max-w-md left-0 right-0 m-auto z-50"
-    v-show="showAlert"
+    v-show="show"
   >
     <div
       class="flex justify-between px-6 py-4 items-center"
@@ -28,7 +28,7 @@
         <p class="text-xs font-light text-white">{{ description }}</p>
       </div>
       <div
-        @click="showAlert = false"
+        @click="setAlertFalse()"
         :class="
           `flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`
         "
@@ -41,6 +41,7 @@
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator';
+import { alertModule } from '@/store/alert';
 
 @Component
 export default class Alert extends Vue {
@@ -49,7 +50,12 @@ export default class Alert extends Vue {
   @Prop({ required: true, type: String }) description!: string;
 
   @Prop({ required: true, type: String }) theme!: string;
+  
+  @Prop({ required: false, type: Boolean }) show!: boolean;
 
-  showAlert: boolean = true;
+  setAlertFalse() {
+    alertModule.setAlertFalse()
+    this.show = alertModule.showAlert
+  }
 }
 </script>

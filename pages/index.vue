@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100 md:h-screen overflow-x-hidden">
     <Alert
-      v-show="alert"
+      :show="alert"
       :title="alertTitle"
       :description="alertDescription"
       :theme="alertTheme"
@@ -95,6 +95,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { credentialModule } from '@/store/credential';
+import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
 import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
 
@@ -141,7 +142,8 @@ export default class Login extends Vue {
               credentialModule.dataCredential.data.accessToken,
             );
             // redirect . . .
-            this.$router.push('/dashboard?success=1');
+            alertModule.setAlertTrue()
+            this.$router.push('/dashboard')
           } else {
             this.loginStatus(false);
           }
@@ -167,7 +169,8 @@ export default class Login extends Vue {
   }
 
   loginStatus(value: boolean): void {
-    this.alert = true;
+    alertModule.setAlertTrue()
+    this.alert = alertModule.showAlert;
     if (value) {
       this.alertTitle = 'Your Login Success';
       this.alertDescription = 'Welcome';

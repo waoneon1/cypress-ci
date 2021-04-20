@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden font-mulish">
     <Alert
-      v-show="alert"
+      :show="alert"
       title="Your Login Success"
       description="Welcome"
       theme="success"
@@ -71,6 +71,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
+import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
 
 export interface CriteriaResponseData {
@@ -104,15 +105,6 @@ export default class Dashboard extends Vue {
     this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
   }
 
-  init() {
-    if (
-      typeof this.$route !== 'undefined'
-      && this.$route.query.success === '1'
-    ) {
-      this.alert = true;
-    }
-  }
-
   criteriaProgress = (id: string) => {
     const criteria = criteriaModule.dataCriteriaProgress;
     return criteria.filter(
@@ -126,8 +118,7 @@ export default class Dashboard extends Vue {
   }
 
   mounted() {
-    this.init();
-    // load criteria data
+    this.alert = alertModule.showAlert;
     this.loadCriteriaData();
   }
 }
