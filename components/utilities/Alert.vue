@@ -47,6 +47,8 @@ import { alertModule } from '@/store/alert';
 
 @Component
 export default class Alert extends Vue {
+  alert: boolean = true
+
   @Prop({ required: true, type: String }) title!: string;
 
   @Prop({ required: true, type: String }) description!: string;
@@ -57,8 +59,8 @@ export default class Alert extends Vue {
 
   @Emit('close')
   setAlertFalse(): void {
+    this.alert = false;
     alertModule.setAlertFalse();
   }
-  
 }
 </script>
