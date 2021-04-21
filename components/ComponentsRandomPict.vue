@@ -34,7 +34,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-interface emplType {
+interface EmplType {
   src: string;
   width: string;
   class: string;
@@ -42,7 +42,7 @@ interface emplType {
 
 @Component
 export default class ComponentsRandomPict extends Vue {
-  emplList: emplType[] = [
+  emplList: EmplType[] = [
     {
       src: '/img/img-01.png',
       width: '75px',

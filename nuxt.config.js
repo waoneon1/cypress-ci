@@ -31,9 +31,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    './plugins/vue-google-oauth2',
-  ],
+  plugins: ['./plugins/vue-google-oauth2', './plugins/v-lazy-image'],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

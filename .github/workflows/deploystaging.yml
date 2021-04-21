@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - dev
-      # use for testing in staging server, markdown this branch when PR
-      # - HOTI-120/page-qna
 
 jobs:
   lint:

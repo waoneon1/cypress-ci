@@ -1,11 +1,12 @@
 import { Middleware } from '@nuxt/types';
 
-const authenticated: Middleware = ({ redirect, error, route }) => {
+const authenticated: Middleware = ({ redirect }) => {
   const isMaintenance:boolean = false;
   const check = localStorage.getItem('token');
   if (isMaintenance) {
     redirect('/maintenance');
-  } else if ((!error && !check) || route.path === '/maintenance') {
+  }
+  if (!check) {
     redirect('/');
   }
 };
