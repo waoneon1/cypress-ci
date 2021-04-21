@@ -40,23 +40,24 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component, Emit } from 'vue-property-decorator';
+import {
+  Vue, Prop, Component, Emit,
+} from 'vue-property-decorator';
 import { alertModule } from '@/store/alert';
 
 @Component
 export default class Alert extends Vue {
-
   @Prop({ required: true, type: String }) title!: string;
 
   @Prop({ required: true, type: String }) description!: string;
 
   @Prop({ required: true, type: String }) theme!: string;
-  
+
   @Prop({ required: false, type: Boolean }) show!: boolean;
 
   @Emit('close')
   setAlertFalse(): void {
-    alertModule.setAlertFalse()
+    alertModule.setAlertFalse();
   }
   
 }

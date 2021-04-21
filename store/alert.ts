@@ -1,16 +1,16 @@
 import {
-    Module,
-    VuexModule,
-    Mutation,
-    getModule,
-  } from 'vuex-module-decorators';
-  import Vuex from 'vuex';
-  import Vue from 'vue';
-  
+  Module,
+  VuexModule,
+  Mutation,
+  getModule,
+} from 'vuex-module-decorators';
+import Vuex from 'vuex';
+import Vue from 'vue';
+
   @Module({ namespaced: true, name: 'alert' })
-  export default class AlertModule extends VuexModule {
+export default class AlertModule extends VuexModule {
     public showAlert: boolean = false
-  
+
     @Mutation
     setAlertTrue(): void {
       this.showAlert = true;
@@ -20,13 +20,12 @@ import {
     setAlertFalse(): void {
       this.showAlert = false;
     }
-  }
-  
-  Vue.use(Vuex);
-  const store = new Vuex.Store({
-    modules: {
-      alert: AlertModule,
-    },
-  });
-  export const alertModule = getModule(AlertModule, store);
-  
+}
+
+Vue.use(Vuex);
+const store = new Vuex.Store({
+  modules: {
+    alert: AlertModule,
+  },
+});
+export const alertModule = getModule(AlertModule, store);

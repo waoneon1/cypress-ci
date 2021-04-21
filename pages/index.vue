@@ -143,8 +143,8 @@ export default class Login extends Vue {
               credentialModule.dataCredential.data.accessToken,
             );
             // redirect . . .
-            alertModule.setAlertTrue()
-            this.$router.push('/dashboard')
+            alertModule.setAlertTrue();
+            this.$router.push('/dashboard');
           } else {
             this.loginStatus(false);
           }
@@ -170,7 +170,7 @@ export default class Login extends Vue {
   }
 
   loginStatus(value: boolean): void {
-    alertModule.setAlertTrue()
+    alertModule.setAlertTrue();
     this.alert = alertModule.showAlert;
     if (value) {
       this.alertTitle = 'Your Login Success';
