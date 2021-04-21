@@ -15,7 +15,7 @@
         <img
           v-if="theme == 'success'"
           src="~/static/img/svg/check.svg"
-          alt="toast icon success"
+          alt="toast icon success "
         />
         <img
           v-else
