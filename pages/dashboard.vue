@@ -5,6 +5,7 @@
       title="Your Login Success"
       description="Welcome"
       theme="success"
+      @close="alert = false"
     />
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"

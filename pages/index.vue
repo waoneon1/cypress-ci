@@ -5,6 +5,7 @@
       :title="alertTitle"
       :description="alertDescription"
       :theme="alertTheme"
+      @close="alert = false"
     />
     <div class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10">
       <div class="flex items-center mb-5">

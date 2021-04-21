@@ -177,6 +177,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
 import Thankyou from '~/components/utilities/Thankyou.vue';
+import LazyImage from '~/components/utilities/LazyImage.vue';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
@@ -205,7 +206,7 @@ export interface QnaSubmit {
   /* eslint-enable camelcase */
 }
 @Component({
-  components: { Thankyou },
+  components: { Thankyou, LazyImage },
 })
 export default class Qna extends Vue {
   domain: string = '';
