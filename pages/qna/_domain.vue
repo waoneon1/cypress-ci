@@ -84,7 +84,7 @@
               "
             >
               <div class="bg-gray-50">
-                <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
+                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" />
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
