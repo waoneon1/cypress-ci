@@ -1,38 +1,108 @@
-name: Build then Push Dev to Docker Registry
-
-# Trigger on push to master or merge to master from PR
+name: Auto Deploy Staging
 on:
   push:
-    branches: [dev]
+    branches:
+      - dev
 
-# A workflow run is made up of one or more jobs that can run sequentially (with needs) or in parallel
 jobs:
-  # We use 2 jobs: continous-integrations and docker-build
-  # docker-build will run after continous-integrations success
-
-  continous-integrations:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  lint:
+    name: Lint Check
+    runs-on: ubuntu-20.04
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            **/node_modules/.cache
+          key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Lint
+        run: npm run lint
 
-      # Run your CI script before build docker image
-      - name: Build and Test
-        run: # make install && \
-          # make test && \
-          # make coverage && \
-          # make cleanup \
-          echo "Simulate install, test and build"
+  unittest:
+    name: Unit Test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            **/node_modules/.cache
+          key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Test
+        run: npm run test
+      - name: Archive Code Coverage Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: rrs-web-code-coverage-report
+          path: coverage
+
+  sonarcloud:
+    needs:
+      - lint
+      - unittest
+    # if: success() && github.ref == 'refs/heads/master'
+    if: success()
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      # - uses: actions/checkout@v2
+      #   with:
+      #     fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            **/node_modules/.cache
+          key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Download Code Coverage Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: rrs-web-code-coverage-report
+          path: coverage
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker-build:
+    name: Docker Build
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Make sure the code is tested before build docker
-    needs: continous-integrations
+    needs: sonarcloud
+    if: success()
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -109,13 +179,11 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
-  deploy_staging:
-    name: Deploy staging
+
+  deploy-staging:
+    name: Deploy Staging
     runs-on: ubuntu-latest
-    needs:
-      [
-        docker-build,
-      ]
+    needs: [docker-build]
     steps:
       - name: Get the version
         id: get_version

@@ -4,6 +4,24 @@
   </div>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
 
-<style scoped></style>
+@Component
+export default class Login extends Vue {
+  pageStatus: boolean = false;
+
+  checkMaintenance() {
+    if (this.pageStatus) {
+      this.$router.push('/maintenance');
+    } else {
+      localStorage.removeItem('token');
+      this.$router.push('/');
+    }
+  }
+
+  beforeMount() {
+    this.checkMaintenance();
+  }
+}
+</script>

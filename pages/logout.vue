@@ -7,8 +7,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
-export default class ClassLogout extends Vue {
+@Component({
+  layout: 'login',
+})
+export default class Logout extends Vue {
   mounted() {
     this.init();
   }
@@ -19,5 +21,3 @@ export default class ClassLogout extends Vue {
   }
 }
 </script>
-
-<style></style>

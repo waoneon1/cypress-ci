@@ -1,10 +1,8 @@
 name: Code Check
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   lint:
     name: Lint Check
@@ -27,6 +25,7 @@ jobs:
         run: npm ci
       - name: Run Lint
         run: npm run lint
+
   unittest:
     name: Unit Test
     runs-on: ubuntu-20.04
@@ -53,9 +52,13 @@ jobs:
         with:
           name: rrs-web-code-coverage-report
           path: coverage
+
   sonarcloud:
-    needs: unittest
-    if: success() && github.ref == 'refs/heads/master'
+    needs:
+      - lint
+      - unittest
+    # if: success() && github.ref == 'refs/heads/master'
+    if: success()
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
