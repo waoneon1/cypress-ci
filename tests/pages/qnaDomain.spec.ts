@@ -5,9 +5,7 @@ import {
 import Vuex from 'vuex';
 import { getModule } from 'vuex-module-decorators';
 import QnaStore from '@/store/qna';
-import {
-  shallowMount, Wrapper, createLocalVue,
-} from '@vue/test-utils';
+import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils';
 import axios, { AxiosResponse } from 'axios';
 
 let wrapper: Wrapper<any>;
@@ -62,7 +60,7 @@ describe('Pages > index.vue', () => {
       },
     };
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
+      stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
           params: { domain: 'requirements' },
@@ -83,7 +81,8 @@ describe('Pages > index.vue', () => {
           domain: 'design',
           domainId: 'nodata',
           thankyouPage: false,
-          local: '{"criteria_name":"requirements","id":"606d1d5cf50eab8cb59f434c"}',
+          local:
+            '{"criteria_name":"requirements","id":"606d1d5cf50eab8cb59f434c"}',
           employees: [
             {
               criteria_id: 'string',
@@ -100,11 +99,13 @@ describe('Pages > index.vue', () => {
           selectedAnswer: [],
           allSelectedAnswer: [],
           answers: [],
-          answersObject: [{
-            name: 'string',
-            email: 'string',
-            image: 'string',
-          }],
+          answersObject: [
+            {
+              name: 'string',
+              email: 'string',
+              image: 'string',
+            },
+          ],
           maxSelectedAnswer: 3,
           indenClass: ['', '-left-2', '-left-3.5'],
           pages: 10,
@@ -238,8 +239,7 @@ describe('Pages > index.vue', () => {
     }
 
     wrapper.setData({
-      employees:
-      [
+      employees: [
         {
           criteria_id: 'string',
           criteria_name: 'design',
@@ -290,7 +290,6 @@ describe('Pages > index.vue', () => {
           employee_image_url_x: '',
           employee_image_url_y: '',
         },
-
       ],
     });
 
@@ -327,7 +326,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
       },
     };
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
+      stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
           params: { domain: 'requirements' },
@@ -345,11 +344,13 @@ describe('Pages > index.vue : kondisi ke 2', () => {
           page: 10,
           currentPages: 10,
           answers: [],
-          answersObject: [{
-            name: 'string',
-            email: 'string',
-            image: 'string',
-          }],
+          answersObject: [
+            {
+              name: 'string',
+              email: 'string',
+              image: 'string',
+            },
+          ],
         };
       },
       mixins: [override],
@@ -413,7 +414,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
 describe('Pages > index.vue : kondisi ke 3', () => {
   beforeEach(() => {
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
+      stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
           params: { domain: 'requirements' },
@@ -453,7 +454,7 @@ describe('Pages > index.vue : kondisi ke 3', () => {
 describe('Pages > index.vue : kondisi ke 4', () => {
   beforeEach(() => {
     wrapper = shallowMount(Qna, {
-      stubs: ['nuxt-link'],
+      stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
           employees: [
@@ -466,7 +467,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone1',
@@ -475,7 +477,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi1@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone2',
@@ -484,7 +487,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi2@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone3',
@@ -493,7 +497,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi3@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -502,7 +507,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -511,7 +517,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -520,7 +527,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -529,7 +537,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -538,7 +547,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',
@@ -547,7 +557,8 @@ describe('Pages > index.vue : kondisi ke 4', () => {
               employee_email_y: 'dodi@alterra.id',
               employee_image_url_x: '',
               employee_image_url_y: '',
-            }, {
+            },
+            {
               criteria_id: 'string',
               criteria_name: 'design',
               employee_name_x: 'waone',

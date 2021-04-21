@@ -83,8 +83,13 @@
                   : `${selectedAnswerClass(item.email)}`
               "
             >
+<<<<<<< HEAD
               <div class="bg-gray-50" style="min-height:100px">
                 <img v-if="item.image" class="" :src="item.image" :alt="item.name" />
+=======
+              <div class="bg-gray-50">
+                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" />
+>>>>>>> fd252232ec505bfd1ea904f212a2e3a4072b9a53
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
