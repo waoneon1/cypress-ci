@@ -127,11 +127,11 @@ export default class Login extends Vue {
   async handleClickLogin() {
     try {
       this.googleUser = await this.$gAuth.signIn();
-      const { idToken } = this.googleUser.getAuthResponse();
+      const idToken = this.googleUser.getAuthResponse().id_token;
       this.email = this.googleUser.getBasicProfile().getEmail();
       if (this.validateEmail()) {
         if (await this.$gAuth.isAuthorized) {
-          // Do stuff with module
+          // Do stuff with
           await credentialModule.getToken(idToken);
           // If success redirect to dashboard
           if (credentialModule.dataCredential.responseCode === '0000') {
