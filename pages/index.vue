@@ -1,10 +1,11 @@
 <template>
   <div class="bg-gray-100 md:h-screen overflow-x-hidden">
     <Alert
-      v-show="alert"
+      :show="alert"
       :title="alertTitle"
       :description="alertDescription"
       :theme="alertTheme"
+      @close="alert = false"
     />
     <div class="relative my-0 mx-auto h-full max-w-md bg-white p-5 sm:p-10">
       <div class="flex items-center mb-5">
@@ -95,6 +96,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { credentialModule } from '@/store/credential';
+import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
 import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
 
@@ -125,12 +127,12 @@ export default class Login extends Vue {
   async handleClickLogin() {
     try {
       this.googleUser = await this.$gAuth.signIn();
-      const profile = this.googleUser.Qs;
-      this.email = profile.zt ? profile.zt : profile.nt;
+      const profile = this.googleUser.ft;
+      this.email = profile.zt ? profile.zt : profile.Qt;
       if (this.validateEmail()) {
         if (await this.$gAuth.isAuthorized) {
           // Do stuff with module
-          await credentialModule.getToken(this.googleUser.tc.id_token);
+          await credentialModule.getToken(this.googleUser.qc.id_token);
           // If success redirect to dashboard
           if (credentialModule.dataCredential.responseCode === '0000') {
             // success
@@ -141,7 +143,8 @@ export default class Login extends Vue {
               credentialModule.dataCredential.data.accessToken,
             );
             // redirect . . .
-            this.$router.push('/dashboard?success=1');
+            alertModule.setAlertTrue();
+            this.$router.push('/dashboard');
           } else {
             this.loginStatus(false);
           }
@@ -167,7 +170,8 @@ export default class Login extends Vue {
   }
 
   loginStatus(value: boolean): void {
-    this.alert = true;
+    alertModule.setAlertTrue();
+    this.alert = alertModule.showAlert;
     if (value) {
       this.alertTitle = 'Your Login Success';
       this.alertDescription = 'Welcome';

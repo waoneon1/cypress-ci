@@ -22,4 +22,11 @@ describe('Components > Utilities > Alert.vue', () => {
   it('berhasil mounting komponen', () => {
     expect(wrapper.vm).toBeTruthy();
   });
+
+  // mounting component
+  it('Emit close > setAlertFalse()', () => {
+    wrapper.vm.setAlertFalse();
+    expect(wrapper.emitted().close).toBeTruthy();
+    expect(wrapper.emitted('close')).toBeTruthy();
+  });
 });
