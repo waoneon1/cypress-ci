@@ -92,41 +92,28 @@ describe('Pages > index.vue', () => {
     const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
-      data() {
-        return {
-          // supaya bisa memanggil focus, makan mesti aktifkan dulu input textarea replynya
-          alert: false,
-          email: 'rizky@alterra.id',
-        };
-      },
       mocks: {
         $router: {
           push: router,
         },
         $gAuth: {
           signIn() {
-            const signin = jest.fn();
-            signin.mockReturnValue({
-              Aa: '113687123356909921492',
-              ft: {
-                EI:
-                  'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
-                ER: '113687123356909921492',
-                Te: 'Rizky Maulana',
-                kR: 'Maulana',
-                oT: 'Rizky',
-                zt: 'rmaulana@alterra.id',
+            return {
+              getAuthResponse() {
+                return {
+                  id_token: 'xxxx',
+                };
               },
-              qc: {
-                id_token:
-                  'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
+              getBasicProfile() {
+                return {
+                  getEmail() {
+                    return 'dharmawan@alterra.id';
+                  },
+                };
               },
-            });
-            return signin();
+            };
           },
-          isAuthorized() {
-            return true;
-          },
+          isAuthorized: true,
         },
         $store: jest.fn(),
         getToken() {
@@ -144,7 +131,7 @@ describe('Pages > index.vue', () => {
     expect(axios.post).toHaveBeenCalled();
   });
 
-  it('Handle click login respon email nt', async () => {
+  it('Handle click login respon email validate success', async () => {
     const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
@@ -154,26 +141,22 @@ describe('Pages > index.vue', () => {
         },
         $gAuth: {
           signIn() {
-            const signin = jest.fn();
-            signin.mockReturnValue({
-              Aa: '113687123356909921492',
-              ft: {
-                EI: 'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
-                ER: '113687123356909921492',
-                Te: 'Rizky Maulana',
-                kR: 'Maulana',
-                oT: 'Rizky',
-                Qt: 'rmaulana@alterra.id',
+            return {
+              getAuthResponse() {
+                return {
+                  id_token: 'xxxx',
+                };
               },
-              qc: {
-                id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
+              getBasicProfile() {
+                return {
+                  getEmail() {
+                    return 'dharmawan@alterra.id';
+                  },
+                };
               },
-            });
-            return signin();
+            };
           },
-          isAuthorized() {
-            return true;
-          },
+          isAuthorized: true,
         },
         $store: jest.fn(),
         getToken() {
@@ -194,7 +177,7 @@ describe('Pages > index.vue', () => {
     expect(wrapper.vm.alertTheme).toBe('success');
   });
 
-  it('Handle click login respon email non alterra', async () => {
+  it('Handle click login respon email validate failed (non alterra login)', async () => {
     const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
@@ -204,26 +187,22 @@ describe('Pages > index.vue', () => {
         },
         $gAuth: {
           signIn() {
-            const signin = jest.fn();
-            signin.mockReturnValue({
-              Aa: '113687123356909921492',
-              ft: {
-                EI: 'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
-                ER: '113687123356909921492',
-                Te: 'Rizky Maulana',
-                kR: 'Maulana',
-                oT: 'Rizky',
-                Qt: 'rizky@gmail.com',
+            return {
+              getAuthResponse() {
+                return {
+                  id_token: 'xxxx',
+                };
               },
-              qc: {
-                id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
+              getBasicProfile() {
+                return {
+                  getEmail() {
+                    return 'dharmawan@gmail.com';
+                  },
+                };
               },
-            });
-            return signin();
+            };
           },
-          isAuthorized() {
-            return true;
-          },
+          isAuthorized: true,
         },
         $store: jest.fn(),
         getToken() {
@@ -243,7 +222,7 @@ describe('Pages > index.vue', () => {
     expect(wrapper.vm.alertTheme).toBe('danger');
   });
 
-  it('Handle click login auth respon fail', async () => {
+  it('Handle click login respon email validate success > $gAuth.isAuthorized failed', async () => {
     const router = jest.fn();
     wrapper = shallowMount(ClassLogin, {
       stubs: ['Alert'],
@@ -253,26 +232,22 @@ describe('Pages > index.vue', () => {
         },
         $gAuth: {
           signIn() {
-            const signin = jest.fn();
-            signin.mockReturnValue({
-              Aa: '113687123356909921492',
-              ft: {
-                EI: 'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
-                ER: '113687123356909921492',
-                Te: 'Rizky Maulana',
-                kR: 'Maulana',
-                oT: 'Rizky',
-                Qt: 'rizky@alterra.id',
+            return {
+              getAuthResponse() {
+                return {
+                  id_token: 'xxxx',
+                };
               },
-              qc: {
-                id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
+              getBasicProfile() {
+                return {
+                  getEmail() {
+                    return 'dharmawan@alterra.id';
+                  },
+                };
               },
-            });
-            return signin();
+            };
           },
-          // isAuthorized() {
-          //   return false;
-          // },
+          isAuthorized: false,
         },
         $store: jest.fn(),
         getToken() {
@@ -281,7 +256,6 @@ describe('Pages > index.vue', () => {
       },
     });
     await wrapper.vm.handleClickLogin();
-
     const service = credentialModule();
     const token = 'token';
 
@@ -291,7 +265,7 @@ describe('Pages > index.vue', () => {
     expect(wrapper.vm.alertTheme).toBe('danger');
   });
 
-  it('Handle click login respon not 000', async () => {
+  it('Handle click login respon not 0000', async () => {
     const router = jest.fn();
     mockedResponse = {
       data: {
@@ -316,26 +290,22 @@ describe('Pages > index.vue', () => {
         },
         $gAuth: {
           signIn() {
-            const signin = jest.fn();
-            signin.mockReturnValue({
-              Aa: '113687123356909921492',
-              ft: {
-                EI: 'https://lh6.googleusercontent.com/-5e87Ngwkp14/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnX-rsvGmnwxBsg4YfzU5VbIdPC5Q/s96-c/photo.jpg',
-                ER: '113687123356909921492',
-                Te: 'Rizky Maulana',
-                kR: 'Maulana',
-                oT: 'Rizky',
-                Qt: 'rizky@alterra.id',
+            return {
+              getAuthResponse() {
+                return {
+                  id_token: 'xxxx',
+                };
               },
-              qc: {
-                id_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjQ2NTMxNTI4NDQ2LTEzNm1maGd2a2ZwNGJwZGVtOG44Y3Jpcml2NG9xbTYwLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNjg3MTIzMzU2OTA5OTIxNDkyIiwiaGQiOiJhbHRlcnJhLmlkIiwiZW1haWwiOiJybWF1bGFuYUBhbHRlcnJhLmlkIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJUakw2bFJ5T0UzcFhqbEZfekRMT19RIiwibmFtZSI6IlJpemt5IE1hdWxhbmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy01ZTg3Tmd3a3AxNC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNuWC1yc3ZHbW53eEJzZzRZZnpVNVZiSWRQQzVRL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJSaXpreSIsImZhbWlseV9uYW1lIjoiTWF1bGFuYSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjE2NDY5OTI4LCJleHAiOjE2MTY0NzM1MjgsImp0aSI6IjU0YjRiZjFhNTM3OGM4YjA0MTk2NzI0ZDM5NzQyZGExN2ExY2MxODAifQ.Mqb0vrJHf_0wLBkbO-uny2z3h4LCmAibOmIVSF1LKOPzOx_kup3W7ZS-IuKKa_iP4EadvYTDT3H_1O-6q2glNrEJcllHr3y4kadL7K3GIFbwWasAFbObtMwpDNw7KcOJKkp9jOzQBQeEMq2z0mAoQ2F5NQqXlKIpNAqX_QHLdKmPENbm0IQrapEyq9dzLoatQWrdWjBHa0W2oVpUcq9282j33BlKLKaVR0AZcSvCnHNXq18a0xmMbgYMoZGazW0svPl5S_SJU9fORa-n20wffdxt2S5mg56CVVxKkoWXYV9-1RrEAEIoaWpy2jjw02YxtGXI3EyoHxJXBhikkuJJuA',
+              getBasicProfile() {
+                return {
+                  getEmail() {
+                    return 'dharmawan@alterra.id';
+                  },
+                };
               },
-            });
-            return signin();
+            };
           },
-          isAuthorized() {
-            return true;
-          },
+          isAuthorized: true,
         },
         $store: jest.fn(),
         getToken() {
@@ -353,5 +323,24 @@ describe('Pages > index.vue', () => {
     expect(wrapper.vm.alertTitle).toBe('Your Login Failed');
     expect(wrapper.vm.alertDescription).toBe('Try again using alterra email');
     expect(wrapper.vm.alertTheme).toBe('danger');
+  });
+
+  it('Handle click login catch error', async () => {
+    const router = jest.fn();
+    wrapper = shallowMount(ClassLogin, {
+      stubs: ['Alert'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+        $gAuth: {
+          signIn() {
+            return false;
+          },
+        },
+      },
+    });
+
+    await wrapper.vm.handleClickLogin();
   });
 });
