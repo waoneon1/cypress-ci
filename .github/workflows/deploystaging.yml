@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - dev
-      - HOTI-161/folderstructure
+      - HOTI-161/src
 
 jobs:
   lint:
