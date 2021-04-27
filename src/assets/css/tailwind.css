@@ -1,0 +1,28 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Animation and Transition */
+.po-animate-btn {
+  @apply transition;
+  @apply duration-500;
+  @apply ease-in-out;
+}
+* {
+  @apply transition;
+  @apply duration-200;
+  @apply ease-in-out;
+}
+
+/* Remove outline on focus */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  @apply outline-none;
+  @apply shadow-none;
+}
+
+.c-message p {
+  @apply mb-3;
+}
