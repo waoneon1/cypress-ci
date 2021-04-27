@@ -85,6 +85,7 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Download Code Coverage Artifact
         uses: actions/download-artifact@v2
