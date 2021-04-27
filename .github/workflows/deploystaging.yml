@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - HOTI-161/folderstructure
 
 jobs:
   lint:
@@ -23,8 +24,10 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Run Lint
+        working-directory: ./src
         run: npm run lint
 
   unittest:
@@ -45,8 +48,10 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Run Test
+        working-directory: ./src
         run: npm run test
       - name: Archive Code Coverage Results
         uses: actions/upload-artifact@v2
@@ -82,6 +87,7 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Download Code Coverage Artifact
         uses: actions/download-artifact@v2
@@ -125,7 +131,6 @@ jobs:
         env:
           ORGANIZATION: sepulsa # example
           APP_NAME: rrs-web # example
-
         # VERSION=$(git describe --tags --abbrev=0) # will fail if never tagged
         run: |
           set -e          
