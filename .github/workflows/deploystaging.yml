@@ -156,7 +156,7 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/./tmp/.buildx-main-cache
+          path: /tmp/.buildx-main-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
@@ -172,16 +172,16 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./src/
-          file: Dockerfile
+          context: src
+          file: src/Dockerfile
           platforms: linux/amd64
           # push: ${{ github.event_name == 'release' }}
           push: true
           # tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
           #tags: ${{ steps.prep.outputs.tags }}
           tags: sepulsa/relative-ranking-system:rrs-web-${{ github.sha }}
-          cache-from: type=local,src=/tmp/./tmp/.buildx-main-cache
-          cache-to: type=local,dest=/tmp/./tmp/.buildx-main-cache
+          cache-from: type=local,src=/tmp/.buildx-main-cache
+          cache-to: type=local,dest=/tmp/.buildx-main-cache
           labels: |
             org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
             org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
