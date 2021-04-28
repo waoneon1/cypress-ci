@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - dev
+      - HOTI-161/src
   pull_request:
     branches: 
       - dev
+      - HOTI-161/src
 
 jobs:
   lint:
