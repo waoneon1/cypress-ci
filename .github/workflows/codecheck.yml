@@ -2,6 +2,9 @@ name: Code Check
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - HOTI-161/src
 
 jobs:
   lint:
@@ -91,7 +94,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: rrs-web-code-coverage-report
-          path: coverage
+          path: src/coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - dev
-      - HOTI-161/src
 
 jobs:
   lint:
