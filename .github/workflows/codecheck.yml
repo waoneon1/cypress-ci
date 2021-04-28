@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: rrs-web-code-coverage-report
-          path: coverage
+          path: src/coverage
 
   sonarcloud:
     needs:
