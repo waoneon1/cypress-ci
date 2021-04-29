@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'RRS | Relative Ranking System',
+    title: process.env.RRS_APP_TITLE,
     htmlAttrs: {
       lang: 'en',
     },
@@ -44,7 +44,10 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios'],
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
+  ],
 
   axios: {
     baseURL: 'https://rrs-api.sumpahpalapa.com/api/v1',

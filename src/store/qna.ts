@@ -28,7 +28,7 @@ export interface QnaResponse {
   data: QnaResponseData[];
 }
 
-const url: string = 'https://rrs-api.sumpahpalapa.com/api/v1/';
+const url: string = process.env.RRS_API_URL!;
 @Module({ namespaced: true, name: 'qna' })
 export default class QnaModule extends VuexModule {
   public dataQna: QnaResponse = {
