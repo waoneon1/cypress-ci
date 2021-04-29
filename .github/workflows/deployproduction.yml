@@ -2,10 +2,10 @@ name: Auto Deploy Staging
 on:
   push:
     branches:
-      - dev
+      - master
   pull_request:
     branches: 
-      - dev
+      - master
 
 jobs:
   lint:
