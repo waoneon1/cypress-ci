@@ -2,10 +2,10 @@
   <div class="bg-gray-100 h-screen overflow-x-hidden">
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
-      :class="thankyouPage || domainId === 'nodata' ? '' : 'pb-36'"
+      :class="thankyouPage || domainId === 'nodata' || help ? '' : 'pb-36'"
     >
       <!-- Heading -->
-      <div class="flex justify-center relative py-5">
+      <div class="flex justify-between relative py-5">
         <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
           <svg
             class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
@@ -17,6 +17,13 @@
         </nuxt-link>
         <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
+        <div 
+          class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
+          @click="help = !help"
+        >
+          <span v-if="help" class="text-xs text-gray-400">x</span>
+          <span v-else class="text-xs text-gray-400">?</span>
+        </div>
       </div>
       <!-- Content: Question -->
       <div v-if="thankyouPage"></div>
@@ -168,6 +175,59 @@
           </div>
         </div>
       </div>
+
+      <!-- Help -->
+      <Help 
+        title="Domain Requirements"
+        :show="help"
+      >
+        <p slot="content" class="mb-5">
+          1. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
+          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
+        </p>
+        <p slot="content">
+          2. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
+        </p>
+        <p slot="content" class="mb-5">
+          3. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
+        </p>
+        <p slot="content" class="mb-5">
+          4. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
+          dummy text of the printing and typesetting industry. 
+          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
+        </p>
+        <p slot="content" class="mb-5">
+          5. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
+          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
+        </p>
+        <p slot="content">
+          6. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
+        </p>
+        <p slot="content" class="mb-5">
+          7. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
+        </p>
+        <p slot="content" class="mb-5">
+          8. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
+          dummy text of the printing and typesetting industry. 
+          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
+        </p>
+        <p slot="content" class="mb-5">
+          9. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
+          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
+        </p>
+        <p slot="content">
+          10. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
+        </p>
+        <p slot="content" class="mb-5">
+          11. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
+        </p>
+        <p slot="content" class="mb-5">
+          12. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
+          dummy text of the printing and typesetting industry. 
+          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
+        </p>
+       
+      </Help>
     </div>
   </div>
 </template>
@@ -177,6 +237,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
 import Thankyou from '~/components/utilities/Thankyou.vue';
+import Help from '~/components/utilities/Help.vue';
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
@@ -205,7 +266,7 @@ export interface QnaSubmit {
   /* eslint-enable camelcase */
 }
 @Component({
-  components: { Thankyou },
+  components: { Thankyou, Help },
 })
 export default class Qna extends Vue {
   domain: string = '';
@@ -218,7 +279,9 @@ export default class Qna extends Vue {
 
   local: string | null = localStorage.getItem('rss_criteria');
 
-  loading: boolean = true
+  loading: boolean = true;
+
+  help: boolean = false;
 
   // data answer
   selectedAnswer: string[] = [];
