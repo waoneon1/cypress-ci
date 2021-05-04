@@ -39,7 +39,9 @@ mockedAxios.get.mockResolvedValue(mockedResponse);
 describe('Pages > dashboard.vue', () => {
   // mounting component
   it('berhasil mounting komponen', () => {
-    const wrapper: any = shallowMount(ClassDashboard, {});
+    const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
+    });
     expect(wrapper.vm).toBeTruthy();
   });
 
