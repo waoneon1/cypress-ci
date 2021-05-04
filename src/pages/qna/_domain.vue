@@ -2,7 +2,14 @@
   <div class="bg-gray-100 h-screen overflow-x-hidden">
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
-      :class="thankyouPage || domainId === 'nodata' || help ? '' : 'pb-36'"
+      :class="thankyouPage
+      || domainId === 'nodata'
+      || help
+      || criteriaProgressCount() == 25
+      || criteriaProgressCount() == 50
+      || criteriaProgressCount() == 75
+      || criteriaProgressCount() >= 100
+      ? '' : 'pb-36'"
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
@@ -17,7 +24,7 @@
         </nuxt-link>
         <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
-        <div 
+        <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
         >
@@ -26,8 +33,9 @@
         </div>
       </div>
       <!-- Content: Question -->
-      <div v-if="thankyouPage"></div>
+      <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
       <div v-else-if="domainId === 'nodata'"></div>
+      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"></div>
       <div v-else class="relative">
         <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
@@ -39,7 +47,7 @@
 
       <!-- Content: Answer -->
       <Thankyou
-        v-if="thankyouPage"
+        v-if="thankyouPage || criteriaProgressCount() >= 100"
         image="appreciation.svg"
         :buttons="[{
           label: 'Kembali',
@@ -65,6 +73,30 @@
           Data dari criteria <span class="text-secondary">{{ domain }},</span> tidak ditemukan
         </h1>
       </Thankyou>
+      <div
+        v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"
+        class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
+      >
+        <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
+          <img class="mb-10 w-60" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
+          <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
+            Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
+          </h1>
+          <p class="text-sm max-w-sm mb-4">Jika ingin menunda untuk melanjutkan proses pemilihan di domain ini, kamu bisa memilih “Lanjutkan Nanti”</p>
+          <p class="text-sm max-w-sm mb-4">Kamu juga bisa melanjutkan pemilihan alterrans lainnya untuk domain ini dengan cara memilih “Lanjutkan” untuk dapat memilih hingga ke milestone berikutnya</p>
+          <div class="flex space-x-4 mt-10">
+            <nuxt-link to="/dashboard" class="rounded-full py-2 px-4 border border-solid border-secondary bg-white hover:bg-secondary  hover:text-white text-secondary focus:outline-none flex items-center mx-auto justify-center inline-block">
+              Lanjutkan Nanti
+            </nuxt-link>
+            <button
+              @click="progressCounter+=5"
+              class="rounded-full py-3 px-8 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+            >
+              Lanjutkan
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="relative" v-else>
         <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
         <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
@@ -104,6 +136,7 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage || domainId === 'nodata'" class="fixed bottom-0 left-0 right-0"></div>
+      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75 || criteriaProgressCount() >= 100"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
@@ -115,10 +148,10 @@
           <div class="flex items-center justify-center mb-2">
             <div class="relative pr-2 w-full">
               <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                <div :style="`width:${criteriaProgress(domainId).progress}%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                <div :style="`width:${criteriaProgress(domainId).progress + progressCounter}%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
               </div>
             </div>
-            <span class="text-xs inline-block text-primary">{{ criteriaProgress(domainId).progress }}%</span>
+            <span class="text-xs inline-block text-primary">{{ criteriaProgress(domainId).progress + progressCounter }}%</span>
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
@@ -153,8 +186,8 @@
             <div class="inline-block flex">
               <button
                 :disabled="loading"
-                @click="nextPage()"
-                class="rounded-full py-2 px-4 border border-solid border-secondary bg-white hover:bg-secondary text-secondary hover:text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+                @click="nextPage(); progressCounter+=5"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -162,14 +195,8 @@
                 </svg>
                 <span class="font-bold text-sm">
                   <!-- {{ buttonLabel() }} -->
-                  Selanjutnya
+                  Lanjut
                 </span>
-              </button>
-              <button
-                @click="thankyouPage = true"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
-              >
-                <span class="font-bold text-sm">Selesai</span>
               </button>
             </div>
           </div>
@@ -177,7 +204,7 @@
       </div>
 
       <!-- Help -->
-      <Help 
+      <Help
         title="Domain Requirements"
         :show="help"
       >
@@ -192,8 +219,8 @@
           3. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
         </p>
         <p slot="content" class="mb-5">
-          4. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
-          dummy text of the printing and typesetting industry. 
+          4. Progress bar berikut mengindikasikan Lorem Ipsum is simply
+          dummy text of the printing and typesetting industry.
           <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
         </p>
         <p slot="content" class="mb-5">
@@ -207,8 +234,8 @@
           7. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
         </p>
         <p slot="content" class="mb-5">
-          8. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
-          dummy text of the printing and typesetting industry. 
+          8. Progress bar berikut mengindikasikan Lorem Ipsum is simply
+          dummy text of the printing and typesetting industry.
           <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
         </p>
         <p slot="content" class="mb-5">
@@ -222,11 +249,11 @@
           11. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
         </p>
         <p slot="content" class="mb-5">
-          12. Progress bar berikut mengindikasikan Lorem Ipsum is simply 
-          dummy text of the printing and typesetting industry. 
+          12. Progress bar berikut mengindikasikan Lorem Ipsum is simply
+          dummy text of the printing and typesetting industry.
           <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
         </p>
-       
+
       </Help>
     </div>
   </div>
@@ -271,7 +298,7 @@ export interface QnaSubmit {
 export default class Qna extends Vue {
   domain: string = '';
 
-  domainId: string | (string | null)[] = 'nodata';
+  domainId: string = 'nodata';
 
   employees: QnaResponseData[] = [];
 
@@ -282,6 +309,10 @@ export default class Qna extends Vue {
   loading: boolean = true;
 
   help: boolean = false;
+
+  progressCounter: number = 0;
+
+  progressCheckpoint: number[] = [25, 50, 75, 100];
 
   // data answer
   selectedAnswer: string[] = [];
@@ -297,7 +328,7 @@ export default class Qna extends Vue {
   indenClass: string[] = ['', '-left-2', '-left-3.5'];
 
   // pagination
-  pages: number = 10;
+  pages: number = 999;
 
   currentPages: number = 1;
 
@@ -457,6 +488,13 @@ export default class Qna extends Vue {
     return criteria.filter(
       (arr) => arr.id === id,
     )[0];
+  }
+
+  criteriaProgressCount() {
+    if (this.criteriaProgress(this.domainId)?.progress) {
+      return this.criteriaProgress(this.domainId).progress + this.progressCounter;
+    }
+    return this.criteriaProgress(this.domainId)?.progress;
   }
 }
 </script>

@@ -341,7 +341,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
           local: null,
           selectedAnswer: [1, 2, 3],
           maxSelectedAnswer: 3,
-          page: 10,
+          pages: 10,
           currentPages: 10,
           answers: [],
           answersObject: [

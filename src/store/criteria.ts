@@ -42,10 +42,10 @@ export default class CriteriaModule extends VuexModule {
       criteria_name: 'Construction', id: '606d1d68f50eab8cb59f434d', progress: 30, rebbon: false,
     },
     {
-      criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 44, rebbon: false,
+      criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 0, rebbon: false,
     },
     {
-      criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 14, rebbon: false,
+      criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 10, rebbon: false,
     },
     {
       criteria_name: 'Process', id: '606d1d78f50eab8cb59f4350', progress: 100, rebbon: false,
@@ -63,7 +63,7 @@ export default class CriteriaModule extends VuexModule {
       criteria_name: 'Config Management', id: '606d1d95f50eab8cb59f4354', progress: 30, rebbon: false,
     },
     {
-      criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 30, rebbon: false,
+      criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 10, rebbon: false,
     },
     {
       criteria_name: 'HCI', id: '606d1da5f50eab8cb59f4356', progress: 30, rebbon: false,

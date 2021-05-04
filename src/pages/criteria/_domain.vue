@@ -15,7 +15,7 @@
           </svg>
         </nuxt-link>
         <h1 class="text-primary text-sm capitalize">{{ domain }}</h1>
-        <div 
+        <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
         >
@@ -40,13 +40,13 @@
 
       <Help title="Domain Requirements 2" :show="help">
         <p slot="content" class="mb-4">
-          1. Domain <span class="text-secondary">Requirement</span> adalah Lorem Ipsum is simply 
-          dummy text of the printing and typesetting industry. 
+          1. Domain <span class="text-secondary">Requirement</span> adalah Lorem Ipsum is simply
+          dummy text of the printing and typesetting industry.
           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
         </p>
         <p slot="content" class="mb-4">
           2. Beberapa contoh lingkup Domain <span class="text-secondary">Requirement</span>
-          adalah Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+          adalah Lorem Ipsum is simply dummy text of the printing and typesetting industry.
           Lorem Ipsum has been the industry's
         </p>
         <p slot="content" class="mb-4">
