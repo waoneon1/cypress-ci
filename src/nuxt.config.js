@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: process.env.RRS_APP_TITLE,
+    title: process.env.NUXT_ENV_RRS_APP_TITLE,
     htmlAttrs: {
       lang: 'en',
     },
