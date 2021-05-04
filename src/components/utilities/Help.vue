@@ -17,7 +17,7 @@ import { Vue, Prop, Component } from 'vue-property-decorator';
 
 @Component
 export default class Help extends Vue {
-  @Prop({ required: false, type: Boolean }) title!: boolean;
+  @Prop({ required: false, type: String }) title?: string;
 
   @Prop({ required: false, type: Boolean }) show!: boolean;
 }

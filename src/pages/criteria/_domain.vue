@@ -38,10 +38,7 @@
         </h1>
       </Thankyou>
 
-      <Help 
-        title="Domain Requirements 2"
-        :show="help"
-      >
+      <Help title="Domain Requirements 2" :show="help">
         <p slot="content" class="mb-4">
           1. Domain <span class="text-secondary">Requirement</span> adalah Lorem Ipsum is simply 
           dummy text of the printing and typesetting industry. 
