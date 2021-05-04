@@ -148,8 +148,18 @@ export default class Dashboard extends Vue {
   }
 
   mounted() {
+    // call onboarding
+    this.onboardingInit();
     this.alert = alertModule.showAlert;
     this.loadCriteriaData();
+  }
+
+  onboardingInit() {
+    if (!localStorage.getItem('rrs_onboard')) {
+      // set localstorage
+      localStorage.setItem('rrs_onboard', 'true');
+      this.$router.push('/onboarding');
+    }
   }
 }
 </script>
