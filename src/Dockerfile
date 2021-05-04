@@ -6,6 +6,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+FROM build-stage as source
+ENV NUXT_ENV_RRS_APP_TITLE='RRS | Relative Ranking System'
+COPY --chown=node:node . .
+RUN npx nuxt build  
+
 ########################
 # production stage 
 ########################
