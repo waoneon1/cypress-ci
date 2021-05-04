@@ -18,11 +18,7 @@
           <div
             class="flex flex-col justify-center items-center text-center px-5 w-full"
           >
-            <img
-              class="mb-8"
-              :src="require('~/static/img/' + item.image)"
-              alt="onboarding"
-            />
+            <img class="mb-8" :src="'/img/' + item.image" alt="onboarding" />
             <h1
               class="text-2xl text-primary mb-8 max-w-xs font-mulish font-bold"
             >
