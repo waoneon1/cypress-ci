@@ -63,7 +63,7 @@ export default class CriteriaModule extends VuexModule {
       criteria_name: 'Config Management', id: '606d1d95f50eab8cb59f4354', progress: 30, rebbon: false,
     },
     {
-      criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 30, rebbon: false,
+      criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 10, rebbon: false,
     },
     {
       criteria_name: 'HCI', id: '606d1da5f50eab8cb59f4356', progress: 30, rebbon: false,
