@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute top-0 left-0 w-full flex bg-gray-900 py-4 bg-opacity-90" style="margin-top:60px; height: calc(100vh - 60px);"
+    class="absolute top-0 left-0 w-full flex bg-primary py-4 bg-opacity-90" style="margin-top:60px; height: calc(100vh - 60px);"
     v-show="show"
   >
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
