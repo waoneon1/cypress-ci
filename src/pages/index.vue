@@ -144,7 +144,7 @@ export default class Login extends Vue {
             );
             // redirect . . .
             alertModule.setAlertTrue();
-           
+
             if (!localStorage.getItem('rrs_onboard')) {
               // set localstorage
               localStorage.setItem('rrs_onboard', 'true');
@@ -152,7 +152,6 @@ export default class Login extends Vue {
             } else {
               this.$router.push('/dashboard');
             }
-            
           } else {
             this.loginStatus(false);
           }
