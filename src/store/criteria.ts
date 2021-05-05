@@ -22,7 +22,7 @@ export interface CriteriaResponse {
   data: CriteriaResponseData[];
 }
 
-const url: string = process.env.RRS_API_URL!;
+const url: string = process.env.NUXT_ENV_RRS_API_URL!;
 @Module({ namespaced: true, name: 'criteria' })
 export default class CriteriaModule extends VuexModule {
   public dataCriteria: CriteriaResponse = {
@@ -36,16 +36,16 @@ export default class CriteriaModule extends VuexModule {
       criteria_name: 'Design', id: '6062d4c9dd3acd0959261f51', progress: 70, rebbon: false,
     },
     {
-      criteria_name: 'Requirements', id: '606d1d5cf50eab8cb59f434c', progress: 30, rebbon: true,
+      criteria_name: 'Requirements', id: '606d1d5cf50eab8cb59f434c', progress: 30, rebbon: false,
     },
     {
       criteria_name: 'Construction', id: '606d1d68f50eab8cb59f434d', progress: 30, rebbon: false,
     },
     {
-      criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 0, rebbon: false,
+      criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 45, rebbon: false,
     },
     {
-      criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 10, rebbon: false,
+      criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 15, rebbon: false,
     },
     {
       criteria_name: 'Process', id: '606d1d78f50eab8cb59f4350', progress: 100, rebbon: false,
@@ -54,7 +54,7 @@ export default class CriteriaModule extends VuexModule {
       criteria_name: 'Systems Engineering', id: '606d1d7ff50eab8cb59f4351', progress: 30, rebbon: false,
     },
     {
-      criteria_name: 'Quality', id: '606d1d89f50eab8cb59f4352', progress: 0, rebbon: false,
+      criteria_name: 'Quality', id: '606d1d89f50eab8cb59f4352', progress: 0, rebbon: true,
     },
     {
       criteria_name: 'Security', id: '606d1d8ef50eab8cb59f4353', progress: 100, rebbon: false,
