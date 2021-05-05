@@ -108,7 +108,7 @@ export default class Criteria extends Vue {
       const domain = JSON.parse(this.local);
       const crit = dataCriteria.filter(
         (arr) => arr.criteria_name === domain.criteria_name,
-      )[0]
+      )[0];
       return crit ? crit.description : 'no data';
     }
     return 'no data';
