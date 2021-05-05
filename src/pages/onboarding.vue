@@ -105,23 +105,11 @@ export default class Onboarding extends Vue {
       image: 'svg/onboard2.svg',
     },
     {
-      title: 'Rekomendasi Domain',
-      content:
-        'Rekomendasi akan muncul jika management menginginkan ada suatu competency yang diprioritaskan di waktu tertentu',
-      image: 'svg/onboard3.svg',
-    },
-    {
       title: 'Pilih Alterans Rekomendasimu',
       content:
         'Alterrans bisa <b>memilih hingga 3 orang</b> yang paling kompeten di setiap sesinya. Alterrans diharapkan memilih employee sebanyak-banyaknya pada setiap competency (domain) yang tersedia',
       image: 'svg/onboard4.svg',
     },
-    // {
-    //   title: "Auto Save",
-    //   content:
-    //     "Saat melakukan pemilihan employee, untuk setiap phase yang dilalui sistem akan secara berkala menyimpan data ke database,jadi alterrans bisa melanjutkan kapan pun mereka mau",
-    //   image: "svg/onboard1.svg"
-    // },
     {
       title: 'Pilih Bantuan',
       content:
