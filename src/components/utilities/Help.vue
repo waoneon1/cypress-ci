@@ -6,7 +6,13 @@
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
       <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
       <div class="text-white font-base text-sm">
-        <slot name="content"></slot>
+        <h1 class="text-white mb-5 font-bold">Deskripsi</h1>
+        <slot name="desc"></slot>
+        <slot name="link"></slot>
+      </div>
+      <div class="text-white font-base text-sm">
+        <h1 class="text-white mb-5 font-bold">Aturan</h1>
+        <slot name="rules"></slot>
       </div>
     </div>
   </div>

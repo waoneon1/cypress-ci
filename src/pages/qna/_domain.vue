@@ -204,56 +204,40 @@
       </div>
 
       <!-- Help -->
-      <Help
-        title="Domain Requirements"
-        :show="help"
-      >
-        <p slot="content" class="mb-5">
-          1. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
+      <Help :title="domain" :show="help">
+        <p slot="desc" class="mb-4">
+          Keterampilan desain perangkat lunak digunakan untuk mengembangkan dan
+          menggambarkan arsitektur perangkat lunak suatu sistem berdasarkan
+          persyaratan perangkat lunaknya: terdiri dari deskripsi tentang
+          bagaimana perangkat lunak didekomposisi menjadi komponen dan antarmuka
+          antara komponen tersebut. Komponen ditentukan pada tingkat detail yang
+          memungkinkan konstruksinya. Bidang keterampilan ini juga mencakup
+          keterampilan yang berkaitan dengan proses dan teknik untuk kualitas
+          desain perangkat lunak, analisis, dan evaluasi.
         </p>
-        <p slot="content">
-          2. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          3. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          4. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-        <p slot="content" class="mb-5">
-          5. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
-        </p>
-        <p slot="content">
-          6. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          7. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          8. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-        <p slot="content" class="mb-5">
-          9. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
-        </p>
-        <p slot="content">
-          10. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          11. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          12. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-
+        <p slot="link" class="mb-4">Detail lingkup domain: <a href="#" class="text-secondary font-bold">http://domaindesign</a></p>
+        <ol slot="rules">
+          <li class="mb-4">
+            Pengguna dapat memilih max. 3 alterrans per halaman yang dirasa
+            sesuai dan paling baik dengan domain <span class="text-secondary">{{ domain }}</span> dan jika menurut
+            pengguna dalam 1 halaman tidak ada yang sesuai bisa langsung
+            klik tombol lanjut untuk melanjutkan ke halaman berikutnya.
+            <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="rounded-lg mt-4">
+          </li>
+          <li class="mb-4">
+            Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam
+            alterrans yang dipilih adalah hasil dari opini menurut mengguna yang
+            paling berkopenten dalam domain <span class="text-secondary">{{ domain }}</span>
+          </li>
+          <li class="mb-4">
+            Progress bar menandakan status dari progress uda sampai berapa
+            persen, progress bar naik ketika dalam halaman ada yang dipilih dan
+            jika progress bar sudah mencapai angka prosentase yang ditentukan
+            pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk
+            pemilih alterrans berdasarkan domain.
+            <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
+          </li>
+        </ol>
       </Help>
     </div>
   </div>
