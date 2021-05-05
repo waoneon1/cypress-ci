@@ -40,16 +40,9 @@
 
       <Help :title="domain" :show="help">
         <p slot="desc" class="mb-4">
-          Keterampilan desain perangkat lunak digunakan untuk mengembangkan dan
-          menggambarkan arsitektur perangkat lunak suatu sistem berdasarkan
-          persyaratan perangkat lunaknya: terdiri dari deskripsi tentang
-          bagaimana perangkat lunak didekomposisi menjadi komponen dan antarmuka
-          antara komponen tersebut. Komponen ditentukan pada tingkat detail yang
-          memungkinkan konstruksinya. Bidang keterampilan ini juga mencakup
-          keterampilan yang berkaitan dengan proses dan teknik untuk kualitas
-          desain perangkat lunak, analisis, dan evaluasi.
+          {{ dataCriteria() }}
         </p>
-        <p slot="link" class="mb-4">Detail lingkup domain: <a href="#" class="text-secondary font-bold">http://domaindesign</a></p>
+        <p slot="link" class="mb-4">Detail lingkup : <a href="http://dahlan.unimal.ac.id/files/ebooks/SWECOM.pdf" target="_blank" class="text-secondary font-bold">SWECOM</a></p>
         <ol slot="rules">
           <li class="mb-4">
             Pengguna dapat memilih max. 3 alterrans per halaman yang dirasa
