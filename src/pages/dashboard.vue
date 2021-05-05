@@ -37,7 +37,7 @@
               <div v-show="criteriaProgress(item.id).rebbon" class="absolute text-xs bg-yellow-300 text-white px-5 transform rotate-45" style="right: -25px; top: 25px;">
                 Rekomendasi
               </div>
-              <div class="bg-white text-primary justify-center px-3 py-3 hover:bg-blue-100">
+              <div :class="`bg-white text-primary justify-center px-3 py-3 ${ criteriaProgress( item.id ).progress >= 100 ? '' : 'hover:bg-blue-100' }`">
                 <div class="bg-gray-100 rounded-lg inline-block p-1">
                   <img src="~/static/img/svg/requirement.svg" alt="criteria"/>
                 </div>
