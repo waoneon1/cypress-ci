@@ -4,6 +4,7 @@
       <img class="mb-10 w-2/3" :src="require('~/static/img/svg/' + image)" alt="description domain" />
       <span v-show="subtitle" class="text-xs text-gray-400 mb-5">{{ subtitle }}</span>
       <slot name="title"></slot>
+      <slot name="content"></slot>
       <div class="flex space-x-4" v-if="buttons.length">
         <nuxt-link
           v-for="(item, i) in buttons"

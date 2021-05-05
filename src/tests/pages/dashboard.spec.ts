@@ -38,8 +38,16 @@ mockedAxios.get.mockResolvedValue(mockedResponse);
 
 describe('Pages > dashboard.vue', () => {
   // mounting component
+  const router = jest.fn();
   it('berhasil mounting komponen', () => {
-    const wrapper: any = shallowMount(ClassDashboard, {});
+    const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+      },
+    });
     expect(wrapper.vm).toBeTruthy();
   });
 

@@ -37,12 +37,12 @@ describe('Pages > criteria/_domain.vue', () => {
       },
       data() {
         return {
-          local: '{"criteria_name":"requirements","id":"606d1d5cf50eab8cb59f434c"}',
+          local: '{"criteria_name":"Requirements","id":"606d1d5cf50eab8cb59f434c"}',
         };
       },
     });
 
-    expect(wrapper.vm.domain).toBe('requirements');
+    expect(wrapper.vm.domain).toBe('Requirements');
     expect(wrapper.vm.domainId).toBe('606d1d5cf50eab8cb59f434c');
   });
 
