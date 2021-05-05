@@ -108,7 +108,7 @@ export default class Onboarding extends Vue {
       title: 'Pilih Alterans Rekomendasimu',
       content:
         'Alterrans bisa <b>memilih hingga 3 orang</b> yang paling kompeten di setiap sesinya. Alterrans diharapkan memilih employee sebanyak-banyaknya pada setiap competency (domain) yang tersedia',
-      image: 'svg/onboard4.svg',
+      image: 'svg/onboard3.svg',
     },
     {
       title: 'Pilih Bantuan',
