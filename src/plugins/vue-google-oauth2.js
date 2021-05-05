@@ -5,7 +5,7 @@ import Vue from 'vue';
 import GAuth from 'vue-google-oauth2';
 
 const gauthOption = {
-  clientId: process.env.RRS_GAUTH_CLIENTID,
+  clientId: process.env.NUXT_ENV_RRS_GAUTH_CLIENTID,
   scope: 'profile email',
   prompt: 'consent',
 };

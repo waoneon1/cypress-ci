@@ -22,7 +22,7 @@ export interface CriteriaResponse {
   data: CriteriaResponseData[];
 }
 
-const url: string = process.env.RRS_API_URL!;
+const url: string = process.env.NUXT_ENV_RRS_API_URL!;
 @Module({ namespaced: true, name: 'criteria' })
 export default class CriteriaModule extends VuexModule {
   public dataCriteria: CriteriaResponse = {

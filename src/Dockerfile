@@ -1,5 +1,9 @@
 FROM node:lts-alpine as build-stage
 
+ARG NUXT_ENV_RRS_APP_TITLE=“”
+ARG NUXT_ENV_RRS_API_URL=“”
+ARG NUXT_ENV_RRS_GAUTH_CLIENTID=“”
+
 WORKDIR /app
 COPY package.json ./
 RUN npm install

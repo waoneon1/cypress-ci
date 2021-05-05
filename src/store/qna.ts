@@ -28,7 +28,7 @@ export interface QnaResponse {
   data: QnaResponseData[];
 }
 
-const url: string = process.env.RRS_API_URL!;
+const url: string = process.env.NUXT_ENV_RRS_API_URL!;
 @Module({ namespaced: true, name: 'qna' })
 export default class QnaModule extends VuexModule {
   public dataQna: QnaResponse = {
