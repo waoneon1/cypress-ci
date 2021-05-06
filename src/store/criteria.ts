@@ -11,8 +11,9 @@ import Vue from 'vue';
 
 export interface CriteriaResponseData {
   /* eslint-disable camelcase */
-  criteria_name: string;
   id: string;
+  criteria_name: string;
+  percent_progress: number;
   /* eslint-enable camelcase */
 }
 export interface CriteriaResponse {
@@ -30,45 +31,6 @@ export default class CriteriaModule extends VuexModule {
     message: '',
     data: [],
   }
-
-  public dataCriteriaProgress = [
-    {
-      criteria_name: 'Design', id: '6062d4c9dd3acd0959261f51', progress: 70, rebbon: false,
-    },
-    {
-      criteria_name: 'Requirements', id: '606d1d5cf50eab8cb59f434c', progress: 30, rebbon: false,
-    },
-    {
-      criteria_name: 'Construction', id: '606d1d68f50eab8cb59f434d', progress: 30, rebbon: false,
-    },
-    {
-      criteria_name: 'Testing', id: '606d1d6df50eab8cb59f434e', progress: 45, rebbon: false,
-    },
-    {
-      criteria_name: 'Sustainment', id: '606d1d73f50eab8cb59f434f', progress: 15, rebbon: false,
-    },
-    {
-      criteria_name: 'Process', id: '606d1d78f50eab8cb59f4350', progress: 100, rebbon: false,
-    },
-    {
-      criteria_name: 'Systems Engineering', id: '606d1d7ff50eab8cb59f4351', progress: 30, rebbon: false,
-    },
-    {
-      criteria_name: 'Quality', id: '606d1d89f50eab8cb59f4352', progress: 0, rebbon: true,
-    },
-    {
-      criteria_name: 'Security', id: '606d1d8ef50eab8cb59f4353', progress: 100, rebbon: false,
-    },
-    {
-      criteria_name: 'Config Management', id: '606d1d95f50eab8cb59f4354', progress: 30, rebbon: false,
-    },
-    {
-      criteria_name: 'Measurement', id: '606d1d9ff50eab8cb59f4355', progress: 10, rebbon: false,
-    },
-    {
-      criteria_name: 'HCI', id: '606d1da5f50eab8cb59f4356', progress: 30, rebbon: false,
-    },
-  ];
 
   @Mutation
   setCriteria(value: CriteriaResponse): void {

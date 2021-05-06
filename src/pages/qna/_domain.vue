@@ -5,9 +5,7 @@
       :class="thankyouPage
       || domainId === 'nodata'
       || help
-      || criteriaProgressCount() == 25
-      || criteriaProgressCount() == 50
-      || criteriaProgressCount() == 75
+      || criteriaProgressCount() >= progressCheckpoint
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
     >
@@ -35,7 +33,7 @@
       <!-- Content: Question -->
       <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
       <div v-else-if="domainId === 'nodata'"></div>
-      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"></div>
+      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
         <div class="flex justify-between text-sm text-gray-300 mb-2">
           <span>Pertanyaan</span>
@@ -74,7 +72,7 @@
         </h1>
       </Thankyou>
       <div
-        v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"
+        v-else-if="criteriaProgressCount() > progressCheckpoint"
         class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
       >
         <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
@@ -89,7 +87,7 @@
               Lanjutkan Nanti
             </nuxt-link>
             <button
-              @click="progressCounter+=5"
+              @click="progressCheckpoint += 1"
               class="rounded-full py-3 px-8 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
             >
               Lanjutkan
@@ -136,7 +134,7 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage || domainId === 'nodata'" class="fixed bottom-0 left-0 right-0"></div>
-      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75 || criteriaProgressCount() >= 100"></div>
+      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
@@ -148,10 +146,10 @@
           <div class="flex items-center justify-center mb-2">
             <div class="relative pr-2 w-full">
               <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                <div :style="`width:${criteriaProgress(domainId).progress + progressCounter}%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                <div :style="`width:${ criteriaProgressCount() }%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
               </div>
             </div>
-            <span class="text-xs inline-block text-primary">{{ criteriaProgress(domainId).progress + progressCounter }}%</span>
+            <span class="text-xs inline-block text-primary">{{ criteriaProgressCount() }}%</span>
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
@@ -262,7 +260,6 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
-import { criteriaModule } from '@/store/criteria';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 
@@ -312,7 +309,7 @@ export default class Qna extends Vue {
 
   progressCounter: number = 0;
 
-  progressCheckpoint: number[] = [25, 50, 75, 100];
+  progressCheckpoint: number = 1;
 
   // data answer
   selectedAnswer: string[] = [];
@@ -454,6 +451,17 @@ export default class Qna extends Vue {
         this.domain = domain.criteria_name;
         this.domainId = domain.id;
       }
+      // set initial progress
+      qnaModule.setSubmit({
+        response_code: '',
+        message: '',
+        data: {
+          count_submitted: 0,
+          percent_progress: domain.percent_progress,
+        },
+      });
+      // set initial checkpoint progress
+      this.progressCheckpoint = domain.percent_progress + 1;
     }
   }
 
@@ -483,18 +491,14 @@ export default class Qna extends Vue {
     }
   }
 
-  criteriaProgress = (id: string) => {
-    const criteria = criteriaModule.dataCriteriaProgress;
-    return criteria.filter(
-      (arr) => arr.id === id,
-    )[0];
-  }
-
   criteriaProgressCount() {
-    if (this.criteriaProgress(this.domainId)?.progress) {
-      return this.criteriaProgress(this.domainId).progress + this.progressCounter;
+    if (this.local) {
+      const local = JSON.parse(this.local);
+      return qnaModule.submitResponse.data.percent_progress === 0
+        ? local.percent_progress.toFixed(2)
+        : qnaModule.submitResponse.data.percent_progress.toFixed(2);
     }
-    return this.criteriaProgress(this.domainId)?.progress;
+    return 0;
   }
 }
 </script>
