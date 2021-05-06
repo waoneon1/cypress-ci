@@ -8,8 +8,7 @@
       <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
       <div class="text-white font-base text-sm">
         <h1 class="text-white mb-5 font-bold">Deskripsi</h1>
-        <slot name="desc"></slot>
-        <slot name="link"></slot>
+        <slot name="articles"></slot>
       </div>
       <div class="text-white font-base text-sm">
         <h1 class="text-white mb-5 font-bold">Aturan</h1>
@@ -18,7 +17,7 @@
             {{ item.desc }}
             <img
               :src="'/img/' + item.image"
-              alt="exp-selected"
+              alt="exp"
               class="rounded-lg mt-4"
             />
           </li>
