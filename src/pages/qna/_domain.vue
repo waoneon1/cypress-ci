@@ -215,7 +215,7 @@
             sesuai dan paling baik dengan domain <span class="text-secondary">{{ domain }}</span> dan jika menurut
             pengguna dalam 1 halaman tidak ada yang sesuai bisa langsung
             klik tombol lanjut untuk melanjutkan ke halaman berikutnya.
-            <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="rounded-lg mt-4">
+            <img src="~/static/img/exp-selected.png" alt="exp-selected" class="rounded-lg mt-4">
           </li>
           <li class="mb-4">
             Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam
@@ -228,7 +228,7 @@
             jika progress bar sudah mencapai angka prosentase yang ditentukan
             pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk
             pemilih alterrans berdasarkan domain.
-            <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
+            <img src="~/static/img/exp-progressbar.png" alt="exp-progressbar" class="rounded-lg mt-4">
           </li>
         </ol>
       </Help>
