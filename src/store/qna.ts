@@ -103,10 +103,10 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async submitQna(payload: object[], criteriaId: string): Promise<void> {
+  async submitQna(data: {payload: object[], criteriaId:string}): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
-      const response = await axios.post(`${url}pair_data/submit/criteria/${criteriaId}`, payload, {
+      const response = await axios.post(`${url}pair_data/submit/criteria/${data.criteriaId}`, data.payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

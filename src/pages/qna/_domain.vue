@@ -385,23 +385,6 @@ export default class Qna extends Vue {
     return i[0]?.image;
   }
 
-  prepareSubmit(): QnaSubmit[] {
-    const data: QnaSubmit[] = [];
-    this.selectedAnswer.forEach((emailX) => {
-      this.answers.forEach((emailY) => {
-        if (!this.selectedAnswer.includes(emailY)) {
-          data.push({
-            criteria_id: this.domainId,
-            selected_employee_email: emailX,
-            employee_email_x: emailX,
-            employee_email_y: emailY,
-          });
-        }
-      });
-    });
-    return data;
-  }
-
   async nextPage(): Promise<void> {
     this.loading = true;
     if (this.pages > this.currentPages) {
@@ -476,11 +459,31 @@ export default class Qna extends Vue {
     this.getUniqueEmployees();
   }
 
+  prepareSubmit(): QnaSubmit[] {
+    const data: QnaSubmit[] = [];
+    this.selectedAnswer.forEach((emailX) => {
+      this.answers.forEach((emailY) => {
+        if (!this.selectedAnswer.includes(emailY)) {
+          data.push({
+            criteria_id: this.domainId,
+            selected_employee_email: emailX,
+            employee_email_x: emailX,
+            employee_email_y: emailY,
+          });
+        }
+      });
+    });
+    return data;
+  }
+
   async submitEmployeeData(): Promise<QnaResponse | object> {
-    const local = this.local ? JSON.parse(this.local) : '';
     if (this.prepareSubmit().length) {
-      await qnaModule.submitQna(this.prepareSubmit(), local.id);
-      return qnaModule.dataQna;
+      const data = {
+        payload: this.prepareSubmit(),
+        criteriaId: JSON.parse(_.clone(this.local)).id,
+      };
+      await qnaModule.submitQna(data);
+      return qnaModule.submitResponse;
     }
     return {};
   }
@@ -499,7 +502,7 @@ export default class Qna extends Vue {
       const local = JSON.parse(this.local);
       return qnaModule.submitResponse.data.percent_progress === 0
         ? _.round(local.percent_progress, 2)
-        : _.round(qnaModule.submitResponse.data.percent_progress);
+        : _.round(qnaModule.submitResponse.data.percent_progress, 2);
     }
     return 0;
   }
