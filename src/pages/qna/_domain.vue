@@ -343,9 +343,9 @@ export default class Qna extends Vue {
     if (this.local) {
       const domain = JSON.parse(this.local);
       const crit = dataCriteria.filter(
-        (arr) => arr.criteria_name === domain.criteria_name,
+        (arr) => arr.criteria === domain.criteria,
       )[0];
-      return crit ? crit.description : 'no data';
+      return crit ? crit.desc : 'no data';
     }
     return 'no data';
   }
