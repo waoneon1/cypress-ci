@@ -263,6 +263,8 @@ import { qnaModule } from '@/store/qna';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 
+const _ = require('lodash');
+
 export interface QnaResponseData {
   /* eslint-disable camelcase */
   criteria_id: string;
@@ -496,8 +498,8 @@ export default class Qna extends Vue {
     if (this.local) {
       const local = JSON.parse(this.local);
       return qnaModule.submitResponse.data.percent_progress === 0
-        ? local.percent_progress.toFixed(2)
-        : qnaModule.submitResponse.data.percent_progress.toFixed(2);
+        ? _.round(local.percent_progress, 2)
+        : _.round(qnaModule.submitResponse.data.percent_progress);
     }
     return 0;
   }

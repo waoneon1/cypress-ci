@@ -154,9 +154,7 @@ export default class Dashboard extends Vue {
     );
   }
 
-  roundedNumber(val: number): number {
-    return _.round(val, 2)
-  }
+  roundedNumber = (val: number): number => _.round(val, 2)
 
   async loadCriteriaData(): Promise<void> {
     await criteriaModule.getCriteria();

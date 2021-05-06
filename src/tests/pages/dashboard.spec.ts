@@ -88,16 +88,16 @@ describe('Pages > dashboard.vue', () => {
       data() {
         return {
           criteria: [{
-            criteria_name: "Design",
-            id: "6062d4c9dd3acd0959261f51",
-            percent_progress: 0
-          },{
-            criteria_name: "XXX",
-            id: "6062d4c9dd3acd0959261f51",
-            percent_progress: 10
-          }]
-        }
-      }
+            criteria_name: 'Design',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 0,
+          }, {
+            criteria_name: 'XXX',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 10,
+          }],
+        };
+      },
     });
     wrapper.vm.setRecommendation();
   });
