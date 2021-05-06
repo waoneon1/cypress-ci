@@ -47,11 +47,11 @@
                     <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
-                        :style="`width:${ item.percent_progress.toFixed(2) }%`"
+                        :style="`width:${ roundedNumber(item.percent_progress) }%`"
                       ></div>
                     </div>
                   </div>
-                  <span v-if="item.percent_progress <= 100" class="text-xs inline-block text-primary">{{ item.percent_progress === 0 ? 0 : item.percent_progress.toFixed(2) }}%</span>
+                  <span v-if="item.percent_progress <= 100" class="text-xs inline-block text-primary">{{ item.percent_progress === 0 ? 0 : roundedNumber(item.percent_progress) }}%</span>
                   <div v-else class="bg-white rounded-full text-white flex items-center justify-center z-10">
                     <svg class="fill-current text-success" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
@@ -152,6 +152,10 @@ export default class Dashboard extends Vue {
       criteria,
       (object: SubmitResponseData) => object.percent_progress,
     );
+  }
+
+  roundedNumber(val: number): number {
+    return _.round(val, 2)
   }
 
   async loadCriteriaData(): Promise<void> {
