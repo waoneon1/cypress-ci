@@ -84,7 +84,6 @@ export default class QnaModule extends VuexModule {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.data.data) {
         this.setQna(response.data);
       } else {
@@ -104,16 +103,14 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async submitQna(payload: object[]): Promise<void> {
-    const rssCriteria = JSON.parse(localStorage.getItem('rss_criteria')!);
+  async submitQna(payload: object[], criteriaId: string): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
-      const response = await axios.post(`${url}pair_data/submit/criteria/${rssCriteria.id}`, payload, {
+      const response = await axios.post(`${url}pair_data/submit/criteria/${criteriaId}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.data.data) {
         this.setSubmit(response.data);
       } else {

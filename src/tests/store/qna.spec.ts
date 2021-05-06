@@ -97,18 +97,21 @@ describe('QNA Store', () => {
 
   it('Action - submitQna response true', async () => {
     const mockedAxios = axios as jest.Mocked<typeof axios>;
-    const mockedResponsePost: AxiosResponse = {
+    const mockedResponsePost2: AxiosResponse = {
       data: {
         response_code: '0000',
         message: 'test success',
-        data: 3,
+        data: {
+          count_submitted: 0,
+          percent_progress: 0,
+        },
       },
       status: 200,
       statusText: 'OK',
       headers: {},
       config: {},
     };
-    mockedAxios.post.mockResolvedValue(mockedResponsePost);
+    mockedAxios.post.mockResolvedValue(mockedResponsePost2);
 
     const service = qnaModule();
     const payload = {};
@@ -135,7 +138,6 @@ describe('QNA Store', () => {
     // expect(axios.post).not.toHaveBeenCalled()
     await service.submitQna({});
     expect(axios.post).toHaveBeenCalled();
-    expect(service.dataQna.data).toHaveLength(0);
   });
 
   it('Action - submitQna catch error', async () => {

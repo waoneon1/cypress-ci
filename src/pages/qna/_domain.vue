@@ -475,8 +475,9 @@ export default class Qna extends Vue {
   }
 
   async submitEmployeeData(): Promise<QnaResponse | object> {
+    const local = this.local ? JSON.parse(this.local) : '';
     if (this.prepareSubmit().length) {
-      await qnaModule.submitQna(this.prepareSubmit());
+      await qnaModule.submitQna(this.prepareSubmit(), local.id);
       return qnaModule.dataQna;
     }
     return {};
