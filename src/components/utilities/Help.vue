@@ -12,7 +12,28 @@
       </div>
       <div class="text-white font-base text-sm">
         <h1 class="text-white mb-5 font-bold">Aturan</h1>
-        <slot name="rules"></slot>
+        <ol>
+          <li class="mb-4">
+            Pengguna dapat memilih max. 3 alterrans per halaman yang dirasa
+            sesuai dan paling baik dengan domain dan jika menurut
+            pengguna dalam 1 halaman tidak ada yang sesuai bisa langsung
+            klik tombol lanjut untuk melanjutkan ke halaman berikutnya.
+            <img src="~/static/img/exp-selected.png" alt="exp-selected" class="rounded-lg mt-4">
+          </li>
+          <li class="mb-4">
+            Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam
+            alterrans yang dipilih adalah hasil dari opini menurut mengguna yang
+            paling berkopenten dalam domain.
+          </li>
+          <li class="mb-4">
+            Progress bar menandakan status dari progress uda sampai berapa
+            persen, progress bar naik ketika dalam halaman ada yang dipilih dan
+            jika progress bar sudah mencapai angka prosentase yang ditentukan
+            pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk
+            pemilih alterrans berdasarkan domain.
+            <img src="~/static/img/exp-progressbar.png" alt="exp-progressbar" class="rounded-lg mt-4">
+          </li>
+        </ol>
       </div>
     </div>
   </div>
