@@ -120,8 +120,8 @@
                 <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
                 <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
               </div>
-              <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
-                <small class="text-primary">{{ item.name }}</small>
+              <div class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden">
+                <small class="text-primary autotrim">{{ item.name }}</small>
               </div>
             </div>
           </div>
@@ -507,12 +507,8 @@ export default class Qna extends Vue {
 
 <style>
 .autotrim {
+  white-space: nowrap;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  position: relative;
-  height: 28px;
-  min-height: 28px;
+  text-overflow: ellipsis;
 }
 </style>
