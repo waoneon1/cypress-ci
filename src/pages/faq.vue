@@ -10,9 +10,9 @@
       <div class="h-1 w-full border-b"></div>
 
       <!-- Content: Criteria List -->
-      <div class="relative m-5">
+      <div class="p-5">
         <div
-          class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm p-4"
+          class="rounded-xl cursor-pointer shadow-lg text-sm p-4 mb-3"
           v-for="(item, i) in faqs"
           :key="i"
         >
@@ -22,6 +22,14 @@
           <p class="pt-2 text-gray-500">
             {{ item.answers }}
           </p>
+          <p v-if="item.link" class="pt-2 text-gray-500">
+            Untuk mengetahui lebih detil, kamu bisa mengecheck tautan berikut
+            ini:
+            <a :href="item.link" target="_blank" class="text-secondary">
+              Software Engineer Competency Model
+            </a>
+          </p>
+          <div v-if="item.embed" v-html="item.embed" class="mt-3"></div>
         </div>
       </div>
 
@@ -92,7 +100,11 @@ export default class Faq extends Vue {
       id: 1,
       question: 'Apa yang di maksud Software Engineer Competency Matrix?',
       answers:
-        'Software Engineer Competency Matrix yaitu suatu acuan yang digunakan sebagai tolak ukur bagi seluruh Software Engineer yang ada di Alterra',
+        'Software Engineer Competency Matrix yaitu suatu acuan yang digunakan sebagai tolak ukur bagi seluruh Software Engineer yang ada di Alterra.',
+      link:
+        'https://alterra.atlassian.net/servicedesk/customer/portal/7/article/485785632?src=1392687325',
+      embed:
+        "<iframe src='https://drive.google.com/file/d/1ai3y1xDCSc4rGIBz9y9xTdqFyD2q-5Az/preview' width='100%' height='275'></iframe>",
     },
     {
       id: 2,
