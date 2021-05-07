@@ -161,11 +161,10 @@ export default class Criteria extends Vue {
     ];
     if (this.local) {
       const domain = JSON.parse(this.local);
-      const domailFiltered = dataCriteria.filter(
+      const domainFiltered: any = dataCriteria.filter(
         (arr) => arr.criteria_name === domain.criteria_name,
       )[0];
-      // return crit ? crit.description : 'no data';
-      return domailFiltered || 'no data';
+      return domainFiltered || 'no data';
     }
     return 'no data';
   }
