@@ -4,7 +4,9 @@
       <!-- Heading -->
       <div class="px-5">
         <div class="flex justify-center relative py-5">
-          <h1 class="text-primary text-sm capitalize">Welcome to RRS</h1>
+          <h1 class="text-primary text-sm capitalize">
+            Selamat Datang di Aplikasi RRS
+          </h1>
         </div>
       </div>
       <div class="h-1 w-full border-b"></div>

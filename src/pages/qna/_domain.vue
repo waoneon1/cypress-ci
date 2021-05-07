@@ -200,7 +200,7 @@
       </div>
 
       <!-- Help -->
-      <Help :title="domain" :show="help"></Help>
+      <Help :title="domain" :show="help" :qnaHelp="true"></Help>
     </div>
   </div>
 </template>

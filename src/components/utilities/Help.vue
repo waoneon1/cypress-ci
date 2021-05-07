@@ -5,22 +5,27 @@
     v-show="show"
   >
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
-      <!-- <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
-      <div class="text-white font-base text-sm">
-        <slot name="articles"></slot>
-      </div> -->
-      <div class="text-white font-base text-sm">
-        <!-- <h1 class="text-white mb-5 font-bold">Aturan</h1> -->
-        <ol v-for="(item, i) in rules" :key="i">
-          <li class="mb-4">
-            {{ item.desc }}
-            <img
-              :src="'/img/' + item.image"
-              alt="exp"
-              class="rounded-lg mt-4"
-            />
-          </li>
-        </ol>
+      <h1 class="text-white mb-5 font-bold text-lg">Competency {{ title }}</h1>
+      <div v-if="!qnaHelp">
+        <h2 class="text-white mb-5 font-bold">
+          Deskripsi
+        </h2>
+        <slot name="help-detail"></slot>
+      </div>
+      <div v-if="qnaHelp">
+        <div class="text-white font-base text-sm">
+          <h2 class="text-white mb-5 font-bold">Aturan</h2>
+          <ol v-for="(item, i) in rules" :key="i">
+            <li class="mb-4">
+              {{ item.desc }}
+              <img
+                :src="'/img/' + item.image"
+                alt="exp"
+                class="rounded-lg mt-4"
+              />
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +39,8 @@ export default class Help extends Vue {
   @Prop({ required: false, type: String }) title?: string;
 
   @Prop({ required: false, type: Boolean }) show!: boolean;
+
+  @Prop({ required: false, type: Boolean }) qnaHelp!: boolean;
 
   rules: object[] = [
     {
