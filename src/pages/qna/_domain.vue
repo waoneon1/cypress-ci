@@ -35,11 +35,8 @@
       <div v-else-if="domainId === 'nodata'"></div>
       <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
-        <div class="flex justify-between text-sm text-gray-300 mb-2">
-          <span>Pertanyaan</span>
-        </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
+          Siapa yang kamu rekomendasikan untuk kriteria {{ domain }} (Max. 3)
         </div>
       </div>
 
@@ -142,7 +139,7 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-2 bg-white rounded-t-xl shadow-lg"
         >
-          <p class="text-xs text-gray-300">Progress</p>
+          <p class="text-xs text-gray-400">Progress</p>
           <div class="flex items-center justify-center mb-2">
             <div class="relative pr-2 w-full">
               <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
@@ -153,7 +150,7 @@
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
-              <p class="text-xs text-gray-300 mb-2">
+              <p class="text-xs text-gray-400 mb-2">
                 Terpilih {{ selectedAnswer.length }} dari {{ maxSelectedAnswer }}
               </p>
               <div class="flex h-10">
