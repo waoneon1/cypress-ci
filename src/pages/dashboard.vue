@@ -25,7 +25,7 @@
 
       <!-- Content: Criteria List -->
       <div class="relative">
-        <p class="text-xs text-primary mb-3">Criteria</p>
+        <p class="text-xs text-primary mb-3">Competency</p>
         <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
           <div
             v-for="(item, i) in criteria"
