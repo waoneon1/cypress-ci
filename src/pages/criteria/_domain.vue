@@ -121,12 +121,12 @@ export default class Criteria extends Vue {
       {
         criteria_name: 'Measurement',
         description:
-          'Measurement adalah dasar dari disiplin ilmu teknik, termasuk rekayasa perangkat lunak. Pengukuran digunakan untuk mengukur atribut proses dan produk untuk tujuan menilai kemajuan dan memberikan indikasi masalah nyata atau yang akan datang ',
+          "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk <b class='text-secondary'>mengukur atribut manajemen</b>, seperti penjadwalan dan anggaran terhadap pengembangan suatu produk. Penekanan pada kompetensi ini adalah bagaimana <b class='text-secondary'>mengukur proses</b> dan <b class='text-secondary'>produk</b> itu sendiri",
       },
       {
         criteria_name: 'HCI',
         description:
-          'Design of human-computer interaction (HCI) dan antarmuka pengguna secara tradisional dianggap sebagai bagian dari ilmu komputer dan sebagian faktor manusia. ',
+          "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk memberikan Human-Computer Interaction yang baik sehingga produk dapat digunakan dengan sesuai oleh penggunanya. Proses ini terdiri mulai dari proses <b class='text-secondary'>requirements gathering</b>, <b class='text-secondary'>interaction</b> pada aplikasi, hingga melakukan <b class='text-secondary'>evaluasi</b> setelah produk diluncurkan",
       },
     ];
     if (this.local) {
