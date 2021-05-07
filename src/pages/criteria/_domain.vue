@@ -85,7 +85,8 @@ export default class Criteria extends Vue {
         criteria_name: 'Requirements',
         shortdec:
           "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk melakukan <b class='text-secondary'>proses analisis</b> baik fungsional maupun non-fungsional, <b class='text-secondary'>mengumpulkan data</b>, hingga <b class='text-secondary'>merumuskan kebutuhan</b> suatu pengembangan aplikasi.",
-        description: '',
+        description:
+          "<p class='mb-3'>Rekayasa kebutuhan perangkat lunak terdiri dari aktivitas yang dilakukan untuk menemukan atribut dan antarmuka fungsional dan nonfungsional yang harus dimiliki sistem perangkat lunak untuk memenuhi kebutuhan pelanggan.</p><p class='mb-3'>Domain ini juga mencakup analisis dan kegiatan manajemen yang dilakukan untuk menemukan kekurangan dalam artefak persyaratan dan untuk mengelola proses rekayasa persyaratan.</p>",
       },
       {
         criteria_name: 'Construction',
@@ -98,7 +99,8 @@ export default class Criteria extends Vue {
         criteria_name: 'Testing',
         shortdec:
           "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk <b class='text-secondary'>mengevaluasi kualitas produk</b> secara keseluruhan, yang <b class='text-secondary'>memerlukan eksekusi kode</b>. Termasuk juga kemampuan melakukan verifikasi dinamis dan kemampuan dalam memilih serangkaian kasus uji yang sesuai.",
-        description: '',
+        description:
+          "<p class='mb-3'>Pengujian perangkat lunak merupakan komponen kualitas perangkat lunak secara keseluruhan; namun, bidang keahlian kualitas perangkat lunak di SWEBOK adalah lintas sektor bidang keterampilan, sedangkan bidang keterampilan pengujian perangkat lunak adalah siklus hidup bidang keterampilan.</p><p class='mb-3'>Pengujian perangkat lunak mencakup semua aktivitas yang dilakukan untuk mengevaluasi kualitas produk secara keseluruhan, yang memerlukan eksekusi kode.</p><p class='mb-3'>Bidang keterampilan pengujian perangkat lunak ini mencakup verifikasi dinamis dan berkaitan dengan pemilihan satu set kasus uji yang sesuai mendemonstrasikan perilaku produk yang diharapkan dengan menjalankan perangkat lunak menggunakan kasus uji yang disiapkan dan hasilnya untuk menganalisis dan meningkatkan kualitas produk. Diketahui perangkat lunak itu tidak dapat diuji secara mendalam untuk semua kemungkinan situasi; karena itu, Memilih serangkaian kasus uji yang sesuai memiliki pengaruh besar keberhasilan atau kegagalan kegiatan pengujian.</p>",
       },
       {
         criteria_name: 'Sustainment',

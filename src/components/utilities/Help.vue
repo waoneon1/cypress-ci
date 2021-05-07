@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from "vue-property-decorator";
+import { Vue, Prop, Component } from 'vue-property-decorator';
 
 @Component
 export default class Help extends Vue {
@@ -46,27 +46,27 @@ export default class Help extends Vue {
     {
       id: 1,
       desc:
-        "Pengguna dapat memilih max. 3 alterrans per halaman yang akan direkomendasikan",
-      image: "exp-selected.png"
+        'Pengguna dapat memilih max. 3 alterrans per halaman yang akan direkomendasikan',
+      image: 'exp-selected.png',
     },
     {
       id: 2,
       desc:
         'Jika dalam 1 halaman tidak ada Alterrans yang bisa kamu rekomendasikan, kamu bisa langsung klik tombol "Lanjut"',
-      image: "exp-btn-next.png"
+      image: 'exp-btn-next.png',
     },
     {
       id: 3,
       desc:
-        "Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.",
-      image: "exp-senior.png"
+        'Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
+      image: 'exp-senior.png',
     },
     {
       id: 4,
       desc:
-        "Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.",
-      image: "exp-progressbar.png"
-    }
+        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+      image: 'exp-progressbar.png',
+    },
   ];
 }
 </script>
