@@ -113,7 +113,8 @@ export default class Criteria extends Vue {
         criteria_name: 'Process',
         shortdec:
           "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk <b class='text-secondary'>mengidentifikasi aktivitas proses</b> dan kombinasi yang perlu dimodifikasi untuk mencapai tujuan proyek dengan lebih baik.",
-        description: '',
+        description:
+          "<p class='mb-3'>Model proses perangkat lunak dan keterampilan model siklus hidup diperhatikan dengan definisi proses dan penyesuaian, implementasi, alur kerja, penilaian, pengukuran, pengelolaan, dan peningkatan proses siklus hidup perangkat lunak, termasuk proses untuk memandu serangkaian aktivitas tertentu dan untuk postmortem. Keterampilan berlaku ke berbagai paradigma proses perangkat lunak yang berkisar dari proses yang direncanakan (proses prediktif) hingga gesit proses (proses adaptif) dan spektrum proses antara keduanya.</p><p class='mb-3'>Elemen kunci dari proses perangkat lunak adalah pengukuran dan penilaian efektivitas aktivitas individu dan kombinasinya untuk proyek perangkat lunak. Tujuan utama dari penilaian proses adalah mengidentifikasi aktivitas proses dan kombinasi yang perlu dilakukan dimodifikasi untuk mencapai tujuan proyek dengan lebih baik.</p><p class='mb-3'>Model proses perangkat lunak dan keterampilan model siklus hidup berlaku di seluruh sebagian besar bidang keterampilan lain dalam dokumen ini, termasuk kehidupan siklus dan bidang keterampilan lintas sektor.</p>",
       },
       {
         criteria_name: 'Systems Engineering',
