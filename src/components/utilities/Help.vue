@@ -5,12 +5,12 @@
     v-show="show"
   >
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
-      <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
+      <!-- <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
       <div class="text-white font-base text-sm">
         <slot name="articles"></slot>
-      </div>
+      </div> -->
       <div class="text-white font-base text-sm">
-        <h1 class="text-white mb-5 font-bold">Aturan</h1>
+        <!-- <h1 class="text-white mb-5 font-bold">Aturan</h1> -->
         <ol v-for="(item, i) in rules" :key="i">
           <li class="mb-4">
             {{ item.desc }}
@@ -39,20 +39,20 @@ export default class Help extends Vue {
     {
       id: 1,
       desc:
-        'Pengguna dapat memilih max. 3 alterrans per halaman yang dirasa sesuai dan paling baik dengan domain dan jika menurut pengguna dalam 1 halaman tidak ada yang sesuai bisa langsungklik tombol lanjut untuk melanjutkan ke halaman berikutnya.',
+        'Pengguna dapat memilih max. 3 alterrans per halaman yang akan direkomendasikan',
       image: 'exp-selected.png',
     },
     {
       id: 2,
       desc:
-        'Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
-      image: 'exp-senior.png',
+        'Jika dalam 1 halaman tidak ada Alterrans yang bisa kamu rekomendasikan, kamu bisa langsung klik tombol "Lanjut"',
+      image: 'exp-btn-next.png',
     },
     {
       id: 3,
       desc:
-        'Jika dalam 1 halaman tidak ada yang dirasa tidak sesuai, paling baik ataupun tidak dikenal bisa langsung klik tombol "Lanjut"',
-      image: 'exp-btn-next.png',
+        'Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
+      image: 'exp-senior.png',
     },
     {
       id: 4,
