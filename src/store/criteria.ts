@@ -30,7 +30,7 @@ export default class CriteriaModule extends VuexModule {
     response_code: '',
     message: '',
     data: [],
-  }
+  };
 
   @Mutation
   setCriteria(value: CriteriaResponse): void {
