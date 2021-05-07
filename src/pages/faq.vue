@@ -1,8 +1,6 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
-    <div
-      class="relative bg-white mx-auto max-w-md font-secondary pb-12 h-screen"
-    >
+    <div class="relative bg-white mx-auto max-w-md font-secondary pb-16">
       <!-- Heading -->
       <div class="px-5">
         <div class="flex justify-center relative py-5">
@@ -85,32 +83,36 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 
-export default class Dashboard extends Vue {
+@Component
+export default class Faq extends Vue {
   faqs: object[] = [
     {
       id: 1,
-      question: 'Apa yang di maksut Criteria?',
-      answers: 'Creteria yaitu ....',
+      question: 'Apa yang di maksud Software Engineer Competency Matrix?',
+      answers:
+        'Software Engineer Competency Matrix yaitu suatu acuan yang digunakan sebagai tolak ukur bagi seluruh Software Engineer yang ada di Alterra',
     },
     {
       id: 2,
       question: 'Bagaimana cara memilih Alterrans?',
       answers:
-        'Dalam pemilihan tidak tergantung dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
+        'Setelah memilih competency, selanjutnya dalam pemilihan alterrans tidak tergantung dalam senior/junior. Jadi alterrans yang dipilih adalah hasil dari rekomendasi menurut pengguna aplikasi ini yang paling kompeten dalam competency tersebut.',
     },
     {
       id: 3,
-      question: 'Bagaimana jika dalam satu halaman tidak ada yang berkomenten?',
+      question:
+        'Bagaimana jika dalam 1 halaman tidak ada Alterrans yang bisa direkomendasikan?',
       answers:
-        'Jika dalam 1 halaman tidak ada Alterrans yang bisa kamu rekomendasikan, kamu bisa langsung klik tombol "Lanjut"',
+        'Apabila dalam 1 halaman tidak ada Alterrans yang bisa kamu rekomendasikan, kamu bisa langsung klik tombol "Lanjut"',
     },
     {
       id: 4,
-      question: 'Seberapa lama saya harus memilih Alterrans?',
+      question:
+        'Seberapa lama saya harus melakukan proses pemilihan Alterrans ini?',
       answers:
-        'Kamu bisa menunda dulu jika kamu sudah sampai maelstone yang sudah di tentukan dan melanjut di lain waktu ataupun bisa melanjutkan kembali',
+        'Kamu bisa menunda dulu jika kamu sudah sampai milestone yang sudah di tentukan, dalam hal ini milestone yang sudah di set adalah setiap berhasil menyelesaikan 1% progress. Setelah itu, akan diberikan pilihan untuk melanjutkan di lain waktu ataupun bisa melanjutkan kembali di competency yang sama untuk memilih alterrans lainnya.',
     },
   ];
 }
