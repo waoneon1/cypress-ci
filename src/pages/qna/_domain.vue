@@ -116,9 +116,9 @@
                   : `${selectedAnswerClass(item.email)}`
               "
             >
-              <div class="bg-gray-50">
-                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" />
-                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
+              <div class="bg-gray-50 w-full overflow-hidden relative" style="padding-bottom: 100%;">
+                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
               </div>
               <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
                 <small class="text-primary">{{ item.name }}</small>
