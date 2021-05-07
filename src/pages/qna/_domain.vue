@@ -204,57 +204,7 @@
       </div>
 
       <!-- Help -->
-      <Help
-        title="Domain Requirements"
-        :show="help"
-      >
-        <p slot="content" class="mb-5">
-          1. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
-        </p>
-        <p slot="content">
-          2. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          3. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          4. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-        <p slot="content" class="mb-5">
-          5. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
-        </p>
-        <p slot="content">
-          6. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          7. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          8. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-        <p slot="content" class="mb-5">
-          9. User dapat memilih maximal 3 alterran dari 9 alterran yg dirasa sesuai dengan <span class="text-secondary">Requirement</span>
-          <img src="~/static/img/screenshoot/image1.png" alt="screenshoot1" class="w-60 rounded-lg mt-4">
-        </p>
-        <p slot="content">
-          10. Alterran yg dipilih adalah alterran yang dirasa paling baik dalam bidang requirment
-        </p>
-        <p slot="content" class="mb-5">
-          11. Jika tidak ada yang dirasa sesuai, pilih tombol "selanjutnya" untuk memuat ulang data alterran yg ditampilkan
-        </p>
-        <p slot="content" class="mb-5">
-          12. Progress bar berikut mengindikasikan Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          <img src="~/static/img/screenshoot/image2.png" alt="screenshoot1" class="rounded-lg mt-4">
-        </p>
-
-      </Help>
+      <Help :title="domain" :show="help"></Help>
     </div>
   </div>
 </template>

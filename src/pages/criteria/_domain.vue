@@ -1,8 +1,6 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
-    <div
-      class="relative bg-white mx-auto max-w-md px-5 font-secondary"
-    >
+    <div class="relative bg-white mx-auto max-w-md px-5 font-secondary">
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
         <nuxt-link to="/dashboard">
@@ -27,37 +25,20 @@
       <Thankyou
         subtitle="Deskripsi"
         image="domain.svg"
-        :buttons="[{
-          label: 'Mulai',
-          url: '/qna/' + this.domain.toLowerCase(),
-          theme: 'border-secondary bg-secondary text-white'
-        }]"
+        :buttons="[
+          {
+            label: 'Mulai',
+            url: '/qna/' + this.domain.toLowerCase(),
+            theme: 'border-secondary bg-secondary text-white'
+          }
+        ]"
       >
         <h1 slot="title" class="text-sm text-white mb-10 px-5">
           {{ dataCriteria() }}
         </h1>
       </Thankyou>
 
-      <Help title="Domain Requirements 2" :show="help">
-        <p slot="content" class="mb-4">
-          1. Domain <span class="text-secondary">Requirement</span> adalah Lorem Ipsum is simply
-          dummy text of the printing and typesetting industry.
-          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-        </p>
-        <p slot="content" class="mb-4">
-          2. Beberapa contoh lingkup Domain <span class="text-secondary">Requirement</span>
-          adalah Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          Lorem Ipsum has been the industry's
-        </p>
-        <p slot="content" class="mb-4">
-          3. Untuk memulai silahkan pencet tombol
-          <span class="rounded-full py-2 px-8 border border-solid focus:outline-none items-center mx-auto justify-center border-secondary bg-secondary text-white inline-block ml-4">Mulai</span>
-        </p>
-         <p slot="content" class="mb-4">
-          4. Selanjutnya user akan diberikan pilihan alterrans yg akan dibandingkan.
-        </p>
-      </Help>
-
+      <Help :title="domain" :show="help"></Help>
     </div>
   </div>
 </template>
@@ -75,7 +56,7 @@ export default class Criteria extends Vue {
 
   domainId: string | (string | null)[] = 'nodata';
 
-  help: boolean = false
+  help: boolean = false;
 
   local: string | null = localStorage.getItem('rss_criteria');
 
