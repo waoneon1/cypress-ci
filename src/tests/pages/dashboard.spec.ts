@@ -82,10 +82,23 @@ describe('Pages > dashboard.vue', () => {
     expect(axios.get).toHaveBeenCalled();
   });
 
-  it('Criteria progress', async () => {
+  it('test setRecommendation', async () => {
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
+      data() {
+        return {
+          criteria: [{
+            criteria_name: 'Design',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 0,
+          }, {
+            criteria_name: 'XXX',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 10,
+          }],
+        };
+      },
     });
-    wrapper.vm.criteriaProgress();
+    wrapper.vm.setRecommendation();
   });
 });

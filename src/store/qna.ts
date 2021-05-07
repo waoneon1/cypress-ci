@@ -27,6 +27,18 @@ export interface QnaResponse {
   message: string;
   data: QnaResponseData[];
 }
+export interface SubmitResponseData {
+  /* eslint-disable camelcase */
+  count_submitted: number;
+  percent_progress: number;
+  /* eslint-enable camelcase */
+}
+export interface SubmitResponse {
+  /* eslint-disable-next-line camelcase */
+  response_code: string;
+  message: string;
+  data: SubmitResponseData;
+}
 
 const url: string = process.env.NUXT_ENV_RRS_API_URL!;
 @Module({ namespaced: true, name: 'qna' })
@@ -37,11 +49,25 @@ export default class QnaModule extends VuexModule {
     data: [],
   };
 
+  public submitResponse: SubmitResponse = {
+    response_code: '',
+    message: '',
+    data: {
+      count_submitted: 0,
+      percent_progress: 0,
+    },
+  };
+
   public dataQuestion: string[] = [];
 
   @Mutation
   setQna(value: QnaResponse): void {
     this.dataQna = value;
+  }
+
+  @Mutation
+  setSubmit(value: SubmitResponse): void {
+    this.submitResponse = value;
   }
 
   @Mutation
@@ -58,7 +84,6 @@ export default class QnaModule extends VuexModule {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.data.data) {
         this.setQna(response.data);
       } else {
@@ -78,29 +103,34 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async submitQna(payload: object[]): Promise<void> {
+  async submitQna(data: {payload: object[], criteriaId:string}): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
-      const response = await axios.post(`${url}pair_data/submit`, payload, {
+      const response = await axios.post(`${url}pair_data/submit/criteria/${data.criteriaId}`, data.payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.data.data) {
-        this.setQna(response.data);
+        this.setSubmit(response.data);
       } else {
-        this.setQna({
+        this.setSubmit({
           response_code: '404',
           message: 'notfound',
-          data: [],
+          data: {
+            count_submitted: 0,
+            percent_progress: 0,
+          },
         });
       }
     } catch {
-      this.setQna({
+      this.setSubmit({
         response_code: '401',
         message: 'unautorized',
-        data: [],
+        data: {
+          count_submitted: 0,
+          percent_progress: 0,
+        },
       });
     }
   }

@@ -307,10 +307,6 @@ describe('Pages > index.vue', () => {
     expect(prepareSubmit.length).toBe(2);
   });
 
-  it('Criteria progress', async () => {
-    wrapper.vm.criteriaProgress();
-  });
-
   it('test selectedAnswerImage()', () => {
     wrapper.vm.selectedAnswerImage();
   });

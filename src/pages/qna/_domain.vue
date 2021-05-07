@@ -5,15 +5,14 @@
       :class="thankyouPage
       || domainId === 'nodata'
       || help
-      || criteriaProgressCount() == 25
-      || criteriaProgressCount() == 50
-      || criteriaProgressCount() == 75
+      || criteriaProgressCount() >= progressCheckpoint
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
-        <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
+        <div>
+          <!-- <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
           <svg
             class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
             viewBox="0 0 8 12"
@@ -21,7 +20,8 @@
           >
             <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
           </svg>
-        </nuxt-link>
+        </nuxt-link> -->
+        </div>
         <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
         <div
@@ -35,13 +35,10 @@
       <!-- Content: Question -->
       <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
       <div v-else-if="domainId === 'nodata'"></div>
-      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"></div>
+      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
-        <div class="flex justify-between text-sm text-gray-300 mb-2">
-          <span>Pertanyaan</span>
-        </div>
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk kriteria {{ domain }}
+          Siapa yang kamu rekomendasikan untuk kriteria {{ domain }} (Max. 3)
         </div>
       </div>
 
@@ -74,11 +71,11 @@
         </h1>
       </Thankyou>
       <div
-        v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75"
+        v-else-if="criteriaProgressCount() >= progressCheckpoint"
         class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
       >
         <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
-          <img class="mb-10 w-60" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
+          <img class="mb-10 w-40" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
           <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
             Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
           </h1>
@@ -89,7 +86,7 @@
               Lanjutkan Nanti
             </nuxt-link>
             <button
-              @click="progressCounter+=5"
+              @click="progressCheckpoint += 1"
               class="rounded-full py-3 px-8 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
             >
               Lanjutkan
@@ -98,7 +95,6 @@
         </div>
       </div>
       <div class="relative" v-else>
-        <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
         <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
           <div
             v-for="(item, i) in answersObject"
@@ -122,12 +118,12 @@
                   : `${selectedAnswerClass(item.email)}`
               "
             >
-              <div class="bg-gray-50">
-                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" />
-                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" />
+              <div class="bg-gray-50 w-full overflow-hidden relative" style="padding-bottom: 100%;">
+                <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
               </div>
-              <div class="flex justify-center bg-white text-sm px-2 py-1 autotrim">
-                <small class="text-primary">{{ item.name }}</small>
+              <div class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden">
+                <small class="text-primary autotrim">{{ item.name }}</small>
               </div>
             </div>
           </div>
@@ -136,7 +132,7 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage || domainId === 'nodata'" class="fixed bottom-0 left-0 right-0"></div>
-      <div v-else-if="criteriaProgressCount() == 25 || criteriaProgressCount() == 50 || criteriaProgressCount() == 75 || criteriaProgressCount() >= 100"></div>
+      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
@@ -144,18 +140,18 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-2 bg-white rounded-t-xl shadow-lg"
         >
-          <p class="text-xs text-gray-300">Progress</p>
+          <p class="text-xs text-gray-400">Progress</p>
           <div class="flex items-center justify-center mb-2">
             <div class="relative pr-2 w-full">
               <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                <div :style="`width:${criteriaProgress(domainId).progress + progressCounter}%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                <div :style="`width:${ criteriaProgressCount() }%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
               </div>
             </div>
-            <span class="text-xs inline-block text-primary">{{ criteriaProgress(domainId).progress + progressCounter }}%</span>
+            <span class="text-xs inline-block text-primary">{{ criteriaProgressCount() }}%</span>
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
-              <p class="text-xs text-gray-300 mb-2">
+              <p class="text-xs text-gray-400 mb-2">
                 Terpilih {{ selectedAnswer.length }} dari {{ maxSelectedAnswer }}
               </p>
               <div class="flex h-10">
@@ -212,9 +208,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
-import { criteriaModule } from '@/store/criteria';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
+
+const _ = require('lodash');
 
 export interface QnaResponseData {
   /* eslint-disable camelcase */
@@ -262,7 +259,7 @@ export default class Qna extends Vue {
 
   progressCounter: number = 0;
 
-  progressCheckpoint: number[] = [25, 50, 75, 100];
+  progressCheckpoint: number = 1;
 
   // data answer
   selectedAnswer: string[] = [];
@@ -336,23 +333,6 @@ export default class Qna extends Vue {
     return i[0]?.image;
   }
 
-  prepareSubmit(): QnaSubmit[] {
-    const data: QnaSubmit[] = [];
-    this.selectedAnswer.forEach((emailX) => {
-      this.answers.forEach((emailY) => {
-        if (!this.selectedAnswer.includes(emailY)) {
-          data.push({
-            criteria_id: this.domainId,
-            selected_employee_email: emailX,
-            employee_email_x: emailX,
-            employee_email_y: emailY,
-          });
-        }
-      });
-    });
-    return data;
-  }
-
   async nextPage(): Promise<void> {
     this.loading = true;
     if (this.pages > this.currentPages) {
@@ -404,6 +384,17 @@ export default class Qna extends Vue {
         this.domain = domain.criteria_name;
         this.domainId = domain.id;
       }
+      // set initial progress
+      qnaModule.setSubmit({
+        response_code: '',
+        message: '',
+        data: {
+          count_submitted: 0,
+          percent_progress: domain.percent_progress,
+        },
+      });
+      // set initial checkpoint progress
+      this.progressCheckpoint = domain.percent_progress + 1;
     }
   }
 
@@ -416,10 +407,31 @@ export default class Qna extends Vue {
     this.getUniqueEmployees();
   }
 
+  prepareSubmit(): QnaSubmit[] {
+    const data: QnaSubmit[] = [];
+    this.selectedAnswer.forEach((emailX) => {
+      this.answers.forEach((emailY) => {
+        if (!this.selectedAnswer.includes(emailY)) {
+          data.push({
+            criteria_id: this.domainId,
+            selected_employee_email: emailX,
+            employee_email_x: emailX,
+            employee_email_y: emailY,
+          });
+        }
+      });
+    });
+    return data;
+  }
+
   async submitEmployeeData(): Promise<QnaResponse | object> {
     if (this.prepareSubmit().length) {
-      await qnaModule.submitQna(this.prepareSubmit());
-      return qnaModule.dataQna;
+      const data = {
+        payload: this.prepareSubmit(),
+        criteriaId: JSON.parse(_.clone(this.local)).id,
+      };
+      await qnaModule.submitQna(data);
+      return qnaModule.submitResponse;
     }
     return {};
   }
@@ -433,30 +445,22 @@ export default class Qna extends Vue {
     }
   }
 
-  criteriaProgress = (id: string) => {
-    const criteria = criteriaModule.dataCriteriaProgress;
-    return criteria.filter(
-      (arr) => arr.id === id,
-    )[0];
-  }
-
   criteriaProgressCount() {
-    if (this.criteriaProgress(this.domainId)?.progress) {
-      return this.criteriaProgress(this.domainId).progress + this.progressCounter;
+    if (this.local) {
+      const local = JSON.parse(this.local);
+      return qnaModule.submitResponse.data.percent_progress === 0
+        ? _.round(local.percent_progress, 2)
+        : _.round(qnaModule.submitResponse.data.percent_progress, 2);
     }
-    return this.criteriaProgress(this.domainId)?.progress;
+    return 0;
   }
 }
 </script>
 
 <style>
 .autotrim {
+  white-space: nowrap;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  position: relative;
-  height: 28px;
-  min-height: 28px;
+  text-overflow: ellipsis;
 }
 </style>
