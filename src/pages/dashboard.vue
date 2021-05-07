@@ -164,7 +164,6 @@ import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
-import Footer from '~/components/Footer.vue';
 
 const _ = require('lodash');
 
@@ -189,7 +188,7 @@ export interface SubmitResponseData {
 }
 
 @Component({
-  components: { Alert, Footer },
+  components: { Alert },
 })
 export default class Dashboard extends Vue {
   title: string = 'RRS Dashboard';
