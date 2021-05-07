@@ -116,7 +116,7 @@ export default class Criteria extends Vue {
       {
         criteria_name: 'Config Management',
         description:
-          'Config Management adalah disiplin penerapan arahan dan pengawasan teknis dan administratif untuk mengidentifikasi dan mendokumentasikan karakteristik fungsional dan fisik dari item konfigurasi, untuk mengontrol perubahan pada karakteristik tersebut, untuk mencatat dan melaporkan pemrosesan dan implementasi perubahan status, dan untuk memverifikasi kepatuhan dengan persyaratan yang ditentukan [IEEE 828-2012] ',
+          "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk melakukan <b class='text-secondary'>manajemen konfigurasi</b>, mulai dari identifikasi software configuration identification, software configuration control, software configuration status accounting, software configuration auditing, dan software release management and delivery",
       },
       {
         criteria_name: 'Measurement',
