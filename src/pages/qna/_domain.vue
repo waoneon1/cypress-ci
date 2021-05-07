@@ -11,7 +11,8 @@
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
-        <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
+        <div>
+          <!-- <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
           <svg
             class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
             viewBox="0 0 8 12"
@@ -19,7 +20,8 @@
           >
             <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
           </svg>
-        </nuxt-link>
+        </nuxt-link> -->
+        </div>
         <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
         <div
@@ -73,7 +75,7 @@
         class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
       >
         <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
-          <img class="mb-10 w-60" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
+          <img class="mb-10 w-40" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
           <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
             Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
           </h1>
