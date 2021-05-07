@@ -93,7 +93,6 @@
         </div>
       </div>
       <div class="relative" v-else>
-        <p class="text-xs text-gray-300 mb-3">Pilih 3 Alterrans rekomendasi kamu</p>
         <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
           <div
             v-for="(item, i) in answersObject"
