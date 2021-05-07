@@ -103,7 +103,7 @@ export default class Onboarding extends Vue {
     {
       title: 'Software Engineer Competency Matrix',
       content:
-        'Terdapat 12 Competency matrix (domain) yang digunakan pada aplikasi, diadaptasi dari <a href="http://dahlan.unimal.ac.id/files/ebooks/SWECOM.pdf" target="_blank" class="text-secondary">SWECOM</a>',
+        'Terdapat 12 <a href="https://alterra.atlassian.net/servicedesk/customer/portal/7/article/485785632?src=1392687325" target="_blank" class="text-secondary" >SE Competency matrix</a> (domain) yang digunakan pada aplikasi ini',
       image: 'svg/onboard2.svg',
     },
     {
