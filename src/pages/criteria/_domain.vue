@@ -106,7 +106,8 @@ export default class Criteria extends Vue {
         criteria_name: 'Sustainment',
         shortdec:
           "Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk <b class='text-secondary'>menangani masalah pemeliharaan</b> termasuk di dalamnya berupa dokumentasi, penerapan, operasi, keamanan, manajemen konfigurasi, pelatihan (pengguna dan personel pemeliharaan), meja bantuan, manajemen produk COTS, pembaruan teknologi, dan penghentian perangkat lunak. ",
-        description: '',
+        description:
+          "<p class='mb-3'>Sustainment berhubungan dengan pemeliharaan plus dokumentasi, penerapan, operasi, keamanan, manajemen konfigurasi, pelatihan (pengguna dan personel pemeliharaan), meja bantuan, manajemen produk COTS, pembaruan teknologi, dan penghentian perangkat lunak.</p><p class='mb-3'>Tiga kategori sustainment, meliputi: aktivitas perangkat lunak, kegiatan korektif, adaptif, dan penyempurnaan, yang melibatkan proses seperti memodifikasi produk perangkat lunak/sistem setelah pengiriman. Kategori keempat dari pemeliharaan perangkat lunak kegiatan berfokus pada pemeliharaan preventif.</p><p class='mb-3'>Keberhasilan Software Sustainment ini bergantung pada budaya organisasi keberlanjutan, keterampilan tim keberlanjutan (yang fokus dari bidang keterampilan ini), fleksibilitas pelanggan, dan domain operasional produk, selain keterampilan yang dibutuhkan memodifikasi kode sumber untuk korektif, adaptif, dan sempurna perangkat tambahan</p>",
       },
       {
         criteria_name: 'Process',
