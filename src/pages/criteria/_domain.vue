@@ -38,12 +38,7 @@
         </h1>
       </Thankyou>
 
-      <Help :title="domain" :show="help">
-        <p slot="articles" class="mb-4">
-          {{ dataCriteria() }}
-        </p>
-        <p slot="articles" class="mb-4">Detail lingkup : <a href="http://dahlan.unimal.ac.id/files/ebooks/SWECOM.pdf" target="_blank" rel="noopener" class="text-secondary font-bold">SWECOM</a></p>
-      </Help>
+      <Help :title="domain" :show="help"></Help>
     </div>
   </div>
 </template>

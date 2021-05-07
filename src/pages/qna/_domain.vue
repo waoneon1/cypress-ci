@@ -204,12 +204,7 @@
       </div>
 
       <!-- Help -->
-      <Help :title="domain" :show="help">
-        <p slot="articles" class="mb-4">
-          {{ dataDomain() }}
-        </p>
-        <p slot="articles" class="mb-4">Detail lingkup : <a href="http://dahlan.unimal.ac.id/files/ebooks/SWECOM.pdf" target="_blank" rel="noopener" class="text-secondary font-bold">SWECOM</a></p>
-      </Help>
+      <Help :title="domain" :show="help"></Help>
     </div>
   </div>
 </template>
@@ -288,67 +283,6 @@ export default class Qna extends Vue {
   currentPages: number = 1;
 
   thankyouPage: boolean = false;
-
-  dataDomain(): string {
-    const dataCriteria = [
-      {
-        criteria: 'Design',
-        desc: 'Software Design ',
-      },
-      {
-        criteria: 'Requirements',
-        desc: 'Software requirements ',
-      },
-      {
-        criteria: 'Construction',
-        desc: 'Software Construction ',
-      },
-      {
-        criteria: 'Testing',
-        desc: 'Software testing',
-      },
-      {
-        criteria: 'Sustainment',
-        desc: 'Software sustainment ',
-      },
-      {
-        criteria: 'Process',
-        desc: 'Elemen kunci ',
-      },
-      {
-        criteria: 'Systems Engineering',
-        desc: 'Systems Engineering ',
-      },
-      {
-        criteria: 'Quality',
-        desc: 'Software quality',
-      },
-      {
-        criteria: 'Security',
-        desc: 'Software security ',
-      },
-      {
-        criteria: 'Config Management',
-        desc: 'Config Management ',
-      },
-      {
-        criteria: 'Measurement',
-        desc: 'Measurement adalah',
-      },
-      {
-        criteria: 'HCI',
-        desc: 'Design of  ',
-      },
-    ];
-    if (this.local) {
-      const domain = JSON.parse(this.local);
-      const crit = dataCriteria.filter(
-        (arr) => arr.criteria === domain.criteria,
-      )[0];
-      return crit ? crit.desc : 'no data';
-    }
-    return 'no data';
-  }
 
   async getUniqueEmployees() {
     // buat array unique employee

@@ -7,7 +7,6 @@
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
       <h2 class="text-white mb-5 font-bold">{{ title }}</h2>
       <div class="text-white font-base text-sm">
-        <h1 class="text-white mb-5 font-bold">Deskripsi</h1>
         <slot name="articles"></slot>
       </div>
       <div class="text-white font-base text-sm">
@@ -51,6 +50,12 @@ export default class Help extends Vue {
     },
     {
       id: 3,
+      desc:
+        'Jika dalam 1 halaman tidak ada yang dirasa tidak sesuai, paling baik ataupun tidak dikenal bisa langsung klik tombol "Lanjut"',
+      image: 'exp-btn-next.png',
+    },
+    {
+      id: 4,
       desc:
         'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
       image: 'exp-progressbar.png',
