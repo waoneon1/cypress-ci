@@ -17,7 +17,7 @@
           </svg>
         </li>
         <li class="cursor-pointer hover:text-secondary text-gray-400">
-          <nuxt-link to="/onboarding">
+          <nuxt-link to="/faq">
             <svg
               class="fill-current"
               width="20"
