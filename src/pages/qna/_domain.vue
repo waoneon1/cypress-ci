@@ -72,7 +72,7 @@
         </h1>
       </Thankyou>
       <div
-        v-else-if="criteriaProgressCount() > progressCheckpoint"
+        v-else-if="criteriaProgressCount() >= progressCheckpoint"
         class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
       >
         <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
