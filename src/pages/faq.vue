@@ -106,6 +106,12 @@ export default class Dashboard extends Vue {
       answers:
         'Jika dalam 1 halaman tidak ada Alterrans yang bisa kamu rekomendasikan, kamu bisa langsung klik tombol "Lanjut"',
     },
+    {
+      id: 4,
+      question: 'Seberapa lama saya harus memilih Alterrans?',
+      answers:
+        'Kamu bisa menunda dulu jika kamu sudah sampai maelstone yang sudah di tentukan dan melanjut di lain waktu ataupun bisa melanjutkan kembali',
+    },
   ];
 }
 </script>
