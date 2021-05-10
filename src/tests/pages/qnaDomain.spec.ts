@@ -220,15 +220,6 @@ describe('Pages > index.vue', () => {
     expect(wrapper.vm.thankyouPage).toBe(true);
   });
 
-  it('test selectedAnswerClass()', async () => {
-    let data = wrapper.vm.selectedAnswerClass('waone@alterra.id');
-    expect(data).toBe('shadow-lg');
-
-    wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
-    data = wrapper.vm.selectedAnswerClass('waone@alterra.id');
-    expect(data).toBe('opacity-30 shadow-md');
-  });
-
   it('test getUniqueEmployees()', async () => {
     expect.assertions(2);
     try {
