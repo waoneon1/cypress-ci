@@ -14,9 +14,6 @@ export default class Login extends Vue {
   checkMaintenance() {
     if (this.pageStatus) {
       this.$router.push('/maintenance');
-    } else {
-      localStorage.removeItem('token');
-      this.$router.push('/');
     }
   }
 
