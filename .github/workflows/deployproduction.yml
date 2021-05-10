@@ -1,4 +1,4 @@
-name: Auto Deploy Staging
+name: Auto Deploy Production
 on:
   push:
     branches:
