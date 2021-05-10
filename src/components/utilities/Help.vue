@@ -6,12 +6,22 @@
   >
     <div class="flex flex-col text-left px-5 w-full overflow-auto">
       <h1 class="text-white mb-5 font-bold text-lg">Competency {{ title }}</h1>
-      <div v-if="!qnaHelp">
-        <h2 class="text-white mb-5 font-bold">
+      <div v-if="!qnaHelp" class="text-white">
+        <h2 class="mb-5 font-bold">
           Deskripsi
         </h2>
         <slot name="help-detail"></slot>
+        <p class="text-sm mt-3">
+          Info lebih lengkap check:
+          <a
+            href="https://alterra.atlassian.net/servicedesk/customer/portal/7/article/485785632?src=1392687325"
+            target="_blank"
+            class="text-secondary"
+            >SE Competency Model</a
+          >
+        </p>
       </div>
+
       <div v-if="qnaHelp">
         <div class="text-white font-base text-sm">
           <h2 class="text-white mb-5 font-bold">Aturan</h2>

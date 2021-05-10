@@ -56,7 +56,7 @@
               </nuxt-link>
             </li>
             <li class="cursor-pointer hover:text-secondary text-secondary ">
-              <nuxt-link to="/onboarding">
+              <nuxt-link to="/faq">
                 <svg
                   class="fill-current"
                   width="20"

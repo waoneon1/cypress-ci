@@ -111,7 +111,7 @@
         <div class="mx-auto max-w-md bg-white px-5 pb-5 rounded-t-xl shadow-lg">
           <ul class="flex justify-between px-10">
             <li class="cursor-pointer hover:text-secondary text-secondary">
-              <nuxt-link to="/faq">
+              <nuxt-link to="/dashboard">
                 <svg
                   class="fill-current"
                   width="24"
