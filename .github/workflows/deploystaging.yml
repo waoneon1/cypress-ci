@@ -1,8 +1,11 @@
-name: Auto Deploy Staging
+name: Check on PR > Auto Deploy on Dev
 on:
   push:
     branches:
       - dev
+  pull_request:
+    branches-ignore:
+      - master
 
 jobs:
   lint:
@@ -23,8 +26,10 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Run Lint
+        working-directory: ./src
         run: npm run lint
 
   unittest:
@@ -45,14 +50,16 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Run Test
+        working-directory: ./src
         run: npm run test
       - name: Archive Code Coverage Results
         uses: actions/upload-artifact@v2
         with:
           name: rrs-web-code-coverage-report
-          path: coverage
+          path: src/coverage
 
   sonarcloud:
     needs:
@@ -82,14 +89,17 @@ jobs:
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        working-directory: ./src
         run: npm ci
       - name: Download Code Coverage Artifact
         uses: actions/download-artifact@v2
         with:
           name: rrs-web-code-coverage-report
-          path: coverage
+          path: src/coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -99,10 +109,9 @@ jobs:
 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Make sure the code is tested before build docker
     needs: sonarcloud
-    if: success()
+    if: github.event_name == 'push' && success() && github.ref == 'refs/heads/dev'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -125,8 +134,8 @@ jobs:
         env:
           ORGANIZATION: sepulsa # example
           APP_NAME: rrs-web # example
-
         # VERSION=$(git describe --tags --abbrev=0) # will fail if never tagged
+        working-directory: ./src
         run: |
           set -e          
           VERSION=$(grep "version" ./package.json | grep -Eo '[0-9]+(\.[0-9]+){2}(-[^"]+)?')
@@ -144,7 +153,7 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-main-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
@@ -160,16 +169,16 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: Dockerfile
+          context: src
+          file: src/Dockerfile
           platforms: linux/amd64
           # push: ${{ github.event_name == 'release' }}
           push: true
           # tags: ${{ secrets.DOCKER_REGISTRY_DOCKERHUB }}/${{ steps.prep.outputs.tags }}
           #tags: ${{ steps.prep.outputs.tags }}
           tags: sepulsa/relative-ranking-system:rrs-web-${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-main-cache
+          cache-to: type=local,dest=/tmp/.buildx-main-cache
           labels: |
             org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
             org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
@@ -179,6 +188,10 @@ jobs:
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
+          build-args: |
+            NUXT_ENV_RRS_APP_TITLE=${{ secrets.NUXT_ENV_RRS_APP_TITLE }}
+            NUXT_ENV_RRS_API_URL=${{ secrets.NUXT_ENV_RRS_API_URL }}
+            NUXT_ENV_RRS_GAUTH_CLIENTID=${{ secrets.NUXT_ENV_RRS_GAUTH_CLIENTID }}
 
   deploy-staging:
     name: Deploy Staging
