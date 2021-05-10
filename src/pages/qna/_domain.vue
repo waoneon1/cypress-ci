@@ -12,15 +12,7 @@
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
         <div>
-          <!-- <nuxt-link :to="`/criteria/${domain.toLowerCase()}`">
-          <svg
-            class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
-            viewBox="0 0 8 12"
-            fill="none"
-          >
-            <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
-          </svg>
-        </nuxt-link> -->
+          <!-- Added back button in here -->
         </div>
         <h1 v-if="domainId === 'nodata'" class="text-primary text-sm"> ??? </h1>
         <h1 v-else class="text-primary text-sm capitalize">{{ domain }}</h1>
