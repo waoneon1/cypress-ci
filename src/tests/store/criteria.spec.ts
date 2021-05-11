@@ -41,10 +41,23 @@ mockedAxios.get.mockResolvedValue(mockedResponse);
  * The test case
  */
 describe('Criteria Store', () => {
-  it('Mutation - setCriteria', () => {
+  it('Mutation - setCriteria test slug', () => {
+    const crit = {
+      data: [{
+        id: '',
+        criteria_name: 'Design System',
+        shortdec: 'Loading ...',
+        description: 'Loading ...',
+        percent_progress: 0,
+      }],
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
     const service = criteriaModule();
-    service.setCriteria('123');
-    expect(service.dataCriteria).toBe('123');
+    service.setCriteria(crit);
+    expect(service.dataCriteria.data[0].slug).toBe('design system');
   });
 
   it('Action - getCriteria true', async () => {
@@ -53,9 +66,6 @@ describe('Criteria Store', () => {
     expect(axios.get).not.toHaveBeenCalled();
     await service.getCriteria();
     expect(axios.get).toHaveBeenCalled();
-
-    // expect(actual.data.responseCode).toBe('9999')
-    // expect(actual.data.data.accessToken).toBe('dummy_akses_token')
   });
 
   it('Action - getQna response false', async () => {
