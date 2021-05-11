@@ -13,7 +13,7 @@
         <div>
           <!-- Added back button in here -->
         </div>
-        <h1 class="text-primary text-sm capitalize">{{ tempBuild.criteria_name }}</h1>
+        <h1 class="text-primary text-sm capitalize">{{ domain.criteria_name }}</h1>
         <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
@@ -27,7 +27,7 @@
       <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk kriteria {{ tempBuild.criteria_name }} (Max. 3)
+          Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }} (Max. 3)
         </div>
       </div>
 
@@ -178,7 +178,6 @@
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 <span class="font-bold text-sm">
-                  <!-- {{ buttonLabel() }} -->
                   Lanjut
                 </span>
               </button>
@@ -188,7 +187,7 @@
       </div>
 
       <!-- Help -->
-      <Help :title="tempBuild.criteria_name" :show="help" :qnaHelp="true"></Help>
+      <Help :title="domain.criteria_name" :show="help" :qnaHelp="true"></Help>
     </div>
   </div>
 </template>
@@ -243,7 +242,7 @@ export interface CriteriaResponseData {
   components: { Thankyou, Help },
 })
 export default class Qna extends Vue {
-  tempBuild: CriteriaResponseData = {
+  domain: CriteriaResponseData = {
     id: '',
     criteria_name: 'Loading ...',
     shortdec: 'Loading ...',
@@ -344,7 +343,7 @@ export default class Qna extends Vue {
     this.loading = true;
     if (this.pages > this.currentPages) {
       // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
-      await this.submitEmployeeData();
+      // await this.submitEmployeeData();
       // success : console.log(response.response_code === '0000')
       // reload data
       this.answers.splice(0);
@@ -357,13 +356,6 @@ export default class Qna extends Vue {
     } else {
       this.thankyouPage = true;
     }
-  }
-
-  buttonLabel(): string {
-    if (this.selectedAnswer.length > 0) {
-      return this.currentPages === this.pages ? 'Selesai' : 'Selanjutnya';
-    }
-    return this.currentPages === this.pages ? 'Selesai' : 'Lewati';
   }
 
   selectedAnswerClass(email: string): string {
@@ -387,10 +379,11 @@ export default class Qna extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    await criteriaModule.getCriteria();
-    const allCriteria = criteriaModule.dataCriteria.data;
-    // set domain variable
-    this.tempBuild = _.find(allCriteria, { slug: criteria });
+    await criteriaModule.getCriteria().then(() => {
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
+    });
   }
 
   async init() {
@@ -406,18 +399,18 @@ export default class Qna extends Vue {
         message: '',
         data: {
           count_submitted: 0,
-          percent_progress: this.tempBuild.percent_progress,
+          percent_progress: this.domain.percent_progress,
         },
       });
 
       // set initial checkpoint progress
-      this.progressCheckpoint = this.tempBuild.percent_progress + 1;
+      this.progressCheckpoint = this.domain.percent_progress + 1;
     });
   }
 
   async loadEmployeeData(): Promise<void> {
     await qnaModule.getQna({
-      criteria_id: this.tempBuild.id,
+      criteria_id: this.domain.id,
       limit: 10,
     });
     this.employees = qnaModule.dataQna.data;
@@ -430,7 +423,7 @@ export default class Qna extends Vue {
       this.answers.forEach((emailY) => {
         if (!this.selectedAnswer.includes(emailY)) {
           data.push({
-            criteria_id: this.tempBuild.id,
+            criteria_id: this.domain.id,
             selected_employee_email: emailX,
             employee_email_x: emailX,
             employee_email_y: emailY,
@@ -445,7 +438,7 @@ export default class Qna extends Vue {
     if (this.prepareSubmit().length) {
       const data = {
         payload: this.prepareSubmit(),
-        criteriaId: this.tempBuild.id,
+        criteriaId: this.domain.id,
       };
       await qnaModule.submitQna(data);
       return qnaModule.submitResponse;
@@ -454,13 +447,12 @@ export default class Qna extends Vue {
   }
 
   mounted() {
-    // initial domain
     this.init();
   }
 
   criteriaProgressCount() {
     return qnaModule.submitResponse.data.percent_progress === 0
-      ? _.round(this.tempBuild.percent_progress, 2)
+      ? _.round(this.domain.percent_progress, 2)
       : _.round(qnaModule.submitResponse.data.percent_progress, 2);
   }
 }
