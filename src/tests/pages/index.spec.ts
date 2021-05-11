@@ -139,6 +139,11 @@ describe('Pages > index.vue', () => {
         $router: {
           push: router,
         },
+        $route: {
+          query: {
+            redirect_url: '/onboarding',
+          },
+        },
         $gAuth: {
           signIn() {
             return {
@@ -342,5 +347,24 @@ describe('Pages > index.vue', () => {
     });
 
     await wrapper.vm.handleClickLogin();
+  });
+
+  it('Handle click login respon email validate success > redirect dashboard', async () => {
+    const router = jest.fn();
+    wrapper = shallowMount(ClassLogin, {
+      stubs: ['Alert'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+        $route: {
+          query: {
+            redirect_url: [],
+          },
+        },
+      },
+    });
+
+    wrapper.vm.redirectUri();
   });
 });

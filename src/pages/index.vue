@@ -150,7 +150,7 @@ export default class Login extends Vue {
               localStorage.setItem('rrs_onboard', 'true');
               this.$router.push('/onboarding');
             } else {
-              this.$router.push('/dashboard');
+              this.redirectUri();
             }
           } else {
             this.loginStatus(false);
@@ -165,6 +165,15 @@ export default class Login extends Vue {
       return 'success';
     } catch (error) {
       return error;
+    }
+  }
+
+  redirectUri(): void {
+    const url: string | (string | null)[] = this.$route.query.redirect_url;
+    if (url && typeof url === 'string') {
+      this.$router.push(url);
+    } else {
+      this.$router.push('/dashboard');
     }
   }
 
