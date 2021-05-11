@@ -1,29 +1,47 @@
 // import { shallowMount } from 'ts-jest/utils';
 import CriteriaDomain from '@/pages/criteria/_domain.vue';
+import CriteriaStore from '@/store/criteria';
+import { getModule } from 'vuex-module-decorators';
 import { expect, it, describe } from '@jest/globals';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import axios, { AxiosResponse } from 'axios';
 
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
-describe('Pages > criteria/_domain.vue', () => {
-  // mounting component
-  it('berhasil mounting komponen', () => {
-    const wrapper: any = shallowMount(CriteriaDomain, {
-      stubs: ['nuxt-link'],
-      mocks: {
-        $route: {
-          query: {
-            success: '1',
-          },
-        },
-      },
-    });
-    expect(wrapper.vm).toBeTruthy();
+const criteriaModule: any = () => {
+  const store = new Vuex.Store({
+    modules: {
+      criteria: CriteriaStore,
+    },
   });
+  return getModule(CriteriaStore, store);
+};
 
-  it('test init()', () => {
+// Mock axios
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedResponse: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: [
+      {
+        criteria_name: 'Design',
+        id: '6062d4c9dd3acd0959261f51',
+      },
+    ],
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+mockedAxios.get.mockResolvedValue(mockedResponse);
+
+describe('Pages > criteria/_domain.vue', () => {
+  it('test init()', async () => {
     const mockRouterPush = jest.fn();
     const wrapper: any = shallowMount(CriteriaDomain, {
       stubs: ['nuxt-link'],
@@ -37,13 +55,24 @@ describe('Pages > criteria/_domain.vue', () => {
       },
       data() {
         return {
-          local: '{"criteria_name":"Requirements","id":"606d1d5cf50eab8cb59f434c"}',
+          domain: {
+            id: '',
+            criteria_name: 'Loading ...',
+            shortdec: 'Loading ...',
+            description: 'Loading ...',
+            percent_progress: 0,
+            slug: '',
+          },
+          help: false,
         };
       },
     });
 
-    expect(wrapper.vm.domain).toBe('Requirements');
-    expect(wrapper.vm.domainId).toBe('606d1d5cf50eab8cb59f434c');
+    const service = criteriaModule();
+    expect(axios.get).toHaveBeenCalled();
+    await service.getCriteria();
+
+    expect(wrapper.vm.domain.criteria_name).toBe('Requirements');
   });
 
   it('test goToQnaPage()', () => {
@@ -54,35 +83,11 @@ describe('Pages > criteria/_domain.vue', () => {
         $router: {
           push: mockRouterPush,
         },
-      },
-    });
-    wrapper.vm.goToQnaPage();
-  });
-});
-
-describe('Pages > criteria/_domain.vue kondisi 2', () => {
-  it('test init() domain.criteria_name.toLowerCase() === url', () => {
-    const mockRouterPush = jest.fn();
-    const wrapper: any = shallowMount(CriteriaDomain, {
-      stubs: ['nuxt-link'],
-      mocks: {
-        $router: {
-          push: mockRouterPush,
-        },
         $route: {
           params: { domain: 'requirements' },
         },
       },
-      data() {
-        return {
-          domain: '',
-          domainId: 'nodata',
-          local: '{"criteria_name":"xxx","id":"xxxx"}',
-        };
-      },
     });
-
-    expect(wrapper.vm.domain).toBe('');
-    expect(wrapper.vm.domainId).toBe('nodata');
+    wrapper.vm.goToQnaPage();
   });
 });
