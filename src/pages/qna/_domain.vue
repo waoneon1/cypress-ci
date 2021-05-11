@@ -105,9 +105,9 @@
             <div
               class="rounded-xl overflow-hidden cursor-pointer"
               :class="
-                selectedAnswer.length < 3
-                  ? `${selectedAnswerClass(item.email)} hover:opacity-50`
-                  : `${selectedAnswerClass(item.email)}`
+                selectedAnswer.includes(item.email)
+                  ? `opacity-30 shadow-md hover:opacity-50`
+                  : `shadow-lg`
               "
             >
               <div class="bg-gray-50 w-full overflow-hidden relative" style="padding-bottom: 100%;">
@@ -349,12 +349,6 @@ export default class Qna extends Vue {
       return this.currentPages === this.pages ? 'Selesai' : 'Selanjutnya';
     }
     return this.currentPages === this.pages ? 'Selesai' : 'Lewati';
-  }
-
-  selectedAnswerClass(email: string): string {
-    return this.selectedAnswer.includes(email)
-      ? 'opacity-30 shadow-md'
-      : 'shadow-lg';
   }
 
   answerAdd(email: string): void {
