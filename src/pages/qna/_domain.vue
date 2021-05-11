@@ -100,9 +100,9 @@
               <div
                 class="rounded-xl overflow-hidden cursor-pointer"
                 :class="
-                  selectedAnswer.length < 3
-                    ? `${selectedAnswerClass(item.email)} hover:opacity-50`
-                    : `${selectedAnswerClass(item.email)}`
+                  selectedAnswer.includes(item.email)
+                  ? `opacity-30 shadow-md hover:opacity-50`
+                  : `shadow-lg`
                 "
               >
                 <div class="bg-gray-50 w-full overflow-hidden relative pulse" style="padding-bottom: 100%;">
@@ -343,7 +343,7 @@ export default class Qna extends Vue {
     this.loading = true;
     if (this.pages > this.currentPages) {
       // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
-      // await this.submitEmployeeData();
+      await this.submitEmployeeData();
       // success : console.log(response.response_code === '0000')
       // reload data
       this.answers.splice(0);
@@ -356,12 +356,6 @@ export default class Qna extends Vue {
     } else {
       this.thankyouPage = true;
     }
-  }
-
-  selectedAnswerClass(email: string): string {
-    return this.selectedAnswer.includes(email)
-      ? 'opacity-30 shadow-md'
-      : 'shadow-lg';
   }
 
   answerAdd(email: string): void {

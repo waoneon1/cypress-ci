@@ -230,15 +230,6 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     wrapper.vm.selectedAnswerImage();
   });
 
-  it('Test > selectedAnswerClass()', () => {
-    let data = wrapper.vm.selectedAnswerClass('waone@alterra.id');
-    expect(data).toBe('shadow-lg');
-
-    wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
-    data = wrapper.vm.selectedAnswerClass('waone@alterra.id');
-    expect(data).toBe('opacity-30 shadow-md');
-  });
-
   it('Test > answerAdd()', async () => {
     expect.assertions(1);
     try {
