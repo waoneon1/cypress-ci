@@ -26,7 +26,13 @@
       <!-- Content: Criteria List -->
       <div class="relative">
         <p class="text-xs text-primary mb-3">Competency</p>
-        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
+        <div v-if="loading" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
+          <div v-for="(item, i) in 12" :key="i">
+            <div class="animate-pulse rounded-xl bg-gray-200 w-full h-32 cursor-pointer relative">
+            </div>
+          </div>
+        </div>
+        <div v-else class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
           <div
             v-for="(item, i) in criteria"
             :key="i"
@@ -169,7 +175,7 @@ const _ = require('lodash');
 
 export interface CriteriaResponseData {
   /* eslint-disable camelcase */
-  id: string;
+  id?: string;
   criteria_name: string;
   percent_progress: number;
   /* eslint-enable camelcase */
@@ -197,13 +203,20 @@ export default class Dashboard extends Vue {
 
   alert: boolean = false;
 
-  recommendation: any = {};
+  loading: boolean = true
+
+  recommendation = {
+    criteria_name: 'No Data',
+    percent_progress: 0,
+    id: '1',
+    slug: 'nodata',
+    shortdec: '',
+  };
 
   // Criteria
   criteria: CriteriaResponseData[] = [];
 
   goToQnaPage(payload: CriteriaResponseData): void {
-    localStorage.setItem('rss_criteria', JSON.stringify(payload));
     this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
   }
 
@@ -218,9 +231,11 @@ export default class Dashboard extends Vue {
   roundedNumber = (val: number): number => _.round(val, 2);
 
   async loadCriteriaData(): Promise<void> {
-    await criteriaModule.getCriteria();
-    this.criteria = criteriaModule.dataCriteria.data;
-    this.recommendation = this.setRecommendation();
+    await criteriaModule.getCriteria().then(() => {
+      this.loading = false;
+      this.criteria = criteriaModule.dataCriteria.data;
+      this.recommendation = this.setRecommendation();
+    });
   }
 
   mounted() {
