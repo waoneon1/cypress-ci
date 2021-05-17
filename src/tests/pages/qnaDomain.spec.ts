@@ -1,6 +1,6 @@
 import Qna from '@/pages/qna/_domain.vue';
 import {
-  expect, it, describe, beforeEach, afterEach,
+  expect, it, describe, beforeEach,
 } from '@jest/globals';
 import Vuex from 'vuex';
 import { getModule } from 'vuex-module-decorators';
@@ -13,6 +13,33 @@ let wrapper: Wrapper<any>;
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
+//= =========================================================
+jest.mock('axios');
+const mockedAxiosGet = axios as jest.Mocked<typeof axios>;
+const mockedResponseGet: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: [
+      {
+        id: '',
+        criteria_name: 'Design',
+        percent_progress: 0,
+      },
+      {
+        id: '65a248199ad87f22412ad',
+        criteria_name: 'HCI',
+        percent_progress: 20,
+      },
+    ],
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+mockedAxiosGet.get.mockResolvedValue(mockedResponseGet);
+//= =========================================================
 const qnaModule: any = () => {
   const store = new Vuex.Store({
     modules: {
@@ -21,23 +48,26 @@ const qnaModule: any = () => {
   });
   return getModule(QnaStore, store);
 };
-
-// Mock axios
 jest.mock('axios');
-let mockedAxios;
-const mockedResponse: AxiosResponse = {
+const mockedAxiosPost = axios as jest.Mocked<typeof axios>;
+const mockedResponsePost: AxiosResponse = {
   data: {
     response_code: '0000',
     message: 'test success',
-    data: {},
+    data: {
+      count_submitted: 5,
+      percent_progress: 10.3,
+    },
   },
   status: 200,
   statusText: 'OK',
   headers: {},
   config: {},
 };
+mockedAxiosPost.post.mockResolvedValue(mockedResponsePost);
+//= =========================================================
 
-describe('Pages > index.vue', () => {
+describe('Pages > index.vue > Kondisi Normal', () => {
   beforeEach(() => {
     const override = {
       methods: {
@@ -59,172 +89,54 @@ describe('Pages > index.vue', () => {
         },
       },
     };
+    // set criteria
     wrapper = shallowMount(Qna, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'requirements' },
+          params: { domain: 'design' },
         },
         $store: jest.fn(),
-        getQuestion() {
-          return jest.fn();
-        },
         submitQna() {
           return jest.fn();
         },
-        loadEmployeeData() {
+        submitEmployeeData() {
           return jest.fn();
+        },
+        dataCriteria: {
+          data: [{
+            id: '',
+            criteria_name: 'Design',
+            shortdec: 'Loading ...',
+            description: 'Loading ...',
+            percent_progress: 0,
+          }],
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config: {},
         },
       },
       data() {
-        return {
-          domain: 'design',
-          domainId: 'nodata',
-          thankyouPage: false,
-          local:
-            '{"criteria_name":"requirements","id":"606d1d5cf50eab8cb59f434c"}',
-          employees: [
-            {
-              criteria_id: 'string',
-              criteria_name: 'design',
-              employee_name_x: 'waone',
-              employee_name_y: 'dodi',
-              employee_email_x: 'waone@alterra.id',
-              employee_email_y: 'dodi@alterra.id',
-              employee_image_url_x: '',
-              employee_image_url_y: '',
-            },
-          ],
-          questions: [],
-          selectedAnswer: [],
-          allSelectedAnswer: [],
-          answers: [],
-          answersObject: [
-            {
-              name: 'string',
-              email: 'string',
-              image: 'string',
-            },
-          ],
-          maxSelectedAnswer: 3,
-          indenClass: ['', '-left-2', '-left-3.5'],
-          pages: 10,
-          currentPages: 1,
-        };
+        return {};
       },
       mixins: [override],
     });
-    mockedAxios = axios as jest.Mocked<typeof axios>;
-    mockedAxios.post.mockResolvedValue(mockedResponse);
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it('berhasil mounting komponen', () => {
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  it('test init()', () => {
-    expect(wrapper.vm.domain).toBe('requirements');
-    expect(wrapper.vm.domainId).toBe('606d1d5cf50eab8cb59f434c');
-  });
-
-  it('test loadEmployeeData()', async () => {
-    const service = qnaModule();
-    const payload = {
-      criteria_id: 'qwerty',
-      limit: 10,
-    };
-
-    expect.assertions(1);
+  it('Test > init()', async () => {
     try {
-      await service.getQna(payload);
-      expect(axios.post).toHaveBeenCalled();
+      await wrapper.vm.init();
     } catch (err) {
       expect(err).toEqual(new Error());
     }
   });
 
-  it('test loadQuestionData()', async () => {
-    const mockedAxios1 = axios as jest.Mocked<typeof axios>;
-    const mockedResponsePost1: AxiosResponse = {
-      data: {},
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      config: {},
-    };
-    mockedAxios1.get.mockResolvedValue(mockedResponsePost1);
-
-    const service = qnaModule();
-
-    expect.assertions(1);
-    try {
-      await service.getQuestion('Design');
-      expect(axios.get).toHaveBeenCalled();
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-  });
-
-  it('test submitEmployeeData()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.submitEmployeeData();
-      const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
-      expect(axios.post).toHaveBeenCalled();
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-  });
-
-  it('test answerAdd()', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.answerAdd();
-      const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
-      expect(axios.post).toHaveBeenCalled();
-
-      wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
-      await wrapper.vm.answerAdd('waone@alterra.id');
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-  });
-
-  it('test buttonLabel()', () => {
-    const buttonLabel1 = wrapper.vm.buttonLabel();
-    expect(buttonLabel1).toBe('Lewati');
-
-    wrapper.setData({ currentPages: 10 });
-    wrapper.setData({ pages: 10 });
-    const buttonLabel2 = wrapper.vm.buttonLabel();
-    expect(buttonLabel2).toBe('Selesai');
-
-    wrapper.setData({ currentPages: 1 });
-    wrapper.setData({ selectedAnswer: ['1', '2'] });
-    const buttonLabel3 = wrapper.vm.buttonLabel();
-    expect(buttonLabel3).toBe('Selanjutnya');
-
-    wrapper.setData({ currentPages: 10 });
-    const buttonLabel4 = wrapper.vm.buttonLabel();
-    expect(buttonLabel4).toBe('Selesai');
-  });
-
-  it('test nextPage()', async () => {
-    await wrapper.vm.nextPage();
-    expect(wrapper.vm.thankyouPage).toBe(true);
-  });
-
-  it('test getUniqueEmployees()', async () => {
+  it('Test > getUniqueEmployees()', async () => {
     expect.assertions(2);
     try {
       await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.answers.length).toBe(2);
+      expect(wrapper.vm.answers.length).toBe(0);
     } catch (err) {
       expect(err).toEqual(new Error());
     }
@@ -292,23 +204,77 @@ describe('Pages > index.vue', () => {
     }
   });
 
-  it('test prepareSubmit()', () => {
+  it('Test > submitEmployeeData()', async () => {
+    expect.assertions(1);
+    try {
+      await wrapper.vm.submitEmployeeData();
+      const service = qnaModule();
+      await service.submitQna(wrapper.vm.prepareSubmit());
+      expect(axios.post).toHaveBeenCalled();
+    } catch (err) {
+      expect(err).toEqual(new Error());
+    }
+  });
+
+  it('Test > nextPage()', async () => {
+    expect.assertions(1);
+    try {
+      await wrapper.vm.nextPage();
+      expect(wrapper.vm.thankyouPage).toBe(false);
+    } catch (err) {
+      expect(err).toEqual(new Error());
+    }
+  });
+
+  it('Test > selectedAnswerImage()', () => {
+    wrapper.vm.selectedAnswerImage();
+  });
+
+  it('Test > answerAdd()', async () => {
+    expect.assertions(1);
+    try {
+      await wrapper.vm.answerAdd();
+      const service = qnaModule();
+      await service.submitQna(wrapper.vm.prepareSubmit());
+      expect(axios.post).toHaveBeenCalled();
+
+      wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
+      await wrapper.vm.answerAdd('waone@alterra.id');
+    } catch (err) {
+      expect(err).toEqual(new Error());
+    }
+  });
+
+  it('Test > prepareSubmit()', () => {
     wrapper.vm.prepareSubmit();
     const prepareSubmit = wrapper.vm.prepareSubmit();
     expect(prepareSubmit.length).toBe(2);
   });
 
-  it('test selectedAnswerImage()', () => {
-    wrapper.vm.selectedAnswerImage();
+  it('Test > progressCheckpointFloor()', () => {
+    wrapper.vm.progressCheckpointFloor();
   });
 });
 
-describe('Pages > index.vue : kondisi ke 2', () => {
+describe('Pages > index.vue > Kondisi ke 2', () => {
   beforeEach(() => {
     const override = {
       methods: {
         prepareSubmit() {
-          return [];
+          return [
+            {
+              criteria_id: 'domainid',
+              selected_employee_email: 'wawan@alterra.id',
+              employee_email_x: 'wawan@alterra.id',
+              employee_email_y: 'dedy@alterra.id',
+            },
+            {
+              criteria_id: 'domainid',
+              selected_employee_email: 'wawan@alterra.id',
+              employee_email_x: 'wawan@alterra.id',
+              employee_email_y: 'dedy@alterra.id',
+            },
+          ];
         },
       },
     };
@@ -318,11 +284,22 @@ describe('Pages > index.vue : kondisi ke 2', () => {
         $route: {
           params: { domain: 'requirements' },
         },
+        dataCriteria: {
+          data: [{
+            id: '',
+            criteria_name: 'Design',
+            shortdec: 'Loading ...',
+            description: 'Loading ...',
+            percent_progress: 0,
+          }],
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config: {},
+        },
       },
       data() {
         return {
-          domain: '',
-          domainId: 'nodata',
           thankyouPage: false,
           employees: 'string',
           local: null,
@@ -342,20 +319,9 @@ describe('Pages > index.vue : kondisi ke 2', () => {
       },
       mixins: [override],
     });
-    mockedAxios = axios as jest.Mocked<typeof axios>;
-    mockedAxios.post.mockResolvedValue(mockedResponse);
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it('test init()', () => {
-    expect(wrapper.vm.domain).toBe('');
-    expect(wrapper.vm.domainId).toBe('nodata');
-  });
-
-  it('test submitEmployeeData()', async () => {
+  it('Test > submitEmployeeData() => this.prepareSubmit().length == false', async () => {
     expect.assertions(1);
     try {
       await wrapper.vm.submitEmployeeData();
@@ -367,7 +333,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
     }
   });
 
-  it('test answerAdd() : this.selectedAnswer.length > this.maxSelectedAnswer', async () => {
+  it('Test > answerAdd() => this.selectedAnswer.length > this.maxSelectedAnswer', async () => {
     expect.assertions(1);
     try {
       await wrapper.vm.answerAdd();
@@ -382,7 +348,7 @@ describe('Pages > index.vue : kondisi ke 2', () => {
     }
   });
 
-  it('test nextPage() : (this.pages == this.currentPages)', async () => {
+  it('Test > nextPage() : this.pages == this.currentPages', async () => {
     expect.assertions(1);
     try {
       await wrapper.vm.nextPage();
@@ -391,15 +357,30 @@ describe('Pages > index.vue : kondisi ke 2', () => {
       expect(err).toEqual(new Error());
     }
   });
-
-  it('test getUniqueEmployees() : employees !== object', async () => {
-    await wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.employees).toBe('string');
-  });
 });
 
 describe('Pages > index.vue : kondisi ke 3', () => {
   beforeEach(() => {
+    const override = {
+      methods: {
+        prepareSubmit() {
+          return [
+            {
+              criteria_id: 'domainid',
+              selected_employee_email: 'wawan@alterra.id',
+              employee_email_x: 'wawan@alterra.id',
+              employee_email_y: 'dedy@alterra.id',
+            },
+            {
+              criteria_id: 'domainid',
+              selected_employee_email: 'wawan@alterra.id',
+              employee_email_x: 'wawan@alterra.id',
+              employee_email_y: 'dedy@alterra.id',
+            },
+          ];
+        },
+      },
+    };
     wrapper = shallowMount(Qna, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
@@ -409,31 +390,37 @@ describe('Pages > index.vue : kondisi ke 3', () => {
       },
       data() {
         return {
-          local: '{"criteria_name":"xxx","id":"xxx"}',
           employees: [
             {
-              criteria_id: 'string',
-              criteria_name: 'design',
+              criteria_id: '606d1d89f50eab8cb59f4352',
+              criteria_name: 'Quality',
+              employee_email_x: 'waone@alterra.id',
+              employee_email_y: 'dodi@alterra.id',
+              employee_image_url_x: '',
+              employee_image_url_y: '',
+              employee_name_x: 'Aditya Imannudin Suryomurtjito',
+              employee_name_y: 'Ainin Nur Asiyah',
             },
           ],
           answers: ['waone@alterra.id', 'dodi@alterra.id'],
-          selectedAnswer: ['waone@alterra.id', 'dodi@alterra.id'],
+          selectedAnswer: ['xx@alterra.id', 'xx@alterra.id'],
         };
       },
+      mixins: [override],
     });
   });
 
-  it('test init()', () => {
-    expect(wrapper.vm.domain).toBe('');
-    expect(wrapper.vm.domainId).toBe('nodata');
+  it('Test > getUniqueEmployees() : employee_email_x === undefined && employee_email_y === undefined', async () => {
+    expect.assertions(1);
+    try {
+      await wrapper.vm.getUniqueEmployees();
+      expect(wrapper.vm.employees.length).toBe(1);
+    } catch (err) {
+      expect(err).toEqual(new Error());
+    }
   });
 
-  it('test getUniqueEmployees() : employee_email_x === undefined && employee_email_y === undefined', async () => {
-    await wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.employees.length).toBe(1);
-  });
-
-  it('test prepareSubmit() selectedAnswer include answer', () => {
+  it('Test > prepareSubmit() selectedAnswer include answer', () => {
     wrapper.vm.prepareSubmit();
   });
 });
@@ -442,6 +429,11 @@ describe('Pages > index.vue : kondisi ke 4', () => {
   beforeEach(() => {
     wrapper = shallowMount(Qna, {
       stubs: ['nuxt-link', 'v-lazy-image'],
+      mocks: {
+        $route: {
+          params: { domain: 'requirements' },
+        },
+      },
       data() {
         return {
           employees: [
@@ -557,18 +549,23 @@ describe('Pages > index.vue : kondisi ke 4', () => {
             },
           ],
           answers: ['waone@alterra.id', 'dodi@alterra.id'],
-          selectedAnswer: ['xx@alterra.id', 'yy@alterra.id'],
+          selectedAnswer: ['waone@alterra.id', 'dodi@alterra.id'],
         };
       },
     });
   });
 
-  it('test getUniqueEmployees() : answers array memiliki employee x dan y', async () => {
-    await wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.employees).toBeTruthy();
+  it('Test > prepareSubmit() selectedAnswer not include answer', () => {
+    wrapper.vm.submitEmployeeData();
+    wrapper.vm.prepareSubmit();
+    expect(wrapper.vm.prepareSubmit().length).toBe(0);
+
+    wrapper.setData({ selectedAnswer: ['xxx@alterra.id', 'xx@alterra.id'] });
+    wrapper.vm.prepareSubmit();
+    expect(wrapper.vm.prepareSubmit().length).toBe(4);
   });
 
-  it('test prepareSubmit() selectedAnswer not include answer', () => {
-    wrapper.vm.prepareSubmit();
+  it('Test > checkDataAnswer()', () => {
+    wrapper.vm.checkDataAnswer();
   });
 });
