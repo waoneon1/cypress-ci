@@ -245,10 +245,14 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     }
   });
 
-  it('test prepareSubmit()', () => {
+  it('Test > prepareSubmit()', () => {
     wrapper.vm.prepareSubmit();
     const prepareSubmit = wrapper.vm.prepareSubmit();
     expect(prepareSubmit.length).toBe(2);
+  });
+
+  it('Test > progressCheckpointFloor()', () => {
+    wrapper.vm.progressCheckpointFloor();
   });
 });
 
@@ -399,7 +403,7 @@ describe('Pages > index.vue : kondisi ke 3', () => {
             },
           ],
           answers: ['waone@alterra.id', 'dodi@alterra.id'],
-          selectedAnswer: ['waone@alterra.id', 'dodi@alterra.id'],
+          selectedAnswer: ['xx@alterra.id', 'xx@alterra.id'],
         };
       },
       mixins: [override],
@@ -545,14 +549,20 @@ describe('Pages > index.vue : kondisi ke 4', () => {
             },
           ],
           answers: ['waone@alterra.id', 'dodi@alterra.id'],
-          selectedAnswer: ['xx@alterra.id', 'yy@alterra.id'],
+          selectedAnswer: ['waone@alterra.id', 'dodi@alterra.id'],
         };
       },
     });
   });
 
   it('Test > prepareSubmit() selectedAnswer not include answer', () => {
+    wrapper.vm.submitEmployeeData();
     wrapper.vm.prepareSubmit();
+    expect(wrapper.vm.prepareSubmit().length).toBe(0);
+    
+    wrapper.setData({ selectedAnswer: ['xxx@alterra.id', 'xx@alterra.id'] });
+    wrapper.vm.prepareSubmit();
+    expect(wrapper.vm.prepareSubmit().length).toBe(4);
   });
 
   it('Test > checkDataAnswer()', () => {
