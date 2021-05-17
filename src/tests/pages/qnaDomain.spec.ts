@@ -559,7 +559,7 @@ describe('Pages > index.vue : kondisi ke 4', () => {
     wrapper.vm.submitEmployeeData();
     wrapper.vm.prepareSubmit();
     expect(wrapper.vm.prepareSubmit().length).toBe(0);
-    
+
     wrapper.setData({ selectedAnswer: ['xxx@alterra.id', 'xx@alterra.id'] });
     wrapper.vm.prepareSubmit();
     expect(wrapper.vm.prepareSubmit().length).toBe(4);
