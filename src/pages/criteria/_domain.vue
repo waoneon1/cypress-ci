@@ -26,8 +26,8 @@
         image="domain.svg"
         :buttons="[
           {
-            label: 'Mulai',
-            url: '/qna/' + domain.slug,
+            label: loading ? 'Loading...' : 'Mulai',
+            url: loading ? '' : '/qna/' + domain.slug,
             theme: 'border-secondary bg-secondary text-white'
           }
         ]"
@@ -84,6 +84,8 @@ export default class Criteria extends Vue {
 
   help: boolean = false;
 
+  loading: boolean = true;
+
   goToQnaPage(): void {
     this.$router.push(`/qna/${this.domain.criteria_name.toLowerCase()}`);
   }
@@ -92,10 +94,12 @@ export default class Criteria extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    await criteriaModule.getCriteria();
-    const allCriteria = criteriaModule.dataCriteria.data;
-    // set domain variable
-    this.domain = _.find(allCriteria, { slug: criteria });
+    await criteriaModule.getCriteria().then(() => {
+      this.loading = false;
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
+    });
   }
 
   async init() {
