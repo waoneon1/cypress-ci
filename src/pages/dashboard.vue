@@ -43,7 +43,7 @@
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
             >
               <div
-                v-show="recommendation.id === item.id"
+                v-show="checkRecommandation(item)"
                 class="absolute text-xs bg-yellow-300 text-white px-5 transform rotate-45"
                 style="right: -25px; top: 25px;"
               >
@@ -236,6 +236,13 @@ export default class Dashboard extends Vue {
       this.criteria = criteriaModule.dataCriteria.data;
       this.recommendation = this.setRecommendation();
     });
+  }
+
+  checkRecommandation(item: {id:''}) {
+    if (this.recommendation?.id === item.id) {
+      return true;
+    }
+    return false;
   }
 
   mounted() {

@@ -51,7 +51,7 @@ describe('Pages > dashboard.vue', () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it('berhasil mounting komponen', () => {
+  it('berhasil mounting komponen alert', () => {
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
     });
@@ -100,5 +100,25 @@ describe('Pages > dashboard.vue', () => {
       },
     });
     wrapper.vm.setRecommendation();
+  });
+
+  it('test checkRecommandation false', async () => {
+    const wrapper: any = shallowMount(ClassDashboard, {
+      stubs: ['nuxt-link'],
+      data() {
+        return {
+          criteria: [{
+            criteria_name: 'Design',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 0,
+          }, {
+            criteria_name: 'XXX',
+            id: '6062d4c9dd3acd0959261f51',
+            percent_progress: 10,
+          }],
+        };
+      },
+    });
+    expect(wrapper.vm.checkRecommandation({ id: false })).toBeFalsy();
   });
 });

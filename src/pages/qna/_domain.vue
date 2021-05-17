@@ -73,7 +73,7 @@
                 Lanjutkan Nanti
               </nuxt-link>
               <button
-                @click="progressCheckpoint += 1"
+                @click="progressCheckpointFloor()"
                 class="rounded-full py-3 px-8 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 Lanjutkan
@@ -170,7 +170,7 @@
             <div class="inline-block flex">
               <button
                 :disabled="loading"
-                @click="nextPage(); progressCounter+=5"
+                @click="nextPage();"
                 class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -398,7 +398,7 @@ export default class Qna extends Vue {
       });
 
       // set initial checkpoint progress
-      this.progressCheckpoint = this.domain.percent_progress + 1;
+      this.progressCheckpoint = _.floor(this.domain.percent_progress + 1);
     });
   }
 
@@ -448,6 +448,10 @@ export default class Qna extends Vue {
     return qnaModule.submitResponse.data.percent_progress === 0
       ? _.round(this.domain.percent_progress, 2)
       : _.round(qnaModule.submitResponse.data.percent_progress, 2);
+  }
+
+  progressCheckpointFloor() {
+    this.progressCheckpoint = _.floor(this.progressCheckpoint + 1);
   }
 }
 </script>
