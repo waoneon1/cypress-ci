@@ -41,7 +41,7 @@
         <div class="mx-auto flex justify-center max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg">
           <nuxt-link
             class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
-            :disabled = loading
+            :event="loading ? '' : 'click'"
             to = '/dashboard'
           >
             <span class="font-bold text-sm">Cukup, lanjutkan untuk menilai</span>
@@ -50,7 +50,7 @@
         <div class="mx-auto flex justify-center max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg">
           <nuxt-link
             class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-white hover:bg-secondary text-secondary hover:text-white focus:outline-none inline-block"
-            :disabled = loading
+            :event="loading ? '' : 'click'"
             to = '/prepare/employee'
           >
             <span class="font-bold text-sm">Ok, saya mau pilih alterran lainnya</span>
