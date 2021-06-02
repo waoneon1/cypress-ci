@@ -34,16 +34,25 @@
                     type="text"
                     disabled
                     class="rounded-md border border-gray-300 bg-gray-300 font-roboto py-2 px-3"
-                    value="Jhon Doe"
+                    :value="data.user_name"
                   />
                 </div>
                 <div class="flex flex-col mb-3">
-                  <label class="font-medium mb-2 pl-1">Posisi</label>
+                  <label class="font-medium mb-2 pl-1">Unit Bisnis</label>
                   <input
                     type="text"
                     disabled
                     class="rounded-md border border-gray-300 bg-gray-300 font-roboto py-2 px-3"
-                    value="Programmer"
+                    :value="data.user_business_unit"
+                  />
+                </div>
+                <div class="flex flex-col mb-3">
+                  <label class="font-medium mb-2 pl-1">Organisasi</label>
+                  <input
+                    type="text"
+                    disabled
+                    class="rounded-md border border-gray-300 bg-gray-300 font-roboto py-2 px-3"
+                    :value="data.user_organization_full_text"
                   />
                 </div>
                 <div class="flex flex-col mb-3">
@@ -52,7 +61,7 @@
                     type="text"
                     disabled
                     class="rounded-md border border-gray-300 bg-gray-300 font-roboto py-2 px-3"
-                    value="jhon@alterra.id"
+                    :value="data.user_email"
                   />
                 </div>
               </div>
@@ -125,3 +134,46 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+
+export interface LoginData {
+  /* eslint-disable camelcase */
+  exp: number;
+  user_business_unit: string;
+  user_email: string;
+  user_id: string;
+  user_name: string;
+  user_oauth_id: string;
+  user_organization: string;
+  user_organization_full_text: string;
+  /* eslint-enable camelcase */
+}
+
+@Component
+export default class Profile extends Vue {
+  data:LoginData = {
+    exp: 1,
+    user_business_unit: 'nodata',
+    user_email: 'nodata',
+    user_id: 'nodata',
+    user_name: 'nodata',
+    user_oauth_id: 'nodata',
+    user_organization: 'nodata',
+    user_organization_full_text: 'nodata',
+  };
+
+  loadLoginData() {
+    const local: string | null = localStorage.getItem('rrs_selected');
+    if (local) {
+      const data = JSON.parse(local);
+      this.data = data.login;
+    }
+  }
+
+  mounted() {
+    this.loadLoginData();
+  }
+}
+</script>

@@ -15,7 +15,7 @@
         <div class="relative">
           <p class="text-xs text-primary">Welcome,</p>
           <h1 class="text-primary font-medium text-xl">
-            John doe
+            {{ username }}
           </h1>
         </div>
         <div class="rounded-full overflow-hidden h-7 w-7">
@@ -25,7 +25,7 @@
 
       <!-- Content: Criteria List -->
       <div class="relative">
-        <p class="text-xs text-primary mb-3">Competency</p>
+        <p class="text-xs text-primary mb-3">Kompetensi</p>
         <div v-if="loading" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
           <div v-for="(item, i) in 12" :key="i">
             <div class="animate-pulse rounded-xl bg-gray-200 w-full h-32 cursor-pointer relative">
@@ -193,6 +193,19 @@ export interface SubmitResponseData {
   /* eslint-enable camelcase */
 }
 
+export interface LoginData {
+  /* eslint-disable camelcase */
+  exp: number;
+  user_business_unit: string;
+  user_email: string;
+  user_id: string;
+  user_name: string;
+  user_oauth_id: string;
+  user_organization: string;
+  user_organization_full_text: string;
+  /* eslint-enable camelcase */
+}
+
 @Component({
   components: { Alert },
 })
@@ -204,6 +217,8 @@ export default class Dashboard extends Vue {
   alert: boolean = false;
 
   loading: boolean = true
+
+  username: string = 'loading...'
 
   recommendation = {
     criteria_name: 'No Data',
@@ -245,10 +260,21 @@ export default class Dashboard extends Vue {
     return false;
   }
 
+  loadLoginData() {
+    const local: string | null = localStorage.getItem('rrs_selected');
+    if (local) {
+      const data = JSON.parse(local);
+      const usernameArray = _.split(data.login.user_name, ' ', 2);
+      const username = _.join(usernameArray, ' ');
+      this.username = username;
+    }
+  }
+
   mounted() {
     // call onboarding
     this.alert = alertModule.showAlert;
     this.loadCriteriaData();
+    this.loadLoginData();
   }
 }
 </script>
