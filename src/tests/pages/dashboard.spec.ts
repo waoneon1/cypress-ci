@@ -49,15 +49,14 @@ describe('Pages > dashboard.vue', () => {
       },
       data() {
         return {
-          selected: { selected: [] }
-        }
-      }
+          selected: { selected: [] },
+        };
+      },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it('berhasil mounting komponen alert', () => {
-    
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
       mocks: {

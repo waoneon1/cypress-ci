@@ -171,10 +171,10 @@ export default class PrepareEmployee extends Vue {
     updated_at: '',
   }]
 
-  toggleSelect(id: string): void {
-    const index = this.selected.indexOf(id);
+  toggleSelect(email: string): void {
+    const index = this.selected.indexOf(email);
     if (index === -1) {
-      this.selected.push(id);
+      this.selected.push(email);
     } else {
       this.selected.splice(index, 1);
     }
@@ -220,6 +220,7 @@ export default class PrepareEmployee extends Vue {
       this.loading = false;
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
+
       const allEmployee = _.filter(
         employeeModule.dataEmployee.data,
         (o:EmployeeResponseData) => o.employee_organization !== org,
