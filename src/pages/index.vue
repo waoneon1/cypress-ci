@@ -96,6 +96,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { credentialModule } from '@/store/credential';
+import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
 import ComponentsRandomPict from '~/components/ComponentsRandomPict.vue';
@@ -142,6 +143,12 @@ export default class Login extends Vue {
               'token',
               credentialModule.dataCredential.data.accessToken,
             );
+
+            await employeeModule.getEmployee().then(() => {
+              const allEmployee = employeeModule.dataEmployee.data;
+              localStorage.setItem('rss_emcounter', JSON.stringify(allEmployee.length));
+            });
+
             // redirect . . .
             alertModule.setAlertTrue();
 

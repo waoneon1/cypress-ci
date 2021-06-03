@@ -16,6 +16,7 @@ export interface CriteriaResponseData {
   id: string;
   criteria_name: string;
   percent_progress: number;
+  percent_progress_filter?: number;
   slug?: string;
   description?: string;
   shortdec?: string;
@@ -40,6 +41,8 @@ export default class CriteriaModule extends VuexModule {
   @Mutation
   setCriteria(value: CriteriaResponse): void {
     const intro = 'Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk';
+    const whitelistJson = localStorage.getItem('rrs_selected');
+    const empCounterJson = localStorage.getItem('rss_emcounter');
     const dataCriteria = [
       {
         criteria_name: 'Design',
@@ -128,12 +131,25 @@ export default class CriteriaModule extends VuexModule {
     ];
     const makeSlug = _.map(value.data, (a: CriteriaResponseData) => {
       const obj = a;
+      // making slug by lowercase criteria name
       obj.slug = obj.criteria_name.toLowerCase();
+
+      // count progress with filter
+      const total_employee_percentage = obj.percent_progress
+      const count_whitelist = whitelistJson ? JSON.parse(whitelistJson).selected.length : null
+      const count_employee = empCounterJson ? JSON.parse(empCounterJson) : 0
+
+      const total_whitelist_pair = count_whitelist * count_whitelist - count_whitelist
+      const total_employee_pair = (count_employee * count_employee - count_employee) - (count_employee * 2 - 2)
+      const percentage_for_user = total_employee_percentage * total_employee_pair / total_whitelist_pair / 100
+
+      obj.percent_progress_filter = percentage_for_user
       return obj;
     });
 
     Object.assign(value.data, _.merge(makeSlug, dataCriteria));
     this.dataCriteria = value;
+    console.log(this.dataCriteria)
   }
 
   @Action({ rawError: true })

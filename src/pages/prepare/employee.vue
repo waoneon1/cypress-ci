@@ -44,12 +44,12 @@
             <div
               v-for="(item, i) in employeeSearch"
               :key="i"
-              @click="toggleSelect(item.id)"
+              @click="toggleSelect(item.employee_email)"
               class="relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
-                v-show="selected.includes(item.id)"
+                v-show="selected.includes(item.employee_email)"
               >
                 <svg class="fill-current text-success" width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
@@ -203,7 +203,6 @@ export default class PrepareEmployee extends Vue {
 
   save(): void {
     const payload = {
-      login: this.decodeDataEmployee(),
       selected: this.selected,
     };
     localStorage.setItem('rrs_selected', JSON.stringify(payload));
@@ -220,10 +219,10 @@ export default class PrepareEmployee extends Vue {
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
       // const allEmployee = employeeModule.dataEmployee.data;
-      const bu = this.decodeDataEmployee().user_business_unit;
+      const org = this.decodeDataEmployee().user_organization;
       const allEmployee = _.filter(
         employeeModule.dataEmployee.data,
-        (o:EmployeeResponseData) => o.employee_business_unit !== bu,
+        (o:EmployeeResponseData) => o.employee_organization !== org,
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;

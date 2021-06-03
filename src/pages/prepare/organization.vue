@@ -127,8 +127,8 @@ export default class PrepareOrganization extends Vue {
       this.loading = false;
       const allEmployee = employeeModule.dataEmployee.data;
       this.employeeFiltered = _.filter(allEmployee, {
-        // employee_business_unit : HO - Technology
-        employee_business_unit: this.decodeDataEmployee().user_business_unit,
+        // employee_organization : TEC - ENG
+        employee_organization: this.decodeDataEmployee().user_organization,
       });
     });
   }

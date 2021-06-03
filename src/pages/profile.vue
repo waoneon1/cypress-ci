@@ -164,16 +164,31 @@ export default class Profile extends Vue {
     user_organization_full_text: 'nodata',
   };
 
-  loadLoginData() {
-    const local: string | null = localStorage.getItem('rrs_selected');
-    if (local) {
-      const data = JSON.parse(local);
-      this.data = data.login;
+  decodeDataEmployee() {
+    const token: string | null = localStorage.getItem('token');
+    let jsonPayload:LoginData = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+
+    if (token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      jsonPayload = JSON.parse(decode);
     }
+    
+     this.data = jsonPayload;
   }
 
   mounted() {
-    this.loadLoginData();
+    this.decodeDataEmployee();
   }
 }
 </script>

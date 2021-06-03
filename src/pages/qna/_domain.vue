@@ -1,5 +1,6 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
+    {{ progressCheckpoint }}
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
@@ -64,6 +65,7 @@
           <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
             <img class="mb-10 w-40" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
             <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
+              cekpoin {{ progressCheckpoint }}
               Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
             </h1>
             <p class="text-sm max-w-sm mb-4">Jika ingin menunda untuk melanjutkan proses pemilihan di domain ini, kamu bisa memilih “Lanjutkan Nanti”</p>
@@ -120,7 +122,7 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0"></div>
-      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
+      <div v-else-if="criteriaProgressCount() >= progressCheckpoint || criteriaProgressCount() >= 100"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
@@ -196,6 +198,8 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
+import { employeeModule } from '@/store/employee';
+
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 
@@ -232,9 +236,24 @@ export interface CriteriaResponseData {
   id: string;
   criteria_name: string;
   percent_progress: number;
+  percent_progress_filter: number;
   slug: string;
   description: string;
   shortdec: string;
+  /* eslint-enable camelcase */
+}
+export interface EmployeeResponseData {
+  /* eslint-disable camelcase */
+  id: string;
+  employee_name: string;
+  employee_email: string;
+  employee_image_url: string;
+  employee_alt_id: string;
+  employee_organization: string;
+  employee_organization_full_text: string;
+  employee_business_unit: string;
+  created_at: string;
+  updated_at: string;
   /* eslint-enable camelcase */
 }
 
@@ -248,10 +267,13 @@ export default class Qna extends Vue {
     shortdec: 'Loading ...',
     description: 'Loading ...',
     percent_progress: 0,
+    percent_progress_filter: 0,
     slug: '',
   }
 
   employees: QnaResponseData[] = [];
+
+  employeeFilter: EmployeeResponseData[] = [];
 
   questions: string = '';
 
@@ -373,11 +395,46 @@ export default class Qna extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
+    console.log('getCriteria')
     await criteriaModule.getCriteria().then(() => {
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
       this.domain = _.find(allCriteria, { slug: criteria });
     });
+
+    console.log('getEmployee')
+    await employeeModule.getEmployee().then(() => {
+      // const allEmployee = employeeModule.dataEmployee.data;
+      const org = this.decodeDataEmployee().user_organization;
+      const allEmployee = _.filter(
+        employeeModule.dataEmployee.data,
+        (o:EmployeeResponseData) => o.employee_organization === org,
+      );
+      this.employeeFilter = allEmployee;
+    });
+  }
+
+  decodeDataEmployee() {
+    const token: string | null = localStorage.getItem('token');
+    let jsonPayload = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+
+    if (token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      jsonPayload = JSON.parse(decode);
+    }
+    
+    return jsonPayload;
   }
 
   async init() {
@@ -388,24 +445,41 @@ export default class Qna extends Vue {
       this.loadEmployeeData().then(() => { this.loading = false; });
 
       // set initial progress
+      console.log(this.domain.percent_progress, 'this.domain.percent_progress')
       qnaModule.setSubmit({
         response_code: '',
         message: '',
         data: {
           count_submitted: 0,
           percent_progress: this.domain.percent_progress,
+          percent_progress_filter: this.domain.percent_progress_filter,
         },
       });
 
-      // set initial checkpoint progress
-      this.progressCheckpoint = _.floor(this.domain.percent_progress + 1);
+      // set initial checkpoint progress  
+      console.log(this.domain.percent_progress, 'domain')
+      this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 25);
     });
   }
 
   async loadEmployeeData(): Promise<void> {
+    const whitelistJson = localStorage.getItem('rrs_selected');
+    const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : []
+
+    console.log(whitelist, 'whitelistn')
+
+    _.forEach(this.employeeFilter, function(obj:EmployeeResponseData) {
+      whitelist.push(obj.employee_email);
+    });
+    console.log(this.employeeFilter, 'employeeFilter')
+    console.log(whitelist, 'whitelist 2')
+    
     await qnaModule.getQna({
       criteria_id: this.domain.id,
       limit: 10,
+      filter: {
+        emails: whitelist
+      }
     });
     this.employees = qnaModule.dataQna.data;
     this.getUniqueEmployees();
@@ -445,13 +519,13 @@ export default class Qna extends Vue {
   }
 
   criteriaProgressCount() {
-    return qnaModule.submitResponse.data.percent_progress === 0
-      ? _.round(this.domain.percent_progress, 2)
-      : _.round(qnaModule.submitResponse.data.percent_progress, 2);
+    return qnaModule.submitResponse.data.percent_progress_filter === 0
+      ? _.round(this.domain.percent_progress_filter, 2)
+      : _.round(qnaModule.submitResponse.data.percent_progress_filter, 2);
   }
 
   progressCheckpointFloor() {
-    this.progressCheckpoint = _.floor(this.progressCheckpoint + 1);
+    this.progressCheckpoint = _.floor(this.progressCheckpoint + 25);
   }
 }
 </script>

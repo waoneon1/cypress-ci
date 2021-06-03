@@ -37,7 +37,7 @@
             v-for="(item, i) in criteria"
             :key="i"
             class="mb-1 cursor-pointer"
-            @click="item.percent_progress <= 100 ? goToQnaPage(item) : null"
+            @click="item.percent_progress_filter <= 100 ? goToQnaPage(item) : null"
           >
             <div
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
@@ -52,7 +52,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress <= 100 ? '' : 'hover:bg-blue-100'
+                    item.percent_progress_filter >= 100 ? '' : 'hover:bg-blue-100'
                   }`
                 "
               >
@@ -70,18 +70,18 @@
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
-                          `width:${roundedNumber(item.percent_progress)}%`
+                          `width:${roundedNumber(item.percent_progress_filter)}%`
                         "
                       ></div>
                     </div>
                   </div>
                   <span
-                    v-if="item.percent_progress <= 100"
+                    v-if="item.percent_progress_filter <= 100"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress === 0
+                      item.percent_progress_filter === 0
                         ? 0
-                        : roundedNumber(item.percent_progress)
+                        : roundedNumber(item.percent_progress_filter)
                     }}%</span
                   >
                   <div
@@ -178,6 +178,7 @@ export interface CriteriaResponseData {
   id?: string;
   criteria_name: string;
   percent_progress: number;
+  percent_progress_filter?: number;
   /* eslint-enable camelcase */
 }
 export interface CriteriaResponse {
@@ -211,8 +212,6 @@ export interface LoginData {
 })
 export default class Dashboard extends Vue {
   title: string = 'RRS Dashboard';
-
-  message: string = 'Content here';
 
   alert: boolean = false;
 
@@ -260,21 +259,36 @@ export default class Dashboard extends Vue {
     return false;
   }
 
-  loadLoginData() {
-    const local: string | null = localStorage.getItem('rrs_selected');
-    if (local) {
-      const data = JSON.parse(local);
-      const usernameArray = _.split(data.login.user_name, ' ', 2);
-      const username = _.join(usernameArray, ' ');
-      this.username = username;
+  decodeDataEmployee() {
+    const token: string | null = localStorage.getItem('token');
+    let jsonPayload:LoginData = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+
+    if (token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      jsonPayload = JSON.parse(decode);
     }
+    
+    const usernameArray = _.split(jsonPayload.user_name, ' ', 2);
+    const username = _.join(usernameArray, ' ');
+    this.username = username;
   }
 
   mounted() {
     // call onboarding
     this.alert = alertModule.showAlert;
     this.loadCriteriaData();
-    this.loadLoginData();
+    this.decodeDataEmployee();
   }
 }
 </script>
