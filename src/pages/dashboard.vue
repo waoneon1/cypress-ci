@@ -278,17 +278,26 @@ export default class Dashboard extends Vue {
       const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       jsonPayload = JSON.parse(decode);
     }
-    
+
     const usernameArray = _.split(jsonPayload.user_name, ' ', 2);
     const username = _.join(usernameArray, ' ');
     this.username = username;
   }
 
+  async init() {
+    const selected = localStorage.getItem('rrs_selected');
+    if (selected == null) {
+      this.$router.push('/prepare/organization');
+    } else {
+      this.alert = alertModule.showAlert;
+      this.loadCriteriaData();
+      this.decodeDataEmployee();
+    }
+  }
+
   mounted() {
     // call onboarding
-    this.alert = alertModule.showAlert;
-    this.loadCriteriaData();
-    this.decodeDataEmployee();
+    this.init();
   }
 }
 </script>

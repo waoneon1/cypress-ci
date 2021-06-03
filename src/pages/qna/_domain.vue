@@ -1,6 +1,5 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
-    {{ progressCheckpoint }}
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
@@ -28,7 +27,7 @@
       <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }} (Max. 3)
+          Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }}
         </div>
       </div>
 
@@ -65,7 +64,6 @@
           <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
             <img class="mb-10 w-40" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
             <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
-              cekpoin {{ progressCheckpoint }}
               Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
             </h1>
             <p class="text-sm max-w-sm mb-4">Jika ingin menunda untuk melanjutkan proses pemilihan di domain ini, kamu bisa memilih “Lanjutkan Nanti”</p>
@@ -271,6 +269,8 @@ export default class Qna extends Vue {
     slug: '',
   }
 
+  token: string | null = localStorage.getItem('token');
+
   employees: QnaResponseData[] = [];
 
   employeeFilter: EmployeeResponseData[] = [];
@@ -395,14 +395,12 @@ export default class Qna extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    console.log('getCriteria')
     await criteriaModule.getCriteria().then(() => {
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
       this.domain = _.find(allCriteria, { slug: criteria });
     });
 
-    console.log('getEmployee')
     await employeeModule.getEmployee().then(() => {
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
@@ -415,7 +413,6 @@ export default class Qna extends Vue {
   }
 
   decodeDataEmployee() {
-    const token: string | null = localStorage.getItem('token');
     let jsonPayload = {
       exp: 1,
       user_business_unit: 'nodata',
@@ -427,13 +424,13 @@ export default class Qna extends Vue {
       user_organization_full_text: 'nodata',
     };
 
-    if (token) {
-      const base64Url = token.split('.')[1];
+    if (this.token) {
+      const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       jsonPayload = JSON.parse(decode);
     }
-    
+
     return jsonPayload;
   }
 
@@ -445,7 +442,6 @@ export default class Qna extends Vue {
       this.loadEmployeeData().then(() => { this.loading = false; });
 
       // set initial progress
-      console.log(this.domain.percent_progress, 'this.domain.percent_progress')
       qnaModule.setSubmit({
         response_code: '',
         message: '',
@@ -456,30 +452,25 @@ export default class Qna extends Vue {
         },
       });
 
-      // set initial checkpoint progress  
-      console.log(this.domain.percent_progress, 'domain')
+      // set initial checkpoint progress
       this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 25);
     });
   }
 
   async loadEmployeeData(): Promise<void> {
     const whitelistJson = localStorage.getItem('rrs_selected');
-    const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : []
+    const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : [];
 
-    console.log(whitelist, 'whitelistn')
-
-    _.forEach(this.employeeFilter, function(obj:EmployeeResponseData) {
+    _.forEach(this.employeeFilter, (obj:EmployeeResponseData) => {
       whitelist.push(obj.employee_email);
     });
-    console.log(this.employeeFilter, 'employeeFilter')
-    console.log(whitelist, 'whitelist 2')
-    
+
     await qnaModule.getQna({
       criteria_id: this.domain.id,
       limit: 10,
       filter: {
-        emails: whitelist
-      }
+        emails: whitelist,
+      },
     });
     this.employees = qnaModule.dataQna.data;
     this.getUniqueEmployees();

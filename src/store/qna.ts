@@ -69,18 +69,19 @@ export default class QnaModule extends VuexModule {
 
   @Mutation
   setSubmit(value: SubmitResponse): void {
+    /* eslint no-param-reassign: "error" */
     const whitelistJson = localStorage.getItem('rrs_selected');
     const empCounterJson = localStorage.getItem('rss_emcounter');
 
-    const total_employee_percentage = value.data.percent_progress
-    const count_whitelist = whitelistJson ? JSON.parse(whitelistJson).selected.length : null
-    const count_employee = empCounterJson ? JSON.parse(empCounterJson) : 0
+    const totalEmployeePercentage = value.data.percent_progress;
+    const countWhitelist = whitelistJson ? JSON.parse(whitelistJson).selected.length : null;
+    const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
 
-    const total_whitelist_pair = count_whitelist * count_whitelist - count_whitelist
-    const total_employee_pair = (count_employee * count_employee - count_employee) - (count_employee * 2 - 2)
-    const percentage_for_user = total_employee_percentage * total_employee_pair / total_whitelist_pair / 100
+    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+    const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
+    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) / 100;
 
-    value.data.percent_progress_filter = percentage_for_user;
+    value.data.percent_progress_filter = percentageForUser;
     this.submitResponse = value;
   }
 
@@ -99,13 +100,6 @@ export default class QnaModule extends VuexModule {
         },
       });
 
-      console.log(`${url}pair_data/get_next`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      console.log(response.data.data)
       if (response.data.data) {
         this.setQna(response.data);
       } else {

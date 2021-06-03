@@ -135,21 +135,20 @@ export default class CriteriaModule extends VuexModule {
       obj.slug = obj.criteria_name.toLowerCase();
 
       // count progress with filter
-      const total_employee_percentage = obj.percent_progress
-      const count_whitelist = whitelistJson ? JSON.parse(whitelistJson).selected.length : null
-      const count_employee = empCounterJson ? JSON.parse(empCounterJson) : 0
+      const totalEmployeePercentage = obj.percent_progress;
+      const countWhitelist = whitelistJson ? JSON.parse(whitelistJson).selected.length : null;
+      const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
 
-      const total_whitelist_pair = count_whitelist * count_whitelist - count_whitelist
-      const total_employee_pair = (count_employee * count_employee - count_employee) - (count_employee * 2 - 2)
-      const percentage_for_user = total_employee_percentage * total_employee_pair / total_whitelist_pair / 100
+      const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+      const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
+      const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) / 100;
 
-      obj.percent_progress_filter = percentage_for_user
+      obj.percent_progress_filter = percentageForUser;
       return obj;
     });
 
     Object.assign(value.data, _.merge(makeSlug, dataCriteria));
     this.dataCriteria = value;
-    console.log(this.dataCriteria)
   }
 
   @Action({ rawError: true })
