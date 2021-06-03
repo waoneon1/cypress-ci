@@ -47,13 +47,24 @@ describe('Pages > dashboard.vue', () => {
           push: router,
         },
       },
+      data() {
+        return {
+          selected: { selected: [] }
+        }
+      }
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it('berhasil mounting komponen alert', () => {
+    
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+      },
     });
     expect(wrapper.vm.alert).toBeFalsy();
   });
@@ -85,6 +96,11 @@ describe('Pages > dashboard.vue', () => {
   it('test setRecommendation', async () => {
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+      },
       data() {
         return {
           criteria: [{
@@ -105,6 +121,11 @@ describe('Pages > dashboard.vue', () => {
   it('test checkRecommandation false', async () => {
     const wrapper: any = shallowMount(ClassDashboard, {
       stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: router,
+        },
+      },
       data() {
         return {
           criteria: [{

@@ -83,16 +83,8 @@ export default class QnaModule extends VuexModule {
     const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
     const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
     const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
-    
-    console.log('countWhitelist : ', whitelistCheck + countEmployee.org)
-    console.log('totalEmployeePercentage : ', totalEmployeePercentage)
-    console.log('totalEmployeePair : ', totalEmployeePair)
-    console.log('totalWhitelistPair : ', totalWhitelistPair)
-    console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) : ', percentageForUser)
-    console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) / 100 : ', percentageForUser / 100)
-    console.log(value)
-    
-    value.data.percent_progress_filter = percentageForUser / 100;
+
+    value.data.percent_progress_filter = percentageForUser;
     this.submitResponse = value;
   }
 

@@ -144,22 +144,13 @@ export default class CriteriaModule extends VuexModule {
       const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
       const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
       const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
-      
-      console.log('countWhitelist : ', whitelistCheck + countEmployee.org)
-      console.log('totalEmployeePercentage : ', totalEmployeePercentage)
-      console.log('totalEmployeePair : ', totalEmployeePair)
-      console.log('totalWhitelistPair : ', totalWhitelistPair)
-      console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) : ', percentageForUser)
-      console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) / 100 : ', percentageForUser / 100)
-      console.log(value)
 
-      obj.percent_progress_filter = percentageForUser / 100;
+      obj.percent_progress_filter = percentageForUser;
       return obj;
     });
 
     Object.assign(value.data, _.merge(makeSlug, dataCriteria));
     this.dataCriteria = value;
-    console.log(this.dataCriteria)
   }
 
   @Action({ rawError: true })

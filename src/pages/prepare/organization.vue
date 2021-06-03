@@ -134,9 +134,8 @@ export default class PrepareOrganization extends Vue {
       // set localstorage count employee
       localStorage.setItem('rss_emcounter', JSON.stringify({
         all: allEmployee.length,
-        org: this.employeeFiltered.length
+        org: this.employeeFiltered.length,
       }));
-
     });
   }
 
@@ -147,7 +146,6 @@ export default class PrepareOrganization extends Vue {
     localStorage.setItem('rrs_selected', JSON.stringify(payload));
     this.$router.push('/dashboard');
   }
-
 
   decodeDataEmployee(): LoginData {
     let jsonPayload:LoginData = {

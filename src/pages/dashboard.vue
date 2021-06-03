@@ -215,6 +215,8 @@ export default class Dashboard extends Vue {
 
   alert: boolean = false;
 
+  selected = localStorage.getItem('rrs_selected');
+
   loading: boolean = true
 
   username: string = 'loading...'
@@ -285,8 +287,7 @@ export default class Dashboard extends Vue {
   }
 
   async init() {
-    const selected = localStorage.getItem('rrs_selected');
-    if (selected == null) {
+    if (this.selected == null) {
       this.$router.push('/prepare/organization');
     } else {
       this.alert = alertModule.showAlert;
