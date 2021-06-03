@@ -151,6 +151,6 @@ describe('Pages > dashboard.vue', () => {
         };
       },
     });
-    wrapper.vm.decodeDataEmployee()
+    wrapper.vm.decodeDataEmployee();
   });
 });

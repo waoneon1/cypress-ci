@@ -22,5 +22,4 @@ describe('pages > Faq.vue', () => {
     });
     expect(wrapper.vm).toBeTruthy();
   });
-
 });

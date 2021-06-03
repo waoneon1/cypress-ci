@@ -70,7 +70,7 @@ describe('Pages > organization.vue', () => {
   });
 
   it('test save()', () => {
-    const wrapper: any = shallowMount(PrepareOrganization, {
+    wrapper = shallowMount(PrepareOrganization, {
       stubs: ['nuxt-link'],
       mocks: {
         $router: {
