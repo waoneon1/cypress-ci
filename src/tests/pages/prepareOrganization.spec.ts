@@ -68,4 +68,16 @@ describe('Pages > organization.vue', () => {
     wrapper.setData({ token: '' });
     expect(wrapper.vm.decodeDataEmployee().user_email).toBe('nodata');
   });
+
+  it('test save()', () => {
+    const wrapper: any = shallowMount(PrepareOrganization, {
+      stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: jest.fn(),
+        },
+      },
+    });
+    wrapper.vm.save();
+  });
 });
