@@ -39,13 +39,13 @@
       <div class="fixed bottom-0 left-0 right-0">
         <!-- navigation circle -->
         <div class="mx-auto flex justify-center max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg">
-          <nuxt-link
+          <button
             class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
-            :event="loading ? '' : 'click'"
-            to = '/dashboard'
+            :disabled="loading"
+            @click="save()"
           >
             <span class="font-bold text-sm">Cukup, lanjutkan untuk menilai</span>
-          </nuxt-link>
+          </button>
         </div>
         <div class="mx-auto flex justify-center max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg">
           <nuxt-link
@@ -130,8 +130,24 @@ export default class PrepareOrganization extends Vue {
         // employee_organization : TEC - ENG
         employee_organization: this.decodeDataEmployee().user_organization,
       });
+
+      // set localstorage count employee
+      localStorage.setItem('rss_emcounter', JSON.stringify({
+        all: allEmployee.length,
+        org: this.employeeFiltered.length
+      }));
+
     });
   }
+
+  save(): void {
+    const payload = {
+      selected: '',
+    };
+    localStorage.setItem('rrs_selected', JSON.stringify(payload));
+    this.$router.push('/dashboard');
+  }
+
 
   decodeDataEmployee(): LoginData {
     let jsonPayload:LoginData = {
