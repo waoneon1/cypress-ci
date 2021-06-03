@@ -15,7 +15,7 @@
         <div class="relative">
           <p class="text-xs text-primary">Welcome,</p>
           <h1 class="text-primary font-medium text-xl">
-            John doe
+            {{ username }}
           </h1>
         </div>
         <div class="rounded-full overflow-hidden h-7 w-7">
@@ -25,7 +25,7 @@
 
       <!-- Content: Criteria List -->
       <div class="relative">
-        <p class="text-xs text-primary mb-3">Competency</p>
+        <p class="text-xs text-primary mb-3">Kompetensi</p>
         <div v-if="loading" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
           <div v-for="(item, i) in 12" :key="i">
             <div class="animate-pulse rounded-xl bg-gray-200 w-full h-32 cursor-pointer relative">
@@ -37,7 +37,7 @@
             v-for="(item, i) in criteria"
             :key="i"
             class="mb-1 cursor-pointer"
-            @click="item.percent_progress <= 100 ? goToQnaPage(item) : null"
+            @click="item.percent_progress_filter <= 100 ? goToQnaPage(item) : null"
           >
             <div
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
@@ -52,7 +52,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress <= 100 ? '' : 'hover:bg-blue-100'
+                    item.percent_progress_filter >= 100 ? '' : 'hover:bg-blue-100'
                   }`
                 "
               >
@@ -70,18 +70,18 @@
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
-                          `width:${roundedNumber(item.percent_progress)}%`
+                          `width:${roundedNumber(item.percent_progress_filter)}%`
                         "
                       ></div>
                     </div>
                   </div>
                   <span
-                    v-if="item.percent_progress <= 100"
+                    v-if="item.percent_progress_filter <= 100"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress === 0
+                      item.percent_progress_filter === 0
                         ? 0
-                        : roundedNumber(item.percent_progress)
+                        : roundedNumber(item.percent_progress_filter)
                     }}%</span
                   >
                   <div
@@ -178,6 +178,7 @@ export interface CriteriaResponseData {
   id?: string;
   criteria_name: string;
   percent_progress: number;
+  percent_progress_filter?: number;
   /* eslint-enable camelcase */
 }
 export interface CriteriaResponse {
@@ -193,17 +194,34 @@ export interface SubmitResponseData {
   /* eslint-enable camelcase */
 }
 
+export interface LoginData {
+  /* eslint-disable camelcase */
+  exp: number;
+  user_business_unit: string;
+  user_email: string;
+  user_id: string;
+  user_name: string;
+  user_oauth_id: string;
+  user_organization: string;
+  user_organization_full_text: string;
+  /* eslint-enable camelcase */
+}
+
 @Component({
   components: { Alert },
 })
 export default class Dashboard extends Vue {
   title: string = 'RRS Dashboard';
 
-  message: string = 'Content here';
-
   alert: boolean = false;
 
+  selected: string | null = localStorage.getItem('rrs_selected');
+
+  token: string | null = localStorage.getItem('token');
+
   loading: boolean = true
+
+  username: string = 'loading...'
 
   recommendation = {
     criteria_name: 'No Data',
@@ -245,10 +263,43 @@ export default class Dashboard extends Vue {
     return false;
   }
 
+  decodeDataEmployee() {
+    let jsonPayload:LoginData = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+
+    if (this.token) {
+      const base64Url = this.token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      jsonPayload = JSON.parse(decode);
+    }
+
+    const usernameArray = _.split(jsonPayload.user_name, ' ', 2);
+    const username = _.join(usernameArray, ' ');
+    this.username = username;
+  }
+
+  async init() {
+    if (this.selected == null) {
+      this.$router.push('/prepare/organization');
+    } else {
+      this.alert = alertModule.showAlert;
+      this.loadCriteriaData();
+      this.decodeDataEmployee();
+    }
+  }
+
   mounted() {
     // call onboarding
-    this.alert = alertModule.showAlert;
-    this.loadCriteriaData();
+    this.init();
   }
 }
 </script>
