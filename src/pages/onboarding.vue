@@ -22,10 +22,10 @@
           >
             <div>
               <img
-                class="mb-8 mx-auto"
+                class="mb-5 mx-auto"
                 :src="'/img/' + item.image"
                 alt="onboarding"
-                style="max-width: 65%;"
+                style="max-width: 50%;"
               />
               <h1
                 class="text-2xl text-primary mb-5 max-w-xs font-mulish font-bold"

@@ -11,14 +11,14 @@
       </div>
       <div class="h-1 w-full border-b"></div>
 
-      <div class="container mx-auto">
+      <div class="container mx-auto px-5">
         <div class="flex relative -mx-5" style="height: calc(100vh - 122px)">
           <div class="flex flex-col px-5 w-full mt-5">
             <img
-              class="mb-8 mx-auto"
+              class="mb-5 mx-auto"
               :src="'/img/svg/hello.svg'"
               alt="onboarding"
-              style="max-width: 65%;"
+              style="max-width: 50%;"
             />
             <span
               v-if="loading"
@@ -77,7 +77,7 @@
 
       <!-- footer -->
       <div class="fixed bottom-0 left-0 right-0">
-        <div class="container mx-auto text-center mb-5">
+        <div class="container mx-auto text-center mb-5 px-5">
           <button
             class="mb-3 rounded-full w-full py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             :disabled="loading"
