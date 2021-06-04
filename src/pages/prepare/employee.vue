@@ -75,7 +75,7 @@
                   />
                 </svg>
               </div>
-              <div class="rounded-xl overflow-hidden cursor-pointer">
+              <div class="bg-white shadow-md rounded-xl overflow-hidden cursor-pointer">
                 <div
                   class="bg-gray-50 w-full overflow-hidden relative pulse"
                   style="padding-bottom: 100%;"
