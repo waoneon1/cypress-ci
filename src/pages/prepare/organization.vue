@@ -77,9 +77,9 @@
 
       <!-- footer -->
       <div class="fixed bottom-0">
-        <div class="container mx-auto text-center mb-5">
+        <div class="mx-auto text-center mb-5">
           <button
-            class="mb-3 rounded-full w-full py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+            class="mb-3 rounded-full w-5/6 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             :disabled="loading"
             @click="save()"
           >
@@ -88,7 +88,7 @@
             >
           </button>
           <nuxt-link
-            class="rounded-full w-full py-3 border border-solid border-secondary bg-white hover:bg-secondary text-secondary hover:text-white focus:outline-none inline-block"
+            class="rounded-full w-5/6 py-3 border border-solid border-secondary bg-white hover:bg-secondary text-secondary hover:text-white focus:outline-none inline-block"
             :event="loading ? '' : 'click'"
             to="/prepare/employee"
           >
