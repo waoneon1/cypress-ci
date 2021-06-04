@@ -453,7 +453,7 @@ export default class Qna extends Vue {
       });
 
       // set initial checkpoint progress
-      this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 25);
+      this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 10);
     });
   }
 
