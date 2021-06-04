@@ -76,8 +76,8 @@
       </div>
 
       <!-- footer -->
-      <div class="fixed bottom-0 left-0 right-0">
-        <div class="container mx-auto text-center mb-5 px-5">
+      <div class="fixed bottom-0">
+        <div class="container mx-auto text-center mb-5">
           <button
             class="mb-3 rounded-full w-full py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             :disabled="loading"

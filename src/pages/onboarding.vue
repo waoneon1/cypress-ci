@@ -28,7 +28,7 @@
                 style="max-width: 50%;"
               />
               <h1
-                class="text-2xl text-primary mb-5 max-w-xs font-mulish font-bold"
+                class="text-2xl text-primary mb-5 font-mulish font-bold"
               >
                 {{ item.title }}
               </h1>
