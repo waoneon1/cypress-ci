@@ -18,24 +18,35 @@
       <div class="px-5 pt-5">
         <!-- Title -->
         <div class="relative">
-          <p class="mb-5 text-sm">Pilih alterran yang ingin kamu nilai diluar HO</p>
+          <p class="mb-5 text-sm">
+            Pilih alterran yang ingin kamu nilai di luar organisasi
+            <strong>{{ this.decodeDataEmployee().user_business_unit }}</strong>
+          </p>
         </div>
         <!-- Search -->
         <div class="relative">
           <input
             v-model="empSearch"
-            :disabled = loading
+            :disabled="loading"
             type="text"
             class="shadow-lg mb-5 text-sm rounded-lg w-full py-3 px-4 border"
-          >
+            placeholder="Cari Nama Alterrans"
+          />
         </div>
         <!-- Grid Employee -->
         <div v-if="loading" class="animate-pulse">
           <div class="w-full grid grid-cols-2 xs:grid-cols-3 gap-5">
-            <div  v-for="(item, i) in 9" :key="i" class="rounded-xl overflow-hidden cursor-pointer">
-              <div class="bg-gray-100 w-full h-28 w-full overflow-hidden relative pulse"></div>
-              <div class="flex w-full h-10 bg-gray-200 justify-center bg-white text-sm px-2 py-1 overflow-hidden">
-              </div>
+            <div
+              v-for="(item, i) in 9"
+              :key="i"
+              class="rounded-xl overflow-hidden cursor-pointer"
+            >
+              <div
+                class="bg-gray-100 w-full h-28 w-full overflow-hidden relative pulse"
+              ></div>
+              <div
+                class="flex w-full h-10 bg-gray-200 justify-center bg-white text-sm px-2 py-1 overflow-hidden"
+              ></div>
             </div>
           </div>
         </div>
@@ -51,17 +62,45 @@
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
                 v-show="selected.includes(item.employee_email)"
               >
-                <svg class="fill-current text-success" width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
+                <svg
+                  class="fill-current text-success"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"
+                  />
                 </svg>
               </div>
               <div class="rounded-xl overflow-hidden cursor-pointer">
-                <div class="bg-gray-50 w-full overflow-hidden relative pulse" style="padding-bottom: 100%;">
-                  <v-lazy-image v-if="item.employee_image_url" :src="item.employee_image_url" src-placeholder="/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
-                  <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                <div
+                  class="bg-gray-50 w-full overflow-hidden relative pulse"
+                  style="padding-bottom: 100%;"
+                >
+                  <v-lazy-image
+                    v-if="item.employee_image_url"
+                    :src="item.employee_image_url"
+                    src-placeholder="/img/blank.jpeg"
+                    :alt="item.employee_name"
+                    style="position:absolute; min-width:100%; min-height :100%;"
+                  />
+                  <img
+                    v-else
+                    class=""
+                    src="~/static/img/blank.jpeg"
+                    :alt="item.employee_name"
+                    style="position:absolute; min-width:100%; min-height :100%;"
+                  />
                 </div>
-                <div class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden">
-                  <small class="text-primary autotrim">{{ item.employee_name }}</small>
+                <div
+                  class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden"
+                >
+                  <small class="text-primary autotrim">{{
+                    item.employee_name
+                  }}</small>
                 </div>
               </div>
             </div>
@@ -84,9 +123,26 @@
                 :disabled="loading"
                 @click="save"
               >
-                <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  v-show="loading"
+                  class="animate-spin -ml-1 mr-3 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 <span class="font-bold text-sm">
                   Simpan & Lanjutkan
@@ -96,7 +152,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -137,39 +192,43 @@ const _ = require('lodash');
 
 @Component
 export default class PrepareEmployee extends Vue {
-  loading: boolean = true
+  loading: boolean = true;
 
-  token = localStorage.getItem('token')
+  token = localStorage.getItem('token');
 
-  empSearch: string = ''
+  empSearch: string = '';
 
   selected: string[] = [];
 
-  employee: EmployeeResponseData[] = [{
-    id: '',
-    employee_name: '',
-    employee_email: '',
-    employee_image_url: '',
-    employee_alt_id: '',
-    employee_organization: '',
-    employee_organization_full_text: '',
-    employee_business_unit: '',
-    created_at: '',
-    updated_at: '',
-  }]
+  employee: EmployeeResponseData[] = [
+    {
+      id: '',
+      employee_name: '',
+      employee_email: '',
+      employee_image_url: '',
+      employee_alt_id: '',
+      employee_organization: '',
+      employee_organization_full_text: '',
+      employee_business_unit: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ];
 
-  employeeSearch: EmployeeResponseData[] = [{
-    id: '',
-    employee_name: '',
-    employee_email: '',
-    employee_image_url: '',
-    employee_alt_id: '',
-    employee_organization: '',
-    employee_organization_full_text: '',
-    employee_business_unit: '',
-    created_at: '',
-    updated_at: '',
-  }]
+  employeeSearch: EmployeeResponseData[] = [
+    {
+      id: '',
+      employee_name: '',
+      employee_email: '',
+      employee_image_url: '',
+      employee_alt_id: '',
+      employee_organization: '',
+      employee_organization_full_text: '',
+      employee_business_unit: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ];
 
   toggleSelect(email: string): void {
     const index = this.selected.indexOf(email);
@@ -181,7 +240,7 @@ export default class PrepareEmployee extends Vue {
   }
 
   decodeDataEmployee(): LoginData {
-    let jsonPayload:LoginData = {
+    let jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -195,7 +254,12 @@ export default class PrepareEmployee extends Vue {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      const decode = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join(''),
+      );
       jsonPayload = JSON.parse(decode);
     }
     return jsonPayload;
@@ -211,7 +275,7 @@ export default class PrepareEmployee extends Vue {
 
   @Watch('empSearch')
   onPropertyChanged(value: string) {
-    this.employeeSearch = _.filter(this.employee, (o:EmployeeResponseData) => o.employee_name.toLowerCase().includes(value));
+    this.employeeSearch = _.filter(this.employee, (o: EmployeeResponseData) => o.employee_name.toLowerCase().includes(value));
   }
 
   async init() {
@@ -223,7 +287,7 @@ export default class PrepareEmployee extends Vue {
 
       const allEmployee = _.filter(
         employeeModule.dataEmployee.data,
-        (o:EmployeeResponseData) => o.employee_organization !== org,
+        (o: EmployeeResponseData) => o.employee_organization !== org,
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;

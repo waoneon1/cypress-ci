@@ -25,19 +25,28 @@
 
       <!-- Content: Criteria List -->
       <div class="relative">
-        <p class="text-xs text-primary mb-3">Kompetensi</p>
-        <div v-if="loading" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
+        <p class="text-xs text-primary mb-3 font-medium">Kompetensi</p>
+        <div
+          v-if="loading"
+          class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2"
+        >
           <div v-for="(item, i) in 12" :key="i">
-            <div class="animate-pulse rounded-xl bg-gray-200 w-full h-32 cursor-pointer relative">
-            </div>
+            <div
+              class="animate-pulse rounded-xl bg-gray-200 w-full h-32 cursor-pointer relative"
+            ></div>
           </div>
         </div>
-        <div v-else class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2">
+        <div
+          v-else
+          class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-2"
+        >
           <div
             v-for="(item, i) in criteria"
             :key="i"
             class="mb-1 cursor-pointer"
-            @click="item.percent_progress_filter <= 100 ? goToQnaPage(item) : null"
+            @click="
+              item.percent_progress_filter <= 100 ? goToQnaPage(item) : null
+            "
           >
             <div
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
@@ -52,7 +61,9 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress_filter >= 100 ? '' : 'hover:bg-blue-100'
+                    item.percent_progress_filter >= 100
+                      ? ''
+                      : 'hover:bg-blue-100'
                   }`
                 "
               >
@@ -70,7 +81,9 @@
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
-                          `width:${roundedNumber(item.percent_progress_filter)}%`
+                          `width:${roundedNumber(
+                            item.percent_progress_filter
+                          )}%`
                         "
                       ></div>
                     </div>
@@ -219,9 +232,9 @@ export default class Dashboard extends Vue {
 
   token: string | null = localStorage.getItem('token');
 
-  loading: boolean = true
+  loading: boolean = true;
 
-  username: string = 'loading...'
+  username: string = 'loading...';
 
   recommendation = {
     criteria_name: 'No Data',
@@ -256,7 +269,7 @@ export default class Dashboard extends Vue {
     });
   }
 
-  checkRecommandation(item: {id:''}) {
+  checkRecommandation(item: { id: '' }) {
     if (this.recommendation?.id === item.id) {
       return true;
     }
@@ -264,7 +277,7 @@ export default class Dashboard extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonPayload:LoginData = {
+    let jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -278,7 +291,12 @@ export default class Dashboard extends Vue {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      const decode = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join(''),
+      );
       jsonPayload = JSON.parse(decode);
     }
 
