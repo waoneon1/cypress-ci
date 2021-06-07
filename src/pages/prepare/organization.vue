@@ -187,7 +187,7 @@ export default class PrepareOrganization extends Vue {
 
   save(): void {
     const payload = {
-      selected: '',
+      selected: [],
     };
     localStorage.setItem('rrs_selected', JSON.stringify(payload));
     this.$router.push('/dashboard');
