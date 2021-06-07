@@ -516,7 +516,7 @@ export default class Qna extends Vue {
   }
 
   progressCheckpointFloor() {
-    this.progressCheckpoint = _.floor(this.progressCheckpoint + 25);
+    this.progressCheckpoint = _.floor(this.progressCheckpoint + 10);
   }
 }
 </script>
