@@ -31,6 +31,7 @@ export interface SubmitResponseData {
   /* eslint-disable camelcase */
   count_submitted: number;
   percent_progress: number;
+  percent_progress_filter?: number;
   /* eslint-enable camelcase */
 }
 export interface SubmitResponse {
@@ -55,6 +56,7 @@ export default class QnaModule extends VuexModule {
     data: {
       count_submitted: 0,
       percent_progress: 0,
+      percent_progress_filter: 0,
     },
   };
 
@@ -67,6 +69,22 @@ export default class QnaModule extends VuexModule {
 
   @Mutation
   setSubmit(value: SubmitResponse): void {
+    /* eslint no-param-reassign: "error" */
+    const whitelistJson = localStorage.getItem('rrs_selected');
+    const empCounterJson = localStorage.getItem('rss_emcounter');
+
+    // count progress with filter
+    const totalEmployeePercentage = value.data.percent_progress;
+    const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
+    const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
+    // count whitelist from check & from organization
+    const countWhitelist = whitelistCheck + countEmployee.org;
+
+    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+    const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
+    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
+
+    value.data.percent_progress_filter = percentageForUser;
     this.submitResponse = value;
   }
 
@@ -84,6 +102,7 @@ export default class QnaModule extends VuexModule {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response.data.data) {
         this.setQna(response.data);
       } else {
@@ -111,6 +130,7 @@ export default class QnaModule extends VuexModule {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response.data.data) {
         this.setSubmit(response.data);
       } else {
@@ -120,6 +140,7 @@ export default class QnaModule extends VuexModule {
           data: {
             count_submitted: 0,
             percent_progress: 0,
+            percent_progress_filter: 0,
           },
         });
       }
@@ -130,6 +151,7 @@ export default class QnaModule extends VuexModule {
         data: {
           count_submitted: 0,
           percent_progress: 0,
+          percent_progress_filter: 0,
         },
       });
     }

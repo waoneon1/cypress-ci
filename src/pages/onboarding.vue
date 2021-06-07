@@ -14,23 +14,30 @@
       <div class="px-5" v-for="(item, i) in onboards" :key="i">
         <div
           v-if="i === step"
-          class="flex items-center relative -mx-5"
+          class="flex relative -mx-5"
           style="height: calc(100vh - 122px)"
         >
           <div
-            class="flex flex-col justify-center items-center text-center px-5 w-full"
+            class="flex flex-col justify-between text-center px-5 w-full mt-5 mb-8"
           >
-            <img class="mb-8" :src="'/img/' + item.image" alt="onboarding" />
-            <h1
-              class="text-2xl text-primary mb-8 max-w-xs font-mulish font-bold"
-            >
-              {{ item.title }}
-            </h1>
-            <span class="text-xs text-primary mb-6 max-w-xs">
-              <span v-html="item.content"></span>
-            </span>
+            <div>
+              <img
+                class="mb-5 mx-auto"
+                :src="'/img/' + item.image"
+                alt="onboarding"
+                style="max-width: 50%;"
+              />
+              <h1
+                class="text-2xl text-primary mb-5 font-mulish font-bold"
+              >
+                {{ item.title }}
+              </h1>
+              <span class="text-xs text-primary mb-6 max-w-xs">
+                <span v-html="item.content"></span>
+              </span>
+            </div>
 
-            <div class="px-5 mx-auto max-w-md">
+            <div class="px-5 mx-auto my-5 max-w-md">
               <ul class="flex justify-center gap-x-2">
                 <li
                   v-for="(item, i) in onboards"
@@ -73,7 +80,7 @@
             </button>
             <!-- selesai -->
             <nuxt-link
-              to="/dashboard"
+              to="/prepare/organization"
               v-show="step === onboards.length - 1"
               class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             >
@@ -98,6 +105,12 @@ export default class Onboarding extends Vue {
       title: 'Apa itu RRS',
       content:
         'RRS adalah sebuah aplikasi untuk memberikan ranking berdasarkan <b>kompetensi</b> dan <b>rekomendasi kamu</b> kepada seluruh engineer di alterra, mengacu kepada <b>Software Engineer Competency Matrix</b>',
+      image: 'svg/onboard0.svg',
+    },
+    {
+      title: 'Mempersiapkan Data Alterrans',
+      content:
+        'Kamu diminta untuk memberikan ranking kepada software engineer sesuai dengan business unit kamu. Akan tetapi, kamu juga boleh menambahkan software engineer di luar business unit jika kamu menginginkan hal tersebut',
       image: 'svg/onboard1.svg',
     },
     {
