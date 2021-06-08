@@ -189,9 +189,9 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
           build-args: |
-            NUXT_ENV_RRS_APP_TITLE=${{ secrets.NUXT_ENV_RRS_APP_TITLE }}
-            NUXT_ENV_RRS_API_URL=${{ secrets.NUXT_ENV_RRS_API_URL }}
-            NUXT_ENV_RRS_GAUTH_CLIENTID=${{ secrets.NUXT_ENV_RRS_GAUTH_CLIENTID }}
+            NUXT_ENV_RRS_APP_TITLE=${{ secrets.NUXT_ENV_RRS_APP_TITLE_PROD }}
+            NUXT_ENV_RRS_API_URL=${{ secrets.NUXT_ENV_RRS_API_URL_PROD }}
+            NUXT_ENV_RRS_GAUTH_CLIENTID=${{ secrets.NUXT_ENV_RRS_GAUTH_CLIENTID_PROD }}
 
   deploy-production:
     name: Deploy Production
