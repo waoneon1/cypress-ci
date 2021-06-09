@@ -33,6 +33,7 @@ export default class CredentialModule extends VuexModule {
 
   @Action({ rawError: true })
   async getToken(payload: string): Promise<void> {
+    console.log( process.env.NUXT_ENV_RRS_API_URL, 'url api endpoin')
     const response = await axios.post(
       `${process.env.NUXT_ENV_RRS_API_URL!}auth/login/google_oauth`,
       {
