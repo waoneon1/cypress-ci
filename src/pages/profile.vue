@@ -79,7 +79,7 @@
       </div>
 
       <!-- footer -->
-      <div class="fixed bottom-0 left-0 right-0">
+      <div class="fixed bottom-0 left-0 right-0 z-10">
         <!-- navigation circle -->
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
