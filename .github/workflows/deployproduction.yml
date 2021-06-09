@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     # Make sure the code is tested before build docker
     needs: sonarcloud
-    if: github.event_name == 'push' && success() && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push' && success() && github.ref == 'refs/heads/master'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
