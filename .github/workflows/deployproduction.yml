@@ -207,11 +207,10 @@ jobs:
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "290.0.1"
-          # project_id: ${{ secrets.GCLOUD_PROJECT_PROD }}
-          project_id: hoti-rrs-090621 
+          project_id: ${{ secrets.GCLOUD_PROJECT_PROD }}
           service_account_key: ${{ secrets.GSA_KEY_PROD }}
       - run: |
-          gcloud container clusters get-credentials ${{ secrets.GCLOUD_CLUSTER_PROD }} --region ${{ secrets.GCLOUD_REGION_PROD }} --project hoti-rrs-090621 
+          gcloud container clusters get-credentials ${{ secrets.GCLOUD_CLUSTER_PROD }} --region ${{ secrets.GCLOUD_REGION_PROD }} --project ${{ secrets.GCLOUD_PROJECT_PROD }}
       - name: Deploy
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
