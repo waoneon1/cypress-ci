@@ -12,10 +12,10 @@
       <!-- Content: Criteria List -->
       <div class="relative">
         <div>
-          <form class="px-3 md:px-6 pt-10">
-            <div class="mb-10">
+          <form class="px-3 md:px-6 pt-5 pb-20">
+            <div class="mb-5">
               <div
-                class="flex content-center justify-center relative rounded-full w-40 h-40"
+                class="flex content-center justify-center relative rounded-full w-24 h-24"
               >
                 <span class="w-full self-center text-5xl font-bold">
                   <img
@@ -82,11 +82,9 @@
       <div class="fixed bottom-0 left-0 right-0 z-10">
         <!-- navigation circle -->
         <div
-          class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
+          class="mx-auto max-w-md bg-white bg-white shadow-lg w-full h-4 transform rotate-180"
         ></div>
-        <div
-          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg"
-        >
+        <div class="mx-auto max-w-md bg-white px-5 pb-5 bg-white">
           <ul class="flex justify-between px-10">
             <li class="cursor-pointer hover:text-secondary text-gray-400">
               <nuxt-link to="/dashboard">
@@ -155,7 +153,7 @@ export interface LoginData {
 export default class Profile extends Vue {
   token: string | null = localStorage.getItem('token');
 
-  data:LoginData = {
+  data: LoginData = {
     exp: 1,
     user_business_unit: 'nodata',
     user_email: 'nodata',
@@ -167,7 +165,7 @@ export default class Profile extends Vue {
   };
 
   decodeDataEmployee() {
-    let jsonPayload:LoginData = {
+    let jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -181,7 +179,13 @@ export default class Profile extends Vue {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      const mapDecode = (c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
+      const decode = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(mapDecode)
+          .join(''),
+      );
       jsonPayload = JSON.parse(decode);
     }
 

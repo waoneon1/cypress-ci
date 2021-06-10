@@ -123,10 +123,10 @@
       <div v-else-if="criteriaProgressCount() >= progressCheckpoint || criteriaProgressCount() >= 100"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
-          class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
+          class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
         ></div>
         <div
-          class="mx-auto max-w-md bg-white px-5 pb-2 bg-white rounded-t-xl shadow-lg"
+          class="mx-auto max-w-md bg-white px-5 pb-2 bg-white shadow-lg"
         >
           <p class="text-xs text-gray-400">Progress</p>
           <div class="flex items-center justify-center mb-2">
