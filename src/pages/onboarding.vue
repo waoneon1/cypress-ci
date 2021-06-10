@@ -56,9 +56,7 @@
       <!-- footer -->
       <div class="fixed bottom-0 left-0 right-0 z-10">
         <!-- navigation circle -->
-        <div
-          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg"
-        >
+        <div class="mx-auto max-w-md bg-white px-5 pb-5 bg-white">
           <div :class="`flex ${step == 0 ? 'justify-end' : 'justify-between'}`">
             <!-- kembali -->
             <button

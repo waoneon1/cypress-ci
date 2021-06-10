@@ -125,9 +125,9 @@
       <div class="fixed bottom-0 left-0 right-0 z-10">
         <!-- navigation circle -->
         <div
-          class="mx-auto max-w-md bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
+          class="mx-auto max-w-md bg-white shadow-lg w-full h-4 transform rotate-180"
         ></div>
-        <div class="mx-auto max-w-md bg-white px-5 pb-5 rounded-t-xl shadow-lg">
+        <div class="mx-auto max-w-md bg-white px-5 pb-5">
           <ul class="flex justify-between px-10">
             <li class="cursor-pointer hover:text-secondary text-secondary">
               <nuxt-link to="/dashboard">
