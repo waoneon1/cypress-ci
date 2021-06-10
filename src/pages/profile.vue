@@ -179,13 +179,7 @@ export default class Profile extends Vue {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const mapDecode = (c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(mapDecode)
-          .join(''),
-      );
+      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       jsonPayload = JSON.parse(decode);
     }
 
