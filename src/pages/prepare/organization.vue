@@ -76,7 +76,7 @@
       </div>
 
       <!-- footer -->
-      <div class="fixed bottom-0">
+      <div class="fixed bottom-0 z-10">
         <div class="mx-auto text-center mb-5">
           <button
             class="mb-3 rounded-full w-5/6 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
