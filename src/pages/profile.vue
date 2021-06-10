@@ -12,7 +12,7 @@
       <!-- Content: Criteria List -->
       <div class="relative">
         <div>
-          <form class="px-3 md:px-6 pt-5 pb-10">
+          <form class="px-3 md:px-6 pt-5 pb-20">
             <div class="mb-5">
               <div
                 class="flex content-center justify-center relative rounded-full w-24 h-24"
@@ -84,9 +84,7 @@
         <div
           class="mx-auto max-w-md bg-white bg-white shadow-lg w-full h-4 transform rotate-180"
         ></div>
-        <div
-          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white"
-        >
+        <div class="mx-auto max-w-md bg-white px-5 pb-5 bg-white">
           <ul class="flex justify-between px-10">
             <li class="cursor-pointer hover:text-secondary text-gray-400">
               <nuxt-link to="/dashboard">
@@ -181,10 +179,11 @@ export default class Profile extends Vue {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const mapDecode = (c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
       const decode = decodeURIComponent(
         atob(base64)
           .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .map(mapDecode)
           .join(''),
       );
       jsonPayload = JSON.parse(decode);
