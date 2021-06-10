@@ -78,7 +78,7 @@ export default class QnaModule extends VuexModule {
     const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
     const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
     // count whitelist from check & from organization
-    const countWhitelist = whitelistCheck + countEmployee.org;
+    const countWhitelist = whitelistCheck + (countEmployee.org - 1);
 
     const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
     const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
