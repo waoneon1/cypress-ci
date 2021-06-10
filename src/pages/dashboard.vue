@@ -89,7 +89,7 @@
                     </div>
                   </div>
                   <span
-                    v-if="item.percent_progress_filter <= 100"
+                    v-if="item.percent_progress_filter < 100"
                     class="text-xs inline-block text-primary"
                     >{{
                       item.percent_progress_filter === 0
