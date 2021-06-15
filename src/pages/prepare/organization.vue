@@ -186,15 +186,6 @@ export default class PrepareOrganization extends Vue {
         // employee_organization : TEC - ENG
         employee_organization: this.decodeDataEmployee().user_organization,
       });
-
-      // set localstorage count employee
-      localStorage.setItem(
-        'rss_emcounter',
-        JSON.stringify({
-          all: allEmployee.length,
-          org: this.employeeFiltered.length,
-        }),
-      );
     });
   }
 
