@@ -15,10 +15,10 @@
         <div class="flex relative -mx-5" style="height: calc(100vh - 122px)">
           <div class="flex flex-col px-5 w-full mt-5">
             <img
-              class="mb-5 mx-auto"
+              :class="whitelist ? 'mb-5 mx-auto' : 'mb-5 mt-5 mx-auto'"
               :src="'/img/svg/hello.svg'"
               alt="onboarding"
-              style="max-width: 50%;"
+              :style="whitelist ? 'max-width: 50%' : 'max-width: 100%'"
             />
             <span
               v-if="loading"
@@ -62,7 +62,7 @@
                 >
                 lainnya.
               </p>
-              <p class="mb-4">
+              <p class="mb-4" v-show="whitelist">
                 Selain dengan engineer di
                 <strong>{{
                   this.decodeDataEmployee().user_business_unit
@@ -76,8 +76,8 @@
       </div>
 
       <!-- footer -->
-      <div class="fixed bottom-0 z-10">
-        <div class="mx-auto text-center mb-5">
+      <div class="fixed bottom-0 z-10 max-w-md w-full">
+        <div v-if="whitelist" class="mx-auto text-center mb-5">
           <button
             class="mb-3 rounded-full w-5/6 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             :disabled="loading"
@@ -96,6 +96,17 @@
               >Ok, saya mau pilih alterran lainnya</span
             >
           </nuxt-link>
+        </div>
+        <div v-else class="mx-auto flex justify-center w-5/6 text-center mb-5">
+          <button
+            class="mb-3 rounded-full px-10 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+            :disabled="loading"
+            @click="save()"
+          >
+            <span class="font-bold text-sm"
+              >Mulai</span
+            >
+          </button>
         </div>
       </div>
     </div>
@@ -146,6 +157,8 @@ const _ = require('lodash');
 @Component
 export default class PrepareOrganization extends Vue {
   token = localStorage.getItem('token');
+
+  whitelist = false
 
   loading: boolean = true;
 
