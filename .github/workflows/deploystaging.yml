@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - HOTI-712/add-google-analytic
   pull_request:
     branches-ignore:
       - master
