@@ -54,7 +54,7 @@ export default {
 
   // Google Analytics implementation
   googleAnalytics: {
-    id: 'G-QRPL8F39G6',
+    id: 'G-B1VNXYPJPQ',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
