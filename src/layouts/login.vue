@@ -11,12 +11,15 @@ import { Vue, Component } from 'vue-property-decorator';
   head() {
     return {
       bodyAttrs: {
-        class: this.$exp.$classes.join(' '),
+        /* eslint-disable-next-line no-use-before-define */
+        class: (this as Login).$exp.$classes.join(' '),
       },
     };
   },
 })
 export default class Login extends Vue {
+  $exp: any;
+
   pageStatus: boolean = false;
 
   checkMaintenance() {
