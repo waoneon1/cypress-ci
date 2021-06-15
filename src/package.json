@@ -1,6 +1,6 @@
 {
   "name": "rrs-web",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "scripts": {
     "dev": "npm run clean && nuxt",

@@ -36,6 +36,9 @@ const mockedResponse: AxiosResponse = {
 };
 mockedAxios.get.mockResolvedValue(mockedResponse);
 
+// mock setInterval
+jest.useFakeTimers();
+
 describe('Pages > dashboard.vue', () => {
   // mounting component
   const router = jest.fn();
@@ -54,6 +57,11 @@ describe('Pages > dashboard.vue', () => {
       },
     });
     expect(wrapper.vm).toBeTruthy();
+
+    // jalankan setInterval
+    jest.advanceTimersByTime(4000);
+    expect(setInterval).toBeCalled();
+    expect(wrapper.vm.alert).toBeFalsy();
   });
 
   it('berhasil mounting komponen alert', () => {
