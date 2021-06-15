@@ -7,7 +7,15 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({
+  head() {
+    return {
+      bodyAttrs: {
+        class: this.$exp.$classes.join(' '),
+      },
+    };
+  },
+})
 export default class Login extends Vue {
   pageStatus: boolean = false;
 

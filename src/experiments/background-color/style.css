@@ -1,0 +1,9 @@
+/* Variant 0 (default value) */
+.exp-background-color-0 {
+  @apply bg-white;
+}
+
+/* Variant 1 */
+.exp-background-color-1 {
+  @apply bg-gray-100;
+}
