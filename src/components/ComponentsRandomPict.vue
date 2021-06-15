@@ -6,7 +6,7 @@
         src="~/static/img/login_achive.png"
         alt="Login Achive"
       />
-      <div class="rounded-3xl shadow-lg p-3 md:p-10 inline-block">
+      <div class="bg-white rounded-3xl shadow-lg p-3 md:p-10 inline-block">
         <div v-for="(empl, index) in shuffleImg(dataShuffle)" :key="index">
           <img
             :src="emplList[empl].src"
