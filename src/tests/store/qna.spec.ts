@@ -114,7 +114,11 @@ describe('QNA Store', () => {
     mockedAxios.post.mockResolvedValue(mockedResponsePost2);
 
     const service = qnaModule();
-    const payload = {};
+    const payload = {
+      payload: {},
+      criteriaId: 'fkldsjaklfjds',
+      counter: { all: 0, org: 0 },
+    };
     // expect(axios.post).not.toHaveBeenCalled()
     await service.submitQna(payload);
     expect(axios.post).toHaveBeenCalled();
@@ -136,7 +140,12 @@ describe('QNA Store', () => {
 
     const service = qnaModule();
     // expect(axios.post).not.toHaveBeenCalled()
-    await service.submitQna({});
+    const payload = {
+      payload: {},
+      criteriaId: 'fkldsjaklfjds',
+      counter: { all: 0, org: 0 },
+    };
+    await service.submitQna(payload);
     expect(axios.post).toHaveBeenCalled();
   });
 
@@ -147,8 +156,12 @@ describe('QNA Store', () => {
     mockedAxios.post.mockResolvedValue(mockedResponsePostTryError);
 
     const service = qnaModule();
-
-    await service.submitQna({}).catch((e: any) => expect(e).toEqual({
+    const payload = {
+      payload: {},
+      criteriaId: 'fkldsjaklfjds',
+      counter: { all: 0, org: 0 },
+    };
+    await service.submitQna(payload).catch((e: any) => expect(e).toEqual({
       error: 'submitQna {} catch error',
     }));
   });
