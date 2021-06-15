@@ -62,21 +62,27 @@ export default class QnaModule extends VuexModule {
 
   public dataQuestion: string[] = [];
 
+  public dataCounter = { all: 0, org: 0 };
+
   @Mutation
   setQna(value: QnaResponse): void {
     this.dataQna = value;
   }
 
   @Mutation
+  setCounter(value: { all: number, org: number }): void {
+    this.dataCounter = value;
+  }
+
+  @Mutation
   setSubmit(value: SubmitResponse): void {
     /* eslint no-param-reassign: "error" */
     const whitelistJson = localStorage.getItem('rrs_selected');
-    const empCounterJson = localStorage.getItem('rss_emcounter');
 
     // count progress with filter
     const totalEmployeePercentage = value.data.percent_progress;
     const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
+    const countEmployee = this.dataCounter;
     // count whitelist from check & from organization
     const countWhitelist = whitelistCheck + (countEmployee.org - 1);
 
@@ -122,7 +128,7 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async submitQna(data: {payload: object[], criteriaId:string}): Promise<void> {
+  async submitQna(data: {payload: object[], criteriaId:string, counter: { all: number, org: number }}): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.post(`${url}pair_data/submit/criteria/${data.criteriaId}`, data.payload, {
@@ -132,6 +138,7 @@ export default class QnaModule extends VuexModule {
       });
 
       if (response.data.data) {
+        this.setCounter(data.counter);
         this.setSubmit(response.data);
       } else {
         this.setSubmit({

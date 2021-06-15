@@ -209,7 +209,12 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     try {
       await wrapper.vm.submitEmployeeData();
       const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
+      const payload = {
+        payload: wrapper.vm.prepareSubmit(),
+        criteriaId: 'domainid',
+        counter: { all: 48, org: 48 },
+      };
+      await service.submitQna(payload);
       expect(axios.post).toHaveBeenCalled();
     } catch (err) {
       expect(err).toEqual(new Error());
@@ -235,7 +240,12 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     try {
       await wrapper.vm.answerAdd();
       const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
+      const payload = {
+        payload: wrapper.vm.prepareSubmit(),
+        criteriaId: 'domainid',
+        counter: { all: 48, org: 48 },
+      };
+      await service.submitQna(payload);
       expect(axios.post).toHaveBeenCalled();
 
       wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });
@@ -326,7 +336,12 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
     try {
       await wrapper.vm.submitEmployeeData();
       const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
+      const payload = {
+        payload: wrapper.vm.prepareSubmit(),
+        criteriaId: 'domainid',
+        counter: { all: 48, org: 48 },
+      };
+      await service.submitQna(payload);
       expect(axios.post).toHaveBeenCalled();
     } catch (err) {
       expect(err).toEqual(new Error());
@@ -338,7 +353,12 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
     try {
       await wrapper.vm.answerAdd();
       const service = qnaModule();
-      await service.submitQna(wrapper.vm.prepareSubmit());
+      const payload = {
+        payload: wrapper.vm.prepareSubmit(),
+        criteriaId: 'domainid',
+        counter: { all: 48, org: 48 },
+      };
+      await service.submitQna(payload);
       expect(axios.post).toHaveBeenCalled();
 
       wrapper.setData({ selectedAnswer: ['waone@alterra.id'] });

@@ -38,11 +38,17 @@ export default class CriteriaModule extends VuexModule {
     data: [],
   };
 
+  public dataCounter = { all: 0, org: 0 };
+
+  @Mutation
+  setCounter(value: { all: number, org: number }): void {
+    this.dataCounter = value;
+  }
+
   @Mutation
   setCriteria(value: CriteriaResponse): void {
     const intro = 'Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk';
     const whitelistJson = localStorage.getItem('rrs_selected');
-    const empCounterJson = localStorage.getItem('rss_emcounter');
     const dataCriteria = [
       {
         criteria_name: 'Design',
@@ -137,7 +143,7 @@ export default class CriteriaModule extends VuexModule {
       // count progress with filter
       const totalEmployeePercentage = obj.percent_progress;
       const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-      const countEmployee = empCounterJson ? JSON.parse(empCounterJson) : 0;
+      const countEmployee = this.dataCounter;
       // count whitelist from check & from organization
       const countWhitelist = whitelistCheck + (countEmployee.org - 1);
 
@@ -154,7 +160,7 @@ export default class CriteriaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async getCriteria(): Promise<void> {
+  async getCriteria(payload: { all: number, org: number }): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.get(`${url}criteria_user`, {
@@ -164,6 +170,7 @@ export default class CriteriaModule extends VuexModule {
       });
 
       if (response.data.data) {
+        this.setCounter(payload);
         this.setCriteria(response.data);
       } else {
         this.setCriteria({

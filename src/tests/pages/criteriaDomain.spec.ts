@@ -57,7 +57,7 @@ describe('Pages > criteria/_domain.vue', () => {
         return {
           domain: {
             id: '',
-            criteria_name: 'Loading ...',
+            criteria_name: 'requirements',
             shortdec: 'Loading ...',
             description: 'Loading ...',
             percent_progress: 0,
@@ -70,9 +70,10 @@ describe('Pages > criteria/_domain.vue', () => {
 
     const service = criteriaModule();
     expect(axios.get).toHaveBeenCalled();
-    await service.getCriteria();
+    const payload = { all: 48, org: 48 };
+    await service.getCriteria(payload);
 
-    expect(wrapper.vm.domain.criteria_name).toBe('Requirements');
+    expect(wrapper.vm.domain.criteria_name).toBe('requirements');
   });
 
   it('test goToQnaPage()', () => {

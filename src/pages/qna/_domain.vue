@@ -275,6 +275,8 @@ export default class Qna extends Vue {
 
   employeeFilter: EmployeeResponseData[] = [];
 
+  employeeCounterData = { all: 0, org: 0 }
+
   questions: string = '';
 
   local: string | null = localStorage.getItem('rss_criteria');
@@ -392,23 +394,33 @@ export default class Qna extends Vue {
   }
 
   async setSelectedCriteria() {
-    // get query param
-    const criteria = this.$route.params.domain;
-    // get criteria endpoint
-    await criteriaModule.getCriteria().then(() => {
-      const allCriteria = criteriaModule.dataCriteria.data;
-      // set domain variable
-      this.domain = _.find(allCriteria, { slug: criteria });
-    });
+    await this.getEmployeeStore();
+    await this.getCriteriaStore();
+  }
 
+  async getEmployeeStore() {
+    let allEmployee = [];
+    let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
-      const allEmployee = _.filter(
+      allEmployee = employeeModule.dataEmployee.data;
+      employeeFiltered = _.filter(
         employeeModule.dataEmployee.data,
         (o:EmployeeResponseData) => o.employee_organization === org,
       );
+      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
       this.employeeFilter = allEmployee;
+      return true;
+    });
+  }
+
+  async getCriteriaStore() {
+    const criteria = this.$route.params.domain;
+    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
     });
   }
 
@@ -498,6 +510,7 @@ export default class Qna extends Vue {
       const data = {
         payload: this.prepareSubmit(),
         criteriaId: this.domain.id,
+        counter: this.employeeCounterData,
       };
       await qnaModule.submitQna(data);
       return qnaModule.submitResponse;
