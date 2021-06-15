@@ -315,6 +315,12 @@ export default class Dashboard extends Vue {
     }
   }
 
+  created() {
+    setInterval(() => {
+      this.alert = false;
+    }, 4000);
+  }
+
   mounted() {
     // call onboarding
     this.init();
