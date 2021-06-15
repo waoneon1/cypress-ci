@@ -2,8 +2,7 @@ name: Check on PR > Auto Deploy on Dev
 on:
   push:
     branches:
-      # - dev
-      - HOTI-712/add-google-analytic
+      - dev
   pull_request:
     branches-ignore:
       - master
@@ -112,8 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     # Make sure the code is tested before build docker
     needs: sonarcloud
-    # if: github.event_name == 'push' && success() && github.ref == 'refs/heads/dev'
-    if: github.event_name == 'push' && success() && github.ref == 'refs/heads/HOTI-712/add-google-analytic'
+    if: github.event_name == 'push' && success() && github.ref == 'refs/heads/dev'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
