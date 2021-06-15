@@ -144,6 +144,7 @@ export default class Login extends Vue {
             );
             // redirect . . .
             alertModule.setAlertTrue();
+            this.alert = false;
 
             if (!localStorage.getItem('rrs_onboard')) {
               // set localstorage
@@ -195,6 +196,9 @@ export default class Login extends Vue {
       this.alertDescription = 'Try again using alterra email';
       this.alertTheme = 'danger';
     }
+    setInterval(() => {
+      this.alert = false;
+    }, 4000);
   }
 }
 </script>
