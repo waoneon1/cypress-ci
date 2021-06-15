@@ -41,16 +41,20 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    // https://google-analytics.nuxtjs.org
+    '@nuxtjs/google-analytics',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/dotenv',
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv'],
 
   axios: {
     baseURL: 'https://rrs-api.sumpahpalapa.com/api/v1',
+  },
+
+  // Google Analytics implementation
+  googleAnalytics: {
+    id: 'UA-199540908-1',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

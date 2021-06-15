@@ -33,6 +33,7 @@
   "devDependencies": {
     "@jest/globals": "^26.6.2",
     "@nuxt/typescript-build": "^2.0.4",
+    "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/tailwindcss": "^4.0.2",
     "@types/gapi": "0.0.39",
     "@types/gapi.auth2": "0.0.53",
