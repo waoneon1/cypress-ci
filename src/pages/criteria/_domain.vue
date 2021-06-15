@@ -59,6 +59,16 @@ import Help from '~/components/utilities/Help.vue';
 
 const _ = require('lodash');
 
+const loginDataDefault = {
+  exp: 1,
+  user_business_unit: 'nodata',
+  user_email: 'nodata',
+  user_id: 'nodata',
+  user_name: 'nodata',
+  user_oauth_id: 'nodata',
+  user_organization: 'nodata',
+  user_organization_full_text: 'nodata',
+};
 export interface CriteriaResponseData {
   /* eslint-disable camelcase */
   id: string;
@@ -101,16 +111,7 @@ export default class Criteria extends Vue {
 
   employeeCounterData = { all: 0, org: 0 }
 
-  loginData: LoginData = {
-    exp: 1,
-    user_business_unit: 'nodata',
-    user_email: 'nodata',
-    user_id: 'nodata',
-    user_name: 'nodata',
-    user_oauth_id: 'nodata',
-    user_organization: 'nodata',
-    user_organization_full_text: 'nodata',
-  }
+  loginData: LoginData = loginDataDefault
 
   loading: boolean = true;
 
@@ -130,7 +131,33 @@ export default class Criteria extends Vue {
     });
   }
 
-  async EmployeeCounter() {
+  decodeDataEmployee() {
+    let jsonP: LoginData = loginDataDefault;
+
+    if (this.token) {
+      const base64Url = this.token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join(''),
+      );
+      jsonP = JSON.parse(decode);
+    }
+    this.loginData = jsonP;
+  }
+
+  async init() {
+    Promise.all([
+      this.employeeCount(),
+      this.decodeDataEmployee(),
+    ]).then(() => {
+      this.setSelectedCriteria();
+    });
+  }
+
+  async employeeCount() {
     // Get Employee filter by ORG and BU
     let allEmployee = [];
     let employeeFiltered = [];
@@ -142,41 +169,6 @@ export default class Criteria extends Vue {
         employee_organization: this.loginData.user_organization,
       });
       this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
-    });
-  }
-
-  decodeDataEmployee() {
-    let jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-    this.loginData = jsonPayload;
-  }
-
-  async init() {
-    Promise.all([
-      this.decodeDataEmployee(),
-      this.EmployeeCounter(),
-    ]).then(() => {
-      this.setSelectedCriteria();
     });
   }
 
