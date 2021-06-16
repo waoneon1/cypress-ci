@@ -53,11 +53,22 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
+import { employeeModule } from '@/store/employee';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 
 const _ = require('lodash');
 
+const loginDataDefault = {
+  exp: 1,
+  user_business_unit: 'nodata',
+  user_email: 'nodata',
+  user_id: 'nodata',
+  user_name: 'nodata',
+  user_oauth_id: 'nodata',
+  user_organization: 'nodata',
+  user_organization_full_text: 'nodata',
+};
 export interface CriteriaResponseData {
   /* eslint-disable camelcase */
   id: string;
@@ -68,11 +79,25 @@ export interface CriteriaResponseData {
   shortdec: string;
   /* eslint-enable camelcase */
 }
+export interface LoginData {
+  /* eslint-disable camelcase */
+  exp: number;
+  user_business_unit: string;
+  user_email: string;
+  user_id: string;
+  user_name: string;
+  user_oauth_id: string;
+  user_organization: string;
+  user_organization_full_text: string;
+  /* eslint-enable camelcase */
+}
 
 @Component({
   components: { Thankyou, Help },
 })
 export default class Criteria extends Vue {
+  token: string | null = localStorage.getItem('token');
+
   domain: CriteriaResponseData = {
     id: '',
     criteria_name: 'Loading ...',
@@ -84,6 +109,10 @@ export default class Criteria extends Vue {
 
   help: boolean = false;
 
+  employeeCounterData = { all: 0, org: 0 }
+
+  loginData: LoginData = loginDataDefault
+
   loading: boolean = true;
 
   goToQnaPage(): void {
@@ -94,7 +123,7 @@ export default class Criteria extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    await criteriaModule.getCriteria().then(() => {
+    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
@@ -102,8 +131,45 @@ export default class Criteria extends Vue {
     });
   }
 
+  decodeDataEmployee() {
+    let jsonP: LoginData = loginDataDefault;
+
+    if (this.token) {
+      const base64Url = this.token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decode = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join(''),
+      );
+      jsonP = JSON.parse(decode);
+    }
+    this.loginData = jsonP;
+  }
+
   async init() {
-    await this.setSelectedCriteria();
+    Promise.all([
+      this.employeeCount(),
+      this.decodeDataEmployee(),
+    ]).then(() => {
+      this.setSelectedCriteria();
+    });
+  }
+
+  async employeeCount() {
+    // Get Employee filter by ORG and BU
+    let allEmployee = [];
+    let employeeFiltered = [];
+    await employeeModule.getEmployee().then(() => {
+      this.loading = false;
+      allEmployee = employeeModule.dataEmployee.data;
+      employeeFiltered = _.filter(allEmployee, {
+        // employee_organization : TEC - ENG
+        employee_organization: this.loginData.user_organization,
+      });
+      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+    });
   }
 
   mounted() {

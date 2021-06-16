@@ -15,7 +15,7 @@
         <div class="relative">
           <p class="text-xs text-primary">Welcome,</p>
           <h1 class="text-primary font-medium text-xl">
-            {{ username }}
+            {{ getUsername() }}
           </h1>
         </div>
         <div class="rounded-full overflow-hidden h-7 w-7">
@@ -181,6 +181,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
+import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
 
@@ -206,7 +207,20 @@ export interface SubmitResponseData {
   percent_progress: number;
   /* eslint-enable camelcase */
 }
-
+export interface EmployeeResponseData {
+  /* eslint-disable camelcase */
+  id: string;
+  employee_name: string;
+  employee_email: string;
+  employee_image_url: string;
+  employee_alt_id: string;
+  employee_organization: string;
+  employee_organization_full_text: string;
+  employee_business_unit: string;
+  created_at: string;
+  updated_at: string;
+  /* eslint-enable camelcase */
+}
 export interface LoginData {
   /* eslint-disable camelcase */
   exp: number;
@@ -234,7 +248,18 @@ export default class Dashboard extends Vue {
 
   loading: boolean = true;
 
-  username: string = 'loading...';
+  employeeCounterData = { all: 0, org: 0 }
+
+  loginData: LoginData = {
+    exp: 1,
+    user_business_unit: 'nodata',
+    user_email: 'nodata',
+    user_id: 'nodata',
+    user_name: 'nodata',
+    user_oauth_id: 'nodata',
+    user_organization: 'nodata',
+    user_organization_full_text: 'nodata',
+  }
 
   recommendation = {
     criteria_name: 'No Data',
@@ -262,7 +287,7 @@ export default class Dashboard extends Vue {
   roundedNumber = (val: number): number => _.round(val, 2);
 
   async loadCriteriaData(): Promise<void> {
-    await criteriaModule.getCriteria().then(() => {
+    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       this.criteria = criteriaModule.dataCriteria.data;
       this.recommendation = this.setRecommendation();
@@ -300,9 +325,28 @@ export default class Dashboard extends Vue {
       jsonPayload = JSON.parse(decode);
     }
 
-    const usernameArray = _.split(jsonPayload.user_name, ' ', 2);
+    this.loginData = jsonPayload;
+  }
+
+  async EmployeeCounter() {
+    // Get Employee filter by ORG and BU
+    let allEmployee = [];
+    let employeeFiltered = [];
+    await employeeModule.getEmployee().then(() => {
+      this.loading = false;
+      allEmployee = employeeModule.dataEmployee.data;
+      employeeFiltered = _.filter(allEmployee, {
+        // employee_organization : TEC - ENG
+        employee_organization: this.loginData.user_organization,
+      });
+      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+    });
+  }
+
+  getUsername() {
+    const usernameArray = _.split(this.loginData.user_name, ' ', 2);
     const username = _.join(usernameArray, ' ');
-    this.username = username;
+    return username;
   }
 
   async init() {
@@ -310,14 +354,19 @@ export default class Dashboard extends Vue {
       this.$router.push('/prepare/organization');
     } else {
       this.alert = alertModule.showAlert;
-      this.loadCriteriaData();
-      this.decodeDataEmployee();
+      Promise.all([
+        this.decodeDataEmployee(),
+        this.EmployeeCounter(),
+      ]).then(() => {
+        this.loadCriteriaData();
+      });
     }
   }
 
   created() {
     setInterval(() => {
       this.alert = false;
+      alertModule.setAlertFalse();
     }, 4000);
   }
 
