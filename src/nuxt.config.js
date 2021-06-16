@@ -48,10 +48,6 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['@nuxtjs/axios', '@nuxtjs/dotenv', 'nuxt-google-optimize'],
 
-  axios: {
-    baseURL: 'https://rrs-api.sumpahpalapa.com/api/v1',
-  },
-
   // Google Analytics implementation
   googleAnalytics: {
     id: 'UA-199540908-1',

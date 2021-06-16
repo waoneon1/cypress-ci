@@ -366,6 +366,7 @@ export default class Dashboard extends Vue {
   created() {
     setInterval(() => {
       this.alert = false;
+      alertModule.setAlertFalse();
     }, 4000);
   }
 
