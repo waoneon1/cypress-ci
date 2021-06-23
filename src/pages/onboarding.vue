@@ -70,7 +70,7 @@
             <button
               @click="step += 1"
               v-show="step < onboards.length - 1"
-              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             >
               <span class="font-bold text-sm">Lanjut</span>
             </button>
@@ -78,7 +78,7 @@
             <nuxt-link
               to="/prepare/organization"
               v-show="step === onboards.length - 1"
-              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             >
               <span class="font-bold text-sm">Selesai</span>
             </nuxt-link>
