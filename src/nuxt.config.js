@@ -50,7 +50,7 @@ export default {
 
   // Google Analytics implementation
   googleAnalytics: {
-    id: 'UA-199540908-1',
+    id: 'UA-199540908-2',
   },
 
   // Google Optimize (Optional options)
