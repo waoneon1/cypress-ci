@@ -70,27 +70,30 @@ export default class QnaModule extends VuexModule {
   }
 
   @Mutation
-  setCounter(value: { all: number, org: number }): void {
+  setCounter(value: { all: number; org: number }): void {
     this.dataCounter = value;
   }
 
   @Mutation
   setSubmit(value: SubmitResponse): void {
     /* eslint no-param-reassign: "error" */
-    const whitelistJson = localStorage.getItem('rrs_selected');
+    // const whitelistJson = localStorage.getItem('rrs_selected');
 
     // count progress with filter
-    const totalEmployeePercentage = value.data.percent_progress;
-    const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    const countEmployee = this.dataCounter;
-    // count whitelist from check & from organization
-    const countWhitelist = whitelistCheck + (countEmployee.org - 1);
+    // const totalEmployeePercentage = value.data.percent_progress;
+    // const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
+    // const countEmployee = this.dataCounter;
+    // // count whitelist from check & from organization
+    // const countWhitelist = whitelistCheck + (countEmployee.org - 1);
 
-    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-    const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
+    // const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+    // const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
+    // const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
-    value.data.percent_progress_filter = percentageForUser;
+    // value.data.percent_progress_filter = percentageForUser;
+
+    // note: this one hardcode suggest by Allan 23/06/2021 to get percentage returned by endpoint
+    value.data.percent_progress_filter = value.data.percent_progress;
     this.submitResponse = value;
   }
 
@@ -128,14 +131,22 @@ export default class QnaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async submitQna(data: {payload: object[], criteriaId:string, counter: { all: number, org: number }}): Promise<void> {
+  async submitQna(data: {
+    payload: object[];
+    criteriaId: string;
+    counter: { all: number; org: number };
+  }): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
-      const response = await axios.post(`${url}pair_data/submit/criteria/${data.criteriaId}`, data.payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        `${url}pair_data/submit/criteria/${data.criteriaId}`,
+        data.payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.data.data) {
         this.setCounter(data.counter);

@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              item.percent_progress_filter <= 100 ? goToQnaPage(item) : null
+              item.percent_progress <= 100 ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,7 +61,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress_filter >= 100
+                    item.percent_progress >= 100
                       ? ''
                       : 'hover:bg-blue-100'
                   }`
@@ -82,19 +82,19 @@
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
                           `width:${roundedNumber(
-                            item.percent_progress_filter
+                            item.percent_progress
                           )}%`
                         "
                       ></div>
                     </div>
                   </div>
                   <span
-                    v-if="item.percent_progress_filter < 100"
+                    v-if="item.percent_progress < 100"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress_filter === 0
+                      item.percent_progress === 0
                         ? 0
-                        : roundedNumber(item.percent_progress_filter)
+                        : roundedNumber(item.percent_progress)
                     }}%</span
                   >
                   <div
@@ -289,7 +289,8 @@ export default class Dashboard extends Vue {
   async loadCriteriaData(): Promise<void> {
     await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
-      this.criteria = criteriaModule.dataCriteria.data;
+      const allCriteria = criteriaModule.dataCriteria.data;
+      this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
       this.recommendation = this.setRecommendation();
     });
   }

@@ -22,7 +22,7 @@
             />
             <span
               v-if="loading"
-              class="text-xs text-primary mb-6 max-w-xs text-center"
+              class="text-xs text-primary mb-6 max-w-xs text-center m-auto"
             >
               <svg
                 class="animate-spin -ml-1 mr-3 h-14 w-14 text-primary"
@@ -79,7 +79,7 @@
       <div class="fixed bottom-0 z-10 max-w-md w-full">
         <div v-if="whitelist" class="mx-auto text-center mb-5">
           <button
-            class="mb-3 rounded-full w-5/6 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+            class="mb-3 rounded-full w-5/6 py-3 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             :disabled="loading"
             @click="save()"
           >
@@ -99,7 +99,7 @@
         </div>
         <div v-else class="mx-auto flex justify-center w-5/6 text-center mb-5">
           <button
-            class="mb-3 rounded-full px-10 py-3 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+            class="mb-3 rounded-full px-10 py-3 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             :disabled="loading"
             @click="save()"
           >
