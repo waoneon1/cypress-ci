@@ -17,7 +17,7 @@
         loading . . .
       </div>
       <div class="relative" v-else>
-        <SwipeableCard :cards="employee"/>
+        <SwipeableCard :cards="employee" @getWhitelist="testing(e)"/>
       </div>
 
       <!-- footer -->
@@ -209,6 +209,10 @@ export default class PrepareEmployee extends Vue {
       const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
     });
+  }
+
+  testing(e:any) {
+    console.log('emit')
   }
 
   mounted() {
