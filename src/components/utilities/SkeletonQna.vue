@@ -93,9 +93,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+
 @Component
 export default class SkeletonQna extends Vue {
   indenClass: string[] = ['', '-left-2', '-left-3.5'];
+
   @Prop({ required: true, type: String }) criteria!: string;
 }
 </script>

@@ -76,22 +76,26 @@
       </div>
       <div class="flex-none h-10">
         <div class="flex justify-around mt-10">
-          <div :class="`bg-danger flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer`"
-            @click="reject">
+          <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+            :class="btnDisabled ? 'bg-gray-400' : 'bg-danger'"
+            :disabled="btnDisabled"
+            @click="reject()">
             <img class="w-9 h-9" src="~/static/img/svg/cross.svg" alt="toast icon close" />
-          </div>
-          <button 
-            @click="save()" 
+          </button>
+          <button
+            @click="save()"
             class="ml-2 rounded-full py-2 px-6 border border-solid text-white focus:outline-none inline-block"
             :class="disableWhitelist ? 'border-gray-200 bg-gray-200' : 'border-secondary bg-secondary hover:bg-yellow-700'"
             :disabled="disableWhitelist"
           >
             <span class="font-bold text-sm">Selesai</span>
           </button>
-          <div :class="`bg-success flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer`"
-            @click="match">
+          <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+            :class="btnDisabled ? 'bg-gray-400' : 'bg-success'"
+            :disabled="btnDisabled"
+            @click="match()">
             <img class="w-9 h-9" src="~/static/img/svg/check.svg" alt="toast icon success "/>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -99,9 +103,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop, Emit } from 'vue-property-decorator';
-import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact'
+import {
+  Vue, Component, Watch, Prop,
+} from 'vue-property-decorator';
+import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
+
 const _ = require('lodash');
+
 export interface EmployeeResponseData {
   /* eslint-disable camelcase */
   id: string;
@@ -119,8 +127,8 @@ export interface EmployeeResponseData {
 
 const EVENTS = {
   MATCH: 'match',
-  REJECT: 'reject'
-}
+  REJECT: 'reject',
+};
 
 @Component({
   components: {
@@ -128,59 +136,79 @@ const EVENTS = {
   },
 })
 export default class SwipeableCard extends Vue {
-
   // Data: {}
   isVisible:boolean = true
+
+  btnDisabled:boolean = false
+
   index:number = 0
+
   selected: EmployeeResponseData[] = []
+
   interactEventBus = {
     draggedRight: EVENTS.MATCH,
     draggedLeft: EVENTS.REJECT,
   }
+
   disableWhitelist:boolean = true
+
   alert: boolean = false;
-  @Prop({ required: true, type: Array }) 
+
+  @Prop({ required: true, type: Array })
   cards!: EmployeeResponseData[];
 
   // Computed: {}
   current = this.cards[0]
+
   @Watch('index')
-  currentComputed() { this.current = this.cards[this.index] }
-  
+  currentComputed() { this.current = this.cards[this.index]; }
+
   next = this.cards[1]
+
   @Watch('index')
-  nextComputed() { this.next = this.cards[this.index + 1] }
+  nextComputed() { this.next = this.cards[this.index + 1]; }
 
   // Method: {}
-  match() {
-    InteractEventBus.$emit(EVENTS.MATCH)
+  match = () => {
+    InteractEventBus.$emit(EVENTS.MATCH);
   }
-  reject() {
-    InteractEventBus.$emit(EVENTS.REJECT)
+
+  reject = () => {
+    InteractEventBus.$emit(EVENTS.REJECT);
   }
 
   checkWhitelist() {
-    if(this.selected.length >= 9) {
-      if(this.selected.length == 9) {
-        this.alert = true
+    if (this.selected.length >= 9) {
+      if (this.selected.length === 9) {
+        this.alert = true;
       } else {
-        this.alert = false
+        this.alert = false;
       }
-      this.disableWhitelist = false
+      this.disableWhitelist = false;
     }
   }
 
   emitAndNext(event: 'match' | 'reject') {
-    this.$emit(event, this.index)
-    if ( event === 'match') {
-      this.selected.push(this.cards[this.index])
+    this.$emit(event, this.index);
+    if (event === 'match') {
+      this.selected.push(this.cards[this.index]);
     }
-    this.checkWhitelist()
-    setTimeout(() => this.isVisible = false, 200)
+    this.checkWhitelist();
+    this.btnDisabled = true;
+    setTimeout(() => this.visibleFalse(), 500);
     setTimeout(() => {
-      this.index++
-      this.isVisible = true
-    }, 200)
+      this.visibleTrue();
+    }, 500);
+  }
+
+  visibleTrue() {
+    this.index += 1;
+    this.isVisible = true;
+    this.btnDisabled = false;
+  }
+
+  visibleFalse() {
+    this.isVisible = false;
   }
 
   save(): void {

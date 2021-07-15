@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 import Help from '~/components/utilities/HelpSwipe.vue';
@@ -179,13 +179,10 @@ export default class Whitelist extends Vue {
     // Get Employee All
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      //TODO:Remove login user data
-      const org = this.decodeDataEmployee().user_organization;
-      const allEmployee = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);;
-      //const allEmployee = employeeModule.dataEmployee.data;
+      // TODO:Remove login user data
+      const allEmployee = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);
+      // const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
-      console.log(this.employee, ' this.employee')
-      console.log(this.decodeDataEmployee().user_email, 'decodeDataEmployee')
     });
   }
 

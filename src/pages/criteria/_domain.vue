@@ -83,7 +83,7 @@ export default class Criteria extends Vue {
   }
 
   skeletonQna: boolean = false;
-  
+
   whitelist: string | null = localStorage.getItem('rrs_whitelist');
 
   help: boolean = false;
@@ -95,15 +95,15 @@ export default class Criteria extends Vue {
   }
 
   checkWhiteList() {
-    if(this.whitelist) {
-      const whitelist = JSON.parse(this.whitelist)
-      if(whitelist.selected.length >= 9) {
-        this.goToQnaPage()
+    if (this.whitelist) {
+      const whitelist = JSON.parse(this.whitelist);
+      if (whitelist.selected.length >= 9) {
+        this.goToQnaPage();
       } else {
-        this.skeletonQna = true
+        this.skeletonQna = true;
       }
     } else {
-       this.skeletonQna = true
+      this.skeletonQna = true;
     }
   }
 
@@ -124,7 +124,7 @@ export default class Criteria extends Vue {
   }
 
   mounted() {
-    this.skeletonQna = false
+    this.skeletonQna = false;
     this.init();
   }
 }
