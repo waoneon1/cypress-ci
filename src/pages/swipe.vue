@@ -86,12 +86,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 
 import Help from '~/components/utilities/Help.vue';
-
 
 export interface LoginData {
   /* eslint-disable camelcase */
@@ -121,6 +120,7 @@ export interface EmployeeResponseData {
   /* eslint-enable camelcase */
 }
 
+// eslint-disable-next-line no-unused-vars
 const _ = require('lodash');
 
 @Component({
@@ -217,16 +217,16 @@ export default class PrepareEmployee extends Vue {
     // Get Employee All
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      //TODO:Remove login user data
+      // TODO:Remove login user data
       const org = this.decodeDataEmployee().user_organization;
       const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
     });
   }
 
-  testing(e:any) {
-    console.log('emit')
-  }
+  // testing(e:any) {
+  //   console.log('emit')
+  // }
 
   mounted() {
     this.init();

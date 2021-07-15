@@ -99,37 +99,37 @@ export default class Help extends Vue {
     {
       id: 1,
       desc:
-        'direkomendasikan',
+        'Swipe kanan untuk menambahkan Alterrans yang dipilih atau yang akan dinilai berdasarkan Domain',
       image: 'exp-swipe-right.png',
     },
     {
       id: 2,
       desc:
-        'Jika dalam 1 ',
+        'Selain swipe kanan juga bisa menggunakan button check berwarna hijau',
       image: 'exp-btn-check.png',
     },
     {
       id: 3,
       desc:
-        'Dalam dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
-      image: 'exp-swipe-right.png',
+        'Jika kamu tidak tahu atau tidak akan menilai Alterrans yang ada bisa menggunakan swipe kiri untuk tidak',
+      image: 'exp-swipe-left.png',
     },
     {
       id: 4,
       desc:
-        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+        'selain menggunakan swipe bisa menggunakan button cross untuk kebutuhan tidak',
       image: 'exp-btn-cross.png',
     },
     {
       id: 5,
       desc:
-        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+        'Jika sudah mencapai minimal 9 Alterrans yang dipilih akan ada notif dan button "Simpan" akan aktif, jika masih ingingin ada Alterrans yang mau di pilih bisa di lanjutkan terlebih dahulu sebelum menekan button "Simpan"',
       image: 'exp-notif.png',
     },
     {
       id: 6,
       desc:
-        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+        'Button "Simpan" bakal aktif ketika mencapai minimum dan bisa di tekan dan akan diarahkan ke menu menilai Alterrans',
       image: 'exp-btn-done-active.png',
     },
   ];
