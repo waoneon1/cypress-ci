@@ -4,11 +4,17 @@
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"
     >
       <!-- Heading -->
-      <div class="flex justify-between items-center relative py-5 mb-5 ">
-        <div class="relative text-center w-full">
-          <h1 class="text-primary font-medium text-xl">
-            Mempersiapkan Data Employee
-          </h1>
+      <div class="flex justify-between relative py-5">
+        <div>
+          <!-- Added back button in here -->
+        </div>
+        <h1 class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
+        <div
+          class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
+          @click="help = !help"
+        >
+          <span v-if="help" class="text-xs text-gray-400">x</span>
+          <span v-else class="text-xs text-gray-400">?</span>
         </div>
       </div>
 
@@ -73,6 +79,8 @@
           </ul>
         </div>
       </div>
+      <!-- Help -->
+      <Help :show="help" :swipe="true" class="z-40"></Help>
     </div>
   </div>
 </template>
@@ -81,6 +89,8 @@
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
+
+import Help from '~/components/utilities/Help.vue';
 
 
 export interface LoginData {
@@ -116,6 +126,7 @@ const _ = require('lodash');
 @Component({
   components: {
     SwipeableCard,
+    Help,
   },
 })
 export default class PrepareEmployee extends Vue {
@@ -126,6 +137,8 @@ export default class PrepareEmployee extends Vue {
   empSearch: string = '';
 
   selected: string[] = [];
+
+  help: boolean = false;
 
   employee: EmployeeResponseData[] = [
     {

@@ -37,6 +37,22 @@
           </ol>
         </div>
       </div>
+
+      <div v-if="swipe">
+        <div class="text-white font-base text-sm">
+          <h2 class="text-white mb-5 font-bold">Aturan</h2>
+          <ol v-for="(item, i) in swipe" :key="i">
+            <li class="mb-4">
+              {{ item.desc }}
+              <img
+                :src="'/img/' + item.image"
+                alt="exp"
+                class="rounded-lg mt-4"
+              />
+            </li>
+          </ol>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +92,45 @@ export default class Help extends Vue {
       desc:
         'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
       image: 'exp-progressbar.png',
+    },
+  ];
+
+  swipe: object[] = [
+    {
+      id: 1,
+      desc:
+        'direkomendasikan',
+      image: 'exp-swipe-right.png',
+    },
+    {
+      id: 2,
+      desc:
+        'Jika dalam 1 ',
+      image: 'exp-btn-check.png',
+    },
+    {
+      id: 3,
+      desc:
+        'Dalam dalam senior/junior jadi dalam alterrans yang dipilih adalah hasil dari opini menurut mengguna yang paling berkopenten dalam domain.',
+      image: 'exp-swipe-right.png',
+    },
+    {
+      id: 4,
+      desc:
+        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+      image: 'exp-btn-cross.png',
+    },
+    {
+      id: 5,
+      desc:
+        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+      image: 'exp-notif.png',
+    },
+    {
+      id: 6,
+      desc:
+        'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
+      image: 'exp-btn-done-active.png',
     },
   ];
 }
