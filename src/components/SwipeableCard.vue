@@ -16,8 +16,6 @@
       </div>
     </div>
     <div class="flex flex-col" style="height:70vh;">
-      <!-- TODO: Styling -->
-      <!-- TODO: Button accpt reject -->
       <!-- TODO: Error type package vue2-interact -->
       <!-- TODO: Styling Loading -->
       <div class="w-11/12 flex-grow">
@@ -83,7 +81,7 @@
             <img class="w-9 h-9" src="~/static/img/svg/cross.svg" alt="toast icon close" />
           </div>
           <button 
-            @click="getWhitelist" 
+            @click="save()" 
             class="ml-2 rounded-full py-2 px-6 border border-solid text-white focus:outline-none inline-block"
             :class="disableWhitelist ? 'border-gray-200 bg-gray-200' : 'border-secondary bg-secondary hover:bg-yellow-700'"
             :disabled="disableWhitelist"
@@ -103,6 +101,7 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop, Emit } from 'vue-property-decorator';
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact'
+const _ = require('lodash');
 export interface EmployeeResponseData {
   /* eslint-disable camelcase */
   id: string;
@@ -128,7 +127,7 @@ const EVENTS = {
     Vue2InteractDraggable,
   },
 })
-export default class SwipeableCardDemo extends Vue {
+export default class SwipeableCard extends Vue {
 
   // Data: {}
   isVisible:boolean = true
@@ -151,12 +150,6 @@ export default class SwipeableCardDemo extends Vue {
   next = this.cards[1]
   @Watch('index')
   nextComputed() { this.next = this.cards[this.index + 1] }
-
-  @Emit('getWhitelist')
-  getWhitelist() { 
-    console.log('MATCH--->>>')
-    return 'EVENTS.MATCH'
-  }
 
   // Method: {}
   match() {
@@ -188,6 +181,14 @@ export default class SwipeableCardDemo extends Vue {
       this.index++
       this.isVisible = true
     }, 200)
+  }
+
+  save(): void {
+    const payload = {
+      selected: _.map(this.selected, 'employee_email'),
+    };
+    localStorage.setItem('rrs_whitelist', JSON.stringify(payload));
+    this.$router.push(`/qna/${this.$route.query.callback}`);
   }
 }
 </script>
