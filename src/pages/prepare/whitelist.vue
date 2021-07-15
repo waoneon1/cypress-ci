@@ -4,11 +4,17 @@
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"
     >
       <!-- Heading -->
-      <div class="flex justify-between items-center relative py-5 mb-5 ">
-        <div class="relative text-center w-full">
-          <h1 class="text-primary font-medium text-xl">
-            Mempersiapkan Data Employee
-          </h1>
+      <div class="flex justify-between relative py-5">
+        <div>
+          <!-- Added back button in here -->
+        </div>
+        <h1 class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
+        <div
+          class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
+          @click="help = !help"
+        >
+          <span v-if="help" class="text-xs text-gray-400">x</span>
+          <span v-else class="text-xs text-gray-400">?</span>
         </div>
       </div>
 
@@ -17,7 +23,7 @@
         loading . . .
       </div>
       <div class="relative" v-else>
-        <SwipeableCard :cards="employee" />
+        <SwipeableCard :cards="employee"/>
       </div>
 
       <!-- footer -->
@@ -28,7 +34,7 @@
         ></div>
         <div class="mx-auto max-w-md bg-white px-5 pb-5 rounded-t-xl shadow-lg">
           <ul class="flex justify-between px-10">
-            <li class="cursor-pointer hover:text-secondary text-secondary">
+            <li class="cursor-pointer hover:text-secondary">
               <nuxt-link to="/dashboard">
                 <svg
                   class="fill-current"
@@ -73,6 +79,8 @@
           </ul>
         </div>
       </div>
+      <!-- Help -->
+      <Help :show="help" class="z-40"></Help>
     </div>
   </div>
 </template>
@@ -81,7 +89,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
-
+import Help from '~/components/utilities/HelpSwipe.vue';
 
 export interface LoginData {
   /* eslint-disable camelcase */
@@ -116,6 +124,7 @@ const _ = require('lodash');
 @Component({
   components: {
     SwipeableCard,
+    Help,
   },
 })
 export default class Whitelist extends Vue {
@@ -123,7 +132,7 @@ export default class Whitelist extends Vue {
 
   token = localStorage.getItem('token');
 
-  selected: string[] = [];
+  help: boolean = false;
 
   employee: EmployeeResponseData[] = [
     {
@@ -172,8 +181,11 @@ export default class Whitelist extends Vue {
       this.loading = false;
       //TODO:Remove login user data
       const org = this.decodeDataEmployee().user_organization;
-      const allEmployee = employeeModule.dataEmployee.data;
+      const allEmployee = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);;
+      //const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
+      console.log(this.employee, ' this.employee')
+      console.log(this.decodeDataEmployee().user_email, 'decodeDataEmployee')
     });
   }
 
@@ -182,19 +194,3 @@ export default class Whitelist extends Vue {
   }
 }
 </script>
-
-<style>
-.autotrim {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pulse .v-lazy-image {
-  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-.pulse .v-lazy-image-loaded {
-  -webkit-animation: none;
-  animation: none;
-}
-</style>
