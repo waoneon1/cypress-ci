@@ -80,7 +80,7 @@
         </div>
       </div>
       <!-- Help -->
-      <Help :show="help" :swipe="true" class="z-40"></Help>
+      <Help :show="help" class="z-40"></Help>
     </div>
   </div>
 </template>
@@ -90,7 +90,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 
-import Help from '~/components/utilities/Help.vue';
+import Help from '~/components/utilities/HelpSwipe.vue';
 
 export interface LoginData {
   /* eslint-disable camelcase */

@@ -37,22 +37,6 @@
           </ol>
         </div>
       </div>
-
-      <div v-if="swipe">
-        <div class="text-white font-base text-sm">
-          <h2 class="text-white mb-5 font-bold">Aturan</h2>
-          <ol v-for="(item, i) in swipe" :key="i">
-            <li class="mb-4">
-              {{ item.desc }}
-              <img
-                :src="'/img/' + item.image"
-                alt="exp"
-                class="rounded-lg mt-4"
-              />
-            </li>
-          </ol>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -92,45 +76,6 @@ export default class Help extends Vue {
       desc:
         'Progress bar menandakan status dari progress uda sampai berapa persen, progress bar naik ketika dalam halaman ada yang dipilih dan jika progress bar sudah mencapai angka prosentase yang ditentukan pengguna dapat mengakhiri dan bisa di lanjut di lain waktu untuk pemilih alterrans berdasarkan domain.',
       image: 'exp-progressbar.png',
-    },
-  ];
-
-  swipe: object[] = [
-    {
-      id: 1,
-      desc:
-        'Swipe kanan untuk menambahkan Alterrans yang dipilih atau yang akan dinilai berdasarkan Domain',
-      image: 'exp-swipe-right.png',
-    },
-    {
-      id: 2,
-      desc:
-        'Selain swipe kanan juga bisa menggunakan button check berwarna hijau',
-      image: 'exp-btn-check.png',
-    },
-    {
-      id: 3,
-      desc:
-        'Jika kamu tidak tahu atau tidak akan menilai Alterrans yang ada bisa menggunakan swipe kiri untuk tidak',
-      image: 'exp-swipe-left.png',
-    },
-    {
-      id: 4,
-      desc:
-        'selain menggunakan swipe bisa menggunakan button cross untuk kebutuhan tidak',
-      image: 'exp-btn-cross.png',
-    },
-    {
-      id: 5,
-      desc:
-        'Jika sudah mencapai minimal 9 Alterrans yang dipilih akan ada notif dan button "Simpan" akan aktif, jika masih ingingin ada Alterrans yang mau di pilih bisa di lanjutkan terlebih dahulu sebelum menekan button "Simpan"',
-      image: 'exp-notif.png',
-    },
-    {
-      id: 6,
-      desc:
-        'Button "Simpan" bakal aktif ketika mencapai minimum dan bisa di tekan dan akan diarahkan ke menu menilai Alterrans',
-      image: 'exp-btn-done-active.png',
     },
   ];
 }
