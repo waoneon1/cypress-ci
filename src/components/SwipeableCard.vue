@@ -222,31 +222,6 @@ export default class SwipeableCard extends Vue {
 </script>
 
 <style scoped>
-.btn {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  padding: .2rem;
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0 6px 6px -3px rgba(0,0,0,0.02), 0 10px 14px 1px rgba(0,0,0,0.02), 0 4px 18px 3px rgba(0,0,0,0.02);
-  cursor: pointer;
-  transition: all .3s ease;
-  user-select: none;
-  -webkit-tap-highlight-color:transparent;
-}
-.btn:active {
-  transform: translateY(4px);
-}
-.btn i {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.btn i:before {
-  content: '';
-}
 .transition {
   animation: appear 200ms ease-in;
 }
