@@ -4,7 +4,6 @@
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
       || help
-      || criteriaProgressCount() >= progressCheckpoint
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
     >
@@ -24,7 +23,6 @@
       </div>
       <!-- Content: Question -->
       <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
-      <div v-else-if="criteriaProgressCount() >= progressCheckpoint"></div>
       <div v-else class="relative">
         <div class="text-sm text-primary font-bold rounded-xl mb-5">
           Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }}
@@ -57,30 +55,6 @@
             Terimakasih
           </h1>
         </Thankyou>
-        <div
-          v-else-if="criteriaProgressCount() >= progressCheckpoint"
-          class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);"
-        >
-          <div class="flex flex-col justify-center items-center text-white text-center px-5 w-full">
-            <img class="mb-10 w-40" src="~/static/img/svg/checkpoint.svg" alt="description domain" />
-            <h1 class="text-base mb-8 max-w-xs font-mulish font-bold">
-              Kamu sudah mencapai <span class="text-secondary">{{ criteriaProgressCount() }}%</span>
-            </h1>
-            <p class="text-sm max-w-sm mb-4">Jika ingin menunda untuk melanjutkan proses pemilihan di domain ini, kamu bisa memilih “Lanjutkan Nanti”</p>
-            <p class="text-sm max-w-sm mb-4">Kamu juga bisa melanjutkan pemilihan alterrans lainnya untuk domain ini dengan cara memilih “Lanjutkan” untuk dapat memilih hingga ke milestone berikutnya</p>
-            <div class="flex space-x-4 mt-10">
-              <nuxt-link to="/dashboard" class="rounded-full py-2 px-4 border border-solid border-secondary bg-white hover:bg-secondary  hover:text-white text-secondary focus:outline-none flex items-center mx-auto justify-center inline-block">
-                Lanjutkan Nanti
-              </nuxt-link>
-              <button
-                @click="progressCheckpointFloor()"
-                class="rounded-full py-3 px-8 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
-              >
-                Lanjutkan
-              </button>
-            </div>
-          </div>
-        </div>
         <div v-else class="relative" >
           <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
             <div
@@ -120,13 +94,13 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0"></div>
-      <div v-else-if="criteriaProgressCount() >= progressCheckpoint || criteriaProgressCount() >= 100"></div>
+      <div v-else-if="criteriaProgressCount() >= 100"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
-          class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-2 transform rotate-180"
+          class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
         ></div>
         <div
-          class="mx-auto max-w-md bg-white px-5 pb-2 bg-white rounded-t-xl shadow-lg"
+          class="mx-auto max-w-md bg-white px-5 pb-2 bg-white shadow-lg"
         >
           <p class="text-xs text-gray-400">Progress</p>
           <div class="flex items-center justify-center mb-2">
@@ -171,7 +145,7 @@
               <button
                 :disabled="loading"
                 @click="nextPage();"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white hover:bg-white hover:text-secondary focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -274,6 +248,8 @@ export default class Qna extends Vue {
   employees: QnaResponseData[] = [];
 
   employeeFilter: EmployeeResponseData[] = [];
+
+  employeeCounterData = { all: 0, org: 0 }
 
   questions: string = '';
 
@@ -392,23 +368,33 @@ export default class Qna extends Vue {
   }
 
   async setSelectedCriteria() {
-    // get query param
-    const criteria = this.$route.params.domain;
-    // get criteria endpoint
-    await criteriaModule.getCriteria().then(() => {
-      const allCriteria = criteriaModule.dataCriteria.data;
-      // set domain variable
-      this.domain = _.find(allCriteria, { slug: criteria });
-    });
+    await this.getEmployeeStore();
+    await this.getCriteriaStore();
+  }
 
+  async getEmployeeStore() {
+    let allEmployee:EmployeeResponseData[] = [];
+    let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
-      const allEmployee:EmployeeResponseData[] = _.filter(
+      allEmployee = employeeModule.dataEmployee.data;
+      employeeFiltered = _.filter(
         employeeModule.dataEmployee.data,
         (o:EmployeeResponseData) => o.employee_organization === org,
       );
+      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
       this.employeeFilter = allEmployee;
+      return true;
+    });
+  }
+
+  async getCriteriaStore() {
+    const criteria = this.$route.params.domain;
+    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
     });
   }
 
@@ -498,6 +484,7 @@ export default class Qna extends Vue {
       const data = {
         payload: this.prepareSubmit(),
         criteriaId: this.domain.id,
+        counter: this.employeeCounterData,
       };
       await qnaModule.submitQna(data);
       return qnaModule.submitResponse;

@@ -111,10 +111,10 @@
       <!-- Navigation Footer -->
       <div class="fixed bottom-0 left-0 right-0 z-10">
         <div
-          class="mx-auto max-w-md bg-white bg-white rounded-b-xl shadow-lg w-full h-5 transform rotate-180"
+          class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-5 transform rotate-180"
         ></div>
         <div
-          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg"
+          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white"
         >
           <div class="flex justify-end items-center">
             <div class="inline-block flex">

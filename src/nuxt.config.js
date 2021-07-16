@@ -41,16 +41,25 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    // https://google-analytics.nuxtjs.org
+    '@nuxtjs/google-analytics',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/dotenv',
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/dotenv', 'nuxt-google-optimize'],
 
-  axios: {
-    baseURL: 'https://rrs-api.sumpahpalapa.com/api/v1',
+  // Google Analytics implementation
+  googleAnalytics: {
+    id: 'UA-199540908-2',
+  },
+
+  // Google Optimize (Optional options)
+  googleOptimize: {
+    // experimentsDir: '~/experiments',
+    // maxAge: 60 * 60 * 24 * 7 // 1 Week
+    // pushPlugin: true,
+    // excludeBots: true,
+    // botExpression: /(bot|spider|crawler)/i
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

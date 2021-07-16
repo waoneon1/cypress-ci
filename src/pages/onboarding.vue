@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 h-screen overflow-x-hidden">
+  <div class="h-screen overflow-x-hidden">
     <div class="relative bg-white mx-auto max-w-md font-secondary">
       <!-- Heading -->
       <div class="px-5">
@@ -13,9 +13,9 @@
 
       <div class="px-5" v-for="(item, i) in onboards" :key="i">
         <div
-          v-if="i === step"
+          v-show="i === step"
           class="flex relative -mx-5"
-          style="height: calc(100vh - 122px)"
+          style="height: calc(100vh - 147px)"
         >
           <div
             class="flex flex-col justify-between text-center px-5 w-full mt-5 mb-8"
@@ -27,9 +27,7 @@
                 alt="onboarding"
                 style="max-width: 50%;"
               />
-              <h1
-                class="text-2xl text-primary mb-5 font-mulish font-bold"
-              >
+              <h1 class="text-2xl text-primary mb-5 font-mulish font-bold">
                 {{ item.title }}
               </h1>
               <span class="text-xs text-primary mb-6 max-w-xs">
@@ -58,9 +56,7 @@
       <!-- footer -->
       <div class="fixed bottom-0 left-0 right-0 z-10">
         <!-- navigation circle -->
-        <div
-          class="mx-auto max-w-md bg-white px-5 pb-5 bg-white rounded-t-xl shadow-lg"
-        >
+        <div class="mx-auto max-w-md bg-white px-5 pb-5 bg-white">
           <div :class="`flex ${step == 0 ? 'justify-end' : 'justify-between'}`">
             <!-- kembali -->
             <button
@@ -74,7 +70,7 @@
             <button
               @click="step += 1"
               v-show="step < onboards.length - 1"
-              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             >
               <span class="font-bold text-sm">Lanjut</span>
             </button>
@@ -82,7 +78,7 @@
             <nuxt-link
               to="/dashboard"
               v-show="step === onboards.length - 1"
-              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+              class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             >
               <span class="font-bold text-sm">Selesai</span>
             </nuxt-link>
@@ -109,8 +105,9 @@ export default class Onboarding extends Vue {
     },
     {
       title: 'Mempersiapkan Data Alterrans',
+      // TODO Tambahkan jika fitur whitelist aktif: Akan tetapi, kamu juga boleh menambahkan software engineer di luar business unit jika kamu menginginkan hal tersebut
       content:
-        'Kamu diminta untuk memberikan ranking kepada software engineer sesuai dengan business unit kamu. Akan tetapi, kamu juga boleh menambahkan software engineer di luar business unit jika kamu menginginkan hal tersebut',
+        'Kamu diminta untuk memberikan ranking kepada software engineer sesuai dengan business unit kamu.',
       image: 'svg/onboard1.svg',
     },
     {
