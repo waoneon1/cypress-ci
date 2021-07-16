@@ -404,7 +404,7 @@ export default class Qna extends Vue {
     await employeeModule.getEmployee().then(() => {
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
-      const allEmployee = _.filter(
+      const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
         (o:EmployeeResponseData) => o.employee_organization === org,
       );

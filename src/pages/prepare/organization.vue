@@ -168,7 +168,7 @@ export default class PrepareOrganization extends Vue {
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      const allEmployee = employeeModule.dataEmployee.data;
+      const allEmployee:EmployeeResponseData[] = employeeModule.dataEmployee.data;
       this.employeeFiltered = _.filter(allEmployee, {
         // employee_organization : TEC - ENG
         employee_organization: this.decodeDataEmployee().user_organization,

@@ -180,7 +180,7 @@ export default class Whitelist extends Vue {
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
       // TODO:Remove login user data
-      const allEmployee = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);
+      const allEmployee:EmployeeResponseData[] = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);
       // const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
     });

@@ -306,13 +306,9 @@ export default class Dashboard extends Vue {
   }
 
   async init() {
-    if (this.selected == null) {
-      this.$router.push('/prepare/organization');
-    } else {
-      this.alert = alertModule.showAlert;
-      this.loadCriteriaData();
-      this.decodeDataEmployee();
-    }
+    this.alert = alertModule.showAlert;
+    this.loadCriteriaData();
+    this.decodeDataEmployee();
   }
 
   mounted() {

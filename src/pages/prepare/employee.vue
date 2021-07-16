@@ -285,7 +285,7 @@ export default class PrepareEmployee extends Vue {
       // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
 
-      const allEmployee = _.filter(
+      const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
         (o: EmployeeResponseData) => o.employee_organization !== org,
       );

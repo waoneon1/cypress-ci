@@ -80,7 +80,7 @@
             </button>
             <!-- selesai -->
             <nuxt-link
-              to="/prepare/organization"
+              to="/dashboard"
               v-show="step === onboards.length - 1"
               class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
             >
