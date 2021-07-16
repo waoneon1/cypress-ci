@@ -331,7 +331,7 @@ export default class Dashboard extends Vue {
 
   async EmployeeCounter() {
     // Get Employee filter by ORG and BU
-    let allEmployee = [];
+    let allEmployee:EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
@@ -351,17 +351,13 @@ export default class Dashboard extends Vue {
   }
 
   async init() {
-    if (this.selected == null) {
-      this.$router.push('/prepare/organization');
-    } else {
-      this.alert = alertModule.showAlert;
-      Promise.all([
-        this.decodeDataEmployee(),
-        this.EmployeeCounter(),
-      ]).then(() => {
-        this.loadCriteriaData();
-      });
-    }
+    this.alert = alertModule.showAlert;
+    Promise.all([
+      this.decodeDataEmployee(),
+      this.EmployeeCounter(),
+    ]).then(() => {
+      this.loadCriteriaData();
+    });
   }
 
   created() {

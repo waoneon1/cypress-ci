@@ -373,7 +373,7 @@ export default class Qna extends Vue {
   }
 
   async getEmployeeStore() {
-    let allEmployee = [];
+    let allEmployee:EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       // const allEmployee = employeeModule.dataEmployee.data;
@@ -444,12 +444,8 @@ export default class Qna extends Vue {
   }
 
   async loadEmployeeData(): Promise<void> {
-    const whitelistJson = localStorage.getItem('rrs_selected');
+    const whitelistJson = localStorage.getItem('rrs_whitelist');
     const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : [];
-
-    _.forEach(this.employeeFilter, (obj:EmployeeResponseData) => {
-      whitelist.push(obj.employee_email);
-    });
 
     await qnaModule.getQna({
       criteria_id: this.domain.id,
