@@ -9,7 +9,7 @@
           :to="`/prepare/whitelist?callback=${criteria}`"
         >
           <span class="font-bold text-sm">
-            Kembali ke Persiapan
+            Pilih Alterran
           </span>
         </nuxt-link>
       </div>
@@ -54,7 +54,7 @@
                 <div :style="`width:${ 10 }%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
               </div>
             </div>
-            <span class="text-xs inline-block text-primary">{{ 10 }}%</span>
+            <span class="text-xs inline-block text-primary">{{ 0 }}%</span>
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
