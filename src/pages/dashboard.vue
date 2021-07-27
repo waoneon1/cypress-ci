@@ -292,8 +292,8 @@ export default class Dashboard extends Vue {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       // TODO: change to construction quality process
-      // this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
-      this.criteria = allCriteria;
+      this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      // this.criteria = allCriteria;
       this.recommendation = this.setRecommendation();
     });
   }
