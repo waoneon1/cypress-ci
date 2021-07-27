@@ -291,9 +291,7 @@ export default class Dashboard extends Vue {
     await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
-      // TODO: change to construction quality process
       this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
-      // this.criteria = allCriteria;
       this.recommendation = this.setRecommendation();
     });
   }
