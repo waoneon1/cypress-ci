@@ -31,7 +31,9 @@
                 {{ item.title }}
               </h1>
               <span class="text-xs text-primary mb-6 max-w-xs">
+                <!-- eslint-disable vue/no-v-html -->
                 <span v-html="item.content"></span>
+                <!--eslint-enable-->
               </span>
             </div>
 
@@ -76,7 +78,7 @@
             </button>
             <!-- selesai -->
             <nuxt-link
-              to="/prepare/organization"
+              to="/dashboard"
               v-show="step === onboards.length - 1"
               class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-white hover:text-secondary text-white focus:outline-none inline-block"
             >

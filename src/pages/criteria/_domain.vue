@@ -1,6 +1,7 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
-    <div class="relative bg-white mx-auto max-w-md px-5 font-secondary">
+    <SkeletonQna v-show="skeletonQna" :criteria="this.domain.criteria_name.toLowerCase()" />
+    <div v-show="!skeletonQna" class="relative bg-white mx-auto max-w-md px-5 font-secondary">
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
         <nuxt-link to="/dashboard">
@@ -21,30 +22,32 @@
           <span v-else class="text-xs text-gray-400">?</span>
         </div>
       </div>
-      <Thankyou
-        subtitle="Deskripsi"
-        image="domain.svg"
-        :buttons="[
-          {
-            label: loading ? 'Loading...' : 'Mulai',
-            url: loading ? '' : '/qna/' + domain.slug,
-            theme: 'border-secondary bg-secondary text-white'
-          }
-        ]"
-      >
-        <h1
-          slot="title"
-          class="text-sm text-white mb-10 px-5"
-          v-html="domain.shortdec"
-        ></h1>
-      </Thankyou>
+
+      <div class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);">
+        <div class="flex flex-col justify-center items-center text-center px-5 w-full">
+          <img class="mb-10 w-2/3" src="~/static/img/svg/domain.svg" alt="description domain" />
+          <span class="text-xs text-gray-400 mb-5">Deskripsi</span>
+          <!-- eslint-disable vue/no-v-html -->
+          <h1 class="text-sm text-white mb-10 px-5" v-html="domain.shortdec"></h1>
+          <!--eslint-enable-->
+          <div class="flex space-x-4">
+            <div class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
+              @click="checkWhiteList()"
+            >
+              Mulai
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Help :title="domain.criteria_name" :show="help">
+        <!-- eslint-disable vue/no-v-html -->
         <div
           slot="help-detail"
           class="text-white text-sm"
           v-html="domain.description"
         ></div>
+        <!--eslint-enable-->
       </Help>
     </div>
   </div>
@@ -54,8 +57,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
+import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
+import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
 
 const _ = require('lodash');
 
@@ -91,9 +96,23 @@ export interface LoginData {
   user_organization_full_text: string;
   /* eslint-enable camelcase */
 }
+export interface EmployeeResponseData {
+  /* eslint-disable camelcase */
+  id: string;
+  employee_name: string;
+  employee_email: string;
+  employee_image_url: string;
+  employee_alt_id: string;
+  employee_organization: string;
+  employee_organization_full_text: string;
+  employee_business_unit: string;
+  created_at: string;
+  updated_at: string;
+  /* eslint-enable camelcase */
+}
 
 @Component({
-  components: { Thankyou, Help },
+  components: { Thankyou, Help, SkeletonQna },
 })
 export default class Criteria extends Vue {
   token: string | null = localStorage.getItem('token');
@@ -107,6 +126,10 @@ export default class Criteria extends Vue {
     slug: '',
   }
 
+  skeletonQna: boolean = false;
+
+  whitelist: string | null = localStorage.getItem('rrs_whitelist');
+
   help: boolean = false;
 
   employeeCounterData = { all: 0, org: 0 }
@@ -117,6 +140,19 @@ export default class Criteria extends Vue {
 
   goToQnaPage(): void {
     this.$router.push(`/qna/${this.domain.criteria_name.toLowerCase()}`);
+  }
+
+  checkWhiteList() {
+    if (this.whitelist) {
+      const whitelist = JSON.parse(this.whitelist);
+      if (whitelist.selected.length >= 9) {
+        this.goToQnaPage();
+      } else {
+        this.skeletonQna = true;
+      }
+    } else {
+      this.skeletonQna = true;
+    }
   }
 
   async setSelectedCriteria() {
@@ -132,20 +168,8 @@ export default class Criteria extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonP: LoginData = loginDataDefault;
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonP = JSON.parse(decode);
-    }
-    this.loginData = jsonP;
+    const jsonPayload: LoginData = loginDataDefault;
+    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {
@@ -159,7 +183,7 @@ export default class Criteria extends Vue {
 
   async employeeCount() {
     // Get Employee filter by ORG and BU
-    let allEmployee = [];
+    let allEmployee:EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
@@ -173,6 +197,7 @@ export default class Criteria extends Vue {
   }
 
   mounted() {
+    this.skeletonQna = false;
     this.init();
   }
 }

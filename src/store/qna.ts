@@ -77,23 +77,21 @@ export default class QnaModule extends VuexModule {
   @Mutation
   setSubmit(value: SubmitResponse): void {
     /* eslint no-param-reassign: "error" */
-    // const whitelistJson = localStorage.getItem('rrs_selected');
+    const whitelistJson = localStorage.getItem('rrs_whitelist');
 
     // count progress with filter
-    // const totalEmployeePercentage = value.data.percent_progress;
-    // const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    // const countEmployee = this.dataCounter;
-    // // count whitelist from check & from organization
-    // const countWhitelist = whitelistCheck + (countEmployee.org - 1);
+    const totalEmployeePercentage = value.data.percent_progress;
+    const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
+    const countEmployee = this.dataCounter;
 
-    // const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-    // const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-    // const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
+    // count whitelist from check & from organization
+    const countWhitelist = whitelistCheck;
 
-    // value.data.percent_progress_filter = percentageForUser;
+    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+    const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
+    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
-    // note: this one hardcode suggest by Allan 23/06/2021 to get percentage returned by endpoint
-    value.data.percent_progress_filter = value.data.percent_progress;
+    value.data.percent_progress_filter = percentageForUser;
     this.submitResponse = value;
   }
 

@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              item.percent_progress <= 100 ? goToQnaPage(item) : null
+              item.percent_progress_filter <= 100 || whitelist === null ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,9 +61,9 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress >= 100
-                      ? ''
-                      : 'hover:bg-blue-100'
+                    item.percent_progress_filter < 100 || whitelist === null
+                      ? 'hover:bg-blue-100'
+                      : ''
                   }`
                 "
               >
@@ -82,19 +82,20 @@
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
                           `width:${roundedNumber(
-                            item.percent_progress
+                            item.percent_progress_filter
                           )}%`
                         "
                       ></div>
                     </div>
                   </div>
+                  <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="item.percent_progress < 100"
+                    v-if="item.percent_progress_filter < 100 || whitelist === null"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress === 0
+                      item.percent_progress_filter === 0 || whitelist === null
                         ? 0
-                        : roundedNumber(item.percent_progress)
+                        : roundedNumber(item.percent_progress_filter)
                     }}%</span
                   >
                   <div
@@ -183,6 +184,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
+import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
 
 const _ = require('lodash');
@@ -242,7 +244,7 @@ export default class Dashboard extends Vue {
 
   alert: boolean = false;
 
-  selected: string | null = localStorage.getItem('rrs_selected');
+  whitelist: string | null = localStorage.getItem('rrs_whitelist');
 
   token: string | null = localStorage.getItem('token');
 
@@ -303,7 +305,7 @@ export default class Dashboard extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -313,25 +315,12 @@ export default class Dashboard extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-
-    this.loginData = jsonPayload;
+    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async EmployeeCounter() {
     // Get Employee filter by ORG and BU
-    let allEmployee = [];
+    let allEmployee:EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
@@ -351,17 +340,13 @@ export default class Dashboard extends Vue {
   }
 
   async init() {
-    if (this.selected == null) {
-      this.$router.push('/prepare/organization');
-    } else {
-      this.alert = alertModule.showAlert;
-      Promise.all([
-        this.decodeDataEmployee(),
-        this.EmployeeCounter(),
-      ]).then(() => {
-        this.loadCriteriaData();
-      });
-    }
+    this.alert = alertModule.showAlert;
+    Promise.all([
+      this.decodeDataEmployee(),
+      this.EmployeeCounter(),
+    ]).then(() => {
+      this.loadCriteriaData();
+    });
   }
 
   created() {

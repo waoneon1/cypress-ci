@@ -48,7 +48,7 @@ export default class CriteriaModule extends VuexModule {
   @Mutation
   setCriteria(value: CriteriaResponse): void {
     const intro = 'Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk';
-    const whitelistJson = localStorage.getItem('rrs_selected');
+    const whitelistJson = localStorage.getItem('rrs_whitelist');
     const dataCriteria = [
       {
         criteria_name: 'Design',
@@ -145,13 +145,14 @@ export default class CriteriaModule extends VuexModule {
       const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
       const countEmployee = this.dataCounter;
       // count whitelist from check & from organization
-      const countWhitelist = whitelistCheck + (countEmployee.org - 1);
+      const countWhitelist = whitelistCheck;
 
       const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
       const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
       const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
       obj.percent_progress_filter = percentageForUser;
+
       return obj;
     });
 
