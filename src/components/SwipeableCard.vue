@@ -16,7 +16,6 @@
       </div>
     </div>
     <div class="flex flex-col" style="height:70vh;">
-      <!-- TODO: Styling Loading -->
       <div class="w-11/12 flex-grow">
         <div  class="h-full w-full relative">
           <!-- one -->
