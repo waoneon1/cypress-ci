@@ -86,7 +86,6 @@ export default class QnaModule extends VuexModule {
     const countEmployee = this.dataCounter;
 
     // count whitelist from check & from organization
-    // const countWhitelist = whitelistCheck + (countEmployee.org - 1);
     const countWhitelist = whitelistCheck;
 
     const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
@@ -94,8 +93,6 @@ export default class QnaModule extends VuexModule {
     const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
     value.data.percent_progress_filter = percentageForUser;
-    // note: this one hardcode suggest by Allan 23/06/2021 to get percentage returned by endpoint
-    // value.data.percent_progress_filter = value.data.percent_progress;
     this.submitResponse = value;
   }
 

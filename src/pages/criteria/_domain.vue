@@ -27,7 +27,9 @@
         <div class="flex flex-col justify-center items-center text-center px-5 w-full">
           <img class="mb-10 w-2/3" src="~/static/img/svg/domain.svg" alt="description domain" />
           <span class="text-xs text-gray-400 mb-5">Deskripsi</span>
+          <!-- eslint-disable vue/no-v-html -->
           <h1 class="text-sm text-white mb-10 px-5" v-html="domain.shortdec"></h1>
+          <!--eslint-enable-->
           <div class="flex space-x-4">
             <div class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
               @click="checkWhiteList()"
@@ -39,11 +41,13 @@
       </div>
 
       <Help :title="domain.criteria_name" :show="help">
+        <!-- eslint-disable vue/no-v-html -->
         <div
           slot="help-detail"
           class="text-white text-sm"
           v-html="domain.description"
         ></div>
+        <!--eslint-enable-->
       </Help>
     </div>
   </div>
