@@ -31,7 +31,9 @@
                 {{ item.title }}
               </h1>
               <span class="text-xs text-primary mb-6 max-w-xs">
+                <!-- eslint-disable vue/no-v-html -->
                 <span v-html="item.content"></span>
+                <!--eslint-enable-->
               </span>
             </div>
 

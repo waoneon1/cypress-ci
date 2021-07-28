@@ -184,6 +184,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
+import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
 
 const _ = require('lodash');
@@ -304,7 +305,7 @@ export default class Dashboard extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -314,20 +315,7 @@ export default class Dashboard extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-
-    this.loginData = jsonPayload;
+    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async EmployeeCounter() {
