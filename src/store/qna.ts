@@ -82,7 +82,6 @@ export default class QnaModule extends VuexModule {
     // count progress with filter
     const totalEmployeePercentage = value.data.percent_progress;
     const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    // const countEmployee = this.dataCounter;
     const countEmployee = this.dataCounter;
 
     // count whitelist from check & from organization
