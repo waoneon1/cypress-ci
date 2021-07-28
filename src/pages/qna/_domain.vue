@@ -430,6 +430,8 @@ export default class Qna extends Vue {
       // load employee data
       this.loadEmployeeData().then(() => { this.loading = false; });
 
+      // set employee counter
+      qnaModule.setCounter(this.employeeCounterData);
       // set initial progress
       qnaModule.setSubmit({
         response_code: '',

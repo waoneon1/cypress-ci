@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              item.percent_progress <= 100 ? goToQnaPage(item) : null
+              item.percent_progress_filter <= 100 || whitelist === null ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,9 +61,9 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress >= 100
-                      ? ''
-                      : 'hover:bg-blue-100'
+                    item.percent_progress_filter < 100 || whitelist === null
+                      ? 'hover:bg-blue-100'
+                      : ''
                   }`
                 "
               >
@@ -82,19 +82,20 @@
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
                           `width:${roundedNumber(
-                            item.percent_progress
+                            item.percent_progress_filter
                           )}%`
                         "
                       ></div>
                     </div>
                   </div>
+                  <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="item.percent_progress < 100"
+                    v-if="item.percent_progress_filter < 100 || whitelist === null"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress === 0
+                      item.percent_progress_filter === 0 || whitelist === null
                         ? 0
-                        : roundedNumber(item.percent_progress)
+                        : roundedNumber(item.percent_progress_filter)
                     }}%</span
                   >
                   <div
@@ -243,7 +244,7 @@ export default class Dashboard extends Vue {
 
   alert: boolean = false;
 
-  selected: string | null = localStorage.getItem('rrs_selected');
+  whitelist: string | null = localStorage.getItem('rrs_whitelist');
 
   token: string | null = localStorage.getItem('token');
 
