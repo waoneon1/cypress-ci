@@ -171,9 +171,9 @@ import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
+import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
-import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -410,7 +410,7 @@ export default class Qna extends Vue {
   }
 
   decodeDataEmployee(): LoginData {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -420,7 +420,7 @@ export default class Qna extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-    return this.token ? jwt_decode(this.token) : jsonPayload;
+    return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {

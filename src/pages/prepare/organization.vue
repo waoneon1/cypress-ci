@@ -116,7 +116,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
-import jwt_decode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
 export interface EmployeeResponseData {
   /* eslint-disable camelcase */
@@ -199,7 +199,7 @@ export default class PrepareOrganization extends Vue {
   }
 
   decodeDataEmployee(): LoginData {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -209,7 +209,7 @@ export default class PrepareOrganization extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-    return this.token ? jwt_decode(this.token) : jsonPayload;
+    return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   mounted() {

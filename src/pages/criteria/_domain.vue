@@ -57,10 +57,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
+import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
-import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -168,8 +168,8 @@ export default class Criteria extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonPayload: LoginData = loginDataDefault;
-    this.loginData = this.token ? jwt_decode(this.token) : jsonPayload;
+    const jsonPayload: LoginData = loginDataDefault;
+    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {

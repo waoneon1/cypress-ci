@@ -135,7 +135,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import jwt_decode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
 export interface LoginData {
   /* eslint-disable camelcase */
@@ -166,7 +166,7 @@ export default class Profile extends Vue {
   };
 
   decodeDataEmployee() {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -176,7 +176,7 @@ export default class Profile extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-    this.data = this.token ? jwt_decode(this.token) : jsonPayload;
+    this.data = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   mounted() {

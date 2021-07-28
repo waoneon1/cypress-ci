@@ -184,8 +184,8 @@ import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
+import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
-import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -292,7 +292,7 @@ export default class Dashboard extends Vue {
     await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
-      //this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      // this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
       this.criteria = allCriteria;
       this.recommendation = this.setRecommendation();
     });
@@ -306,7 +306,7 @@ export default class Dashboard extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -316,7 +316,7 @@ export default class Dashboard extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-    this.loginData = this.token ? jwt_decode(this.token) : jsonPayload;
+    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async EmployeeCounter() {
