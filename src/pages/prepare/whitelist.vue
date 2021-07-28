@@ -90,6 +90,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 import Help from '~/components/utilities/HelpSwipe.vue';
+import jwtDecode from 'jwt-decode';
 
 export interface LoginData {
   /* eslint-disable camelcase */
@@ -161,27 +162,14 @@ export default class Whitelist extends Vue {
       user_organization_full_text: 'nodata',
     };
 
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-    return jsonPayload;
+    return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {
     // Get Employee All
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      // TODO:Remove login user data
       const allEmployee:EmployeeResponseData[] = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);
-      // const allEmployee = employeeModule.dataEmployee.data;
       this.employee = allEmployee;
     });
   }
