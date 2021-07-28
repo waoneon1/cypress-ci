@@ -116,6 +116,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
+import jwt_decode from "jwt-decode";
 
 export interface EmployeeResponseData {
   /* eslint-disable camelcase */
@@ -208,19 +209,7 @@ export default class PrepareOrganization extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-    return jsonPayload;
+    return this.token ? jwt_decode(this.token) : jsonPayload;
   }
 
   mounted() {

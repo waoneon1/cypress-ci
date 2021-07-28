@@ -171,9 +171,9 @@ import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule } from '@/store/qna';
 import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
-
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
+import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -226,6 +226,18 @@ export interface EmployeeResponseData {
   employee_business_unit: string;
   created_at: string;
   updated_at: string;
+  /* eslint-enable camelcase */
+}
+export interface LoginData {
+  /* eslint-disable camelcase */
+  exp: number;
+  user_business_unit: string;
+  user_email: string;
+  user_id: string;
+  user_name: string;
+  user_oauth_id: string;
+  user_organization: string;
+  user_organization_full_text: string;
   /* eslint-enable camelcase */
 }
 
@@ -376,7 +388,6 @@ export default class Qna extends Vue {
     let allEmployee:EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
-      // const allEmployee = employeeModule.dataEmployee.data;
       const org = this.decodeDataEmployee().user_organization;
       allEmployee = employeeModule.dataEmployee.data;
       employeeFiltered = _.filter(
@@ -398,8 +409,8 @@ export default class Qna extends Vue {
     });
   }
 
-  decodeDataEmployee() {
-    let jsonPayload = {
+  decodeDataEmployee(): LoginData {
+    let jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
@@ -409,15 +420,7 @@ export default class Qna extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
-      jsonPayload = JSON.parse(decode);
-    }
-
-    return jsonPayload;
+    return this.token ? jwt_decode(this.token) : jsonPayload;
   }
 
   async init() {

@@ -184,6 +184,7 @@ import { criteriaModule } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import Alert from '~/components/utilities/Alert.vue';
+import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -290,7 +291,8 @@ export default class Dashboard extends Vue {
     await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
-      this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      //this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      this.criteria = allCriteria;
       this.recommendation = this.setRecommendation();
     });
   }
@@ -313,20 +315,7 @@ export default class Dashboard extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonPayload = JSON.parse(decode);
-    }
-
-    this.loginData = jsonPayload;
+    this.loginData = this.token ? jwt_decode(this.token) : jsonPayload;
   }
 
   async EmployeeCounter() {

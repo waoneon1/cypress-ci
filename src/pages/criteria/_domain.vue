@@ -56,6 +56,7 @@ import { employeeModule } from '@/store/employee';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
+import jwt_decode from "jwt-decode";
 
 const _ = require('lodash');
 
@@ -163,20 +164,8 @@ export default class Criteria extends Vue {
   }
 
   decodeDataEmployee() {
-    let jsonP: LoginData = loginDataDefault;
-
-    if (this.token) {
-      const base64Url = this.token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decode = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-          .join(''),
-      );
-      jsonP = JSON.parse(decode);
-    }
-    this.loginData = jsonP;
+    let jsonPayload: LoginData = loginDataDefault;
+    this.loginData = this.token ? jwt_decode(this.token) : jsonPayload;
   }
 
   async init() {
