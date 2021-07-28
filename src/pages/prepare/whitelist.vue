@@ -88,9 +88,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
+import jwtDecode from 'jwt-decode';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 import Help from '~/components/utilities/HelpSwipe.vue';
-import jwtDecode from 'jwt-decode';
 
 export interface LoginData {
   /* eslint-disable camelcase */
@@ -151,7 +151,7 @@ export default class Whitelist extends Vue {
   ];
 
   decodeDataEmployee(): LoginData {
-    let jsonPayload: LoginData = {
+    const jsonPayload: LoginData = {
       exp: 1,
       user_business_unit: 'nodata',
       user_email: 'nodata',
