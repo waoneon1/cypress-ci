@@ -8,28 +8,26 @@ import {
 import axios from 'axios';
 import Vuex from 'vuex';
 import Vue from 'vue';
-
 export interface EmployeeResponseData {
-    /* eslint-disable camelcase */
-    id: string;
-    employee_name: string;
-    employee_email: string;
-    employee_image_url: string;
-    employee_alt_id: string;
-    employee_organization: string;
-    employee_organization_full_text: string;
-    employee_business_unit: string;
-    created_at: string;
-    updated_at: string;
-    /* eslint-enable camelcase */
-  }
-
+  /* eslint-disable camelcase */
+  id: string;
+  employee_name: string;
+  employee_email: string;
+  employee_image_url: string;
+  employee_alt_id: string;
+  employee_organization: string;
+  employee_organization_full_text: string;
+  employee_business_unit: string;
+  created_at: string;
+  updated_at: string;
+  /* eslint-enable camelcase */
+}
 export interface EmployeeResponse {
-    /* eslint-disable-next-line camelcase */
-    response_code: string;
-    message: string;
-    data: EmployeeResponseData[];
-  }
+  /* eslint-disable-next-line camelcase */
+  response_code: string;
+  message: string;
+  data: EmployeeResponseData[];
+}
 
 const url: string = process.env.NUXT_ENV_RRS_API_URL!;
 @Module({ namespaced: true, name: 'employee' })

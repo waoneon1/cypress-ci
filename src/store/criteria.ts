@@ -16,7 +16,7 @@ export interface CriteriaResponseData {
   id: string;
   criteria_name: string;
   percent_progress: number;
-  percent_progress_filter?: number;
+  percent_progress_filter: number;
   slug?: string;
   description?: string;
   shortdec?: string;

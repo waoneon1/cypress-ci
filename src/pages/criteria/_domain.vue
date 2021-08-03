@@ -55,12 +55,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { criteriaModule } from '@/store/criteria';
-import { employeeModule } from '@/store/employee';
+import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
+import { employeeModule, EmployeeResponseData } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
+import { LoginData } from '~/types/LoginData'
 
 const _ = require('lodash');
 
@@ -74,42 +75,6 @@ const loginDataDefault = {
   user_organization: 'nodata',
   user_organization_full_text: 'nodata',
 };
-export interface CriteriaResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  criteria_name: string;
-  percent_progress: number;
-  slug: string;
-  description: string;
-  shortdec: string;
-  /* eslint-enable camelcase */
-}
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
 
 @Component({
   components: { Thankyou, Help, SkeletonQna },
@@ -123,8 +88,10 @@ export default class Criteria extends Vue {
     shortdec: 'Loading ...',
     description: 'Loading ...',
     percent_progress: 0,
+    percent_progress_filter: 0,
     slug: '',
   }
+  
 
   skeletonQna: boolean = false;
 

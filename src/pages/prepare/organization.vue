@@ -115,43 +115,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { employeeModule } from '@/store/employee';
+import { employeeModule, EmployeeResponseData } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
-
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
-
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
-
-export interface EmployeeResponse {
-  /* eslint-disable-next-line camelcase */
-  response_code: string;
-  message: string;
-  data: EmployeeResponseData[];
-}
+import { LoginData } from '~/types/LoginData'
 
 const _ = require('lodash');
 

@@ -181,60 +181,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { criteriaModule } from '@/store/criteria';
-import { employeeModule } from '@/store/employee';
+import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
+import { employeeModule, EmployeeResponseData } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
+import { LoginData } from '~/types/LoginData'
 
 const _ = require('lodash');
-
-export interface CriteriaResponseData {
-  /* eslint-disable camelcase */
-  id?: string;
-  criteria_name: string;
-  percent_progress: number;
-  percent_progress_filter?: number;
-  /* eslint-enable camelcase */
-}
-export interface CriteriaResponse {
-  /* eslint-disable-next-line camelcase */
-  response_code: string;
-  message: string;
-  data: CriteriaResponseData[];
-}
-export interface SubmitResponseData {
-  /* eslint-disable camelcase */
-  count_submitted: number;
-  percent_progress: number;
-  /* eslint-enable camelcase */
-}
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
 
 @Component({
   components: { Alert },
@@ -282,7 +236,7 @@ export default class Dashboard extends Vue {
     const criteria = _.clone(this.criteria);
     return _.minBy(
       criteria,
-      (object: SubmitResponseData) => object.percent_progress,
+      object => object.percent_progress,
     );
   }
 
@@ -292,7 +246,10 @@ export default class Dashboard extends Vue {
     await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
-      this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      // this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      // TODO: Remove this
+      this.criteria = allCriteria;
+        console.log(this.setRecommendation(), 'object.percent_progress')
       this.recommendation = this.setRecommendation();
     });
   }
