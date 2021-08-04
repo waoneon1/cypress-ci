@@ -6,6 +6,7 @@
       || help
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
+      v-if="swipe"
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
@@ -163,6 +164,15 @@
       <!-- Help -->
       <Help :title="domain.criteria_name" :show="help" :qnaHelp="true"></Help>
     </div>
+    <div v-else>
+      <!-- Content: Criteria List -->
+      <div class="relative" v-if="loading">
+        loading . . .
+      </div>
+      <div class="relative" v-else>
+        <SwipeableCard :cards="getUniqueEmployees()"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -170,17 +180,21 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { qnaModule, QnaResponse, QnaResponseData } from '@/store/qna';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
-import { employeeModule, EmployeeResponseData } from '@/store/employee';
+import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
+
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
+import SwipeableCard from '~/components/SwipeableCard.vue';
+
 import { LoginData } from '~/types/LoginData'
 import { QnaSubmit } from '~/types/QnaSubmit'
+import { EmployeeResponseData } from '~/types/EmployeeResponseData'
 
 const _ = require('lodash');
 
 @Component({
-  components: { Thankyou, Help },
+  components: { Thankyou, Help, SwipeableCard },
 })
 export default class Qna extends Vue {
   domain: CriteriaResponseData = {
@@ -192,6 +206,8 @@ export default class Qna extends Vue {
     percent_progress_filter: 0,
     slug: '',
   }
+
+  swipe: boolean = false
 
   token: string | null = localStorage.getItem('token');
 

@@ -182,11 +182,13 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
-import { employeeModule, EmployeeResponseData } from '@/store/employee';
+import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
+
 import { LoginData } from '~/types/LoginData'
+import { EmployeeResponseData } from '~/types/EmployeeResponseData'
 
 const _ = require('lodash');
 

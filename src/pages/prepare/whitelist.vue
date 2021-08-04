@@ -87,11 +87,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { employeeModule, EmployeeResponseData } from '@/store/employee';
+import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 import Help from '~/components/utilities/HelpSwipe.vue';
+
 import { LoginData } from '~/types/LoginData'
+import { EmployeeResponseData } from '~/types/EmployeeResponseData'
 
 const _ = require('lodash');
 

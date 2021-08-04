@@ -56,12 +56,14 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
-import { employeeModule, EmployeeResponseData } from '@/store/employee';
+import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
+
 import { LoginData } from '~/types/LoginData'
+import { EmployeeResponseData } from '~/types/EmployeeResponseData'
 
 const _ = require('lodash');
 
