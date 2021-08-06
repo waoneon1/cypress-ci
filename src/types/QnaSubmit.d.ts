@@ -7,4 +7,3 @@ export interface QnaSubmit {
     employee_email_y?: string;
     /* eslint-enable camelcase */
   }
-    

@@ -8,7 +8,8 @@ import {
 import axios from 'axios';
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+
 export interface EmployeeResponse {
   /* eslint-disable-next-line camelcase */
   response_code: string;

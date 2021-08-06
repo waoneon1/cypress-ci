@@ -62,8 +62,8 @@ import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
 
-import { LoginData } from '~/types/LoginData'
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
 const _ = require('lodash');
 
@@ -93,7 +93,6 @@ export default class Criteria extends Vue {
     percent_progress_filter: 0,
     slug: '',
   }
-  
 
   skeletonQna: boolean = false;
 

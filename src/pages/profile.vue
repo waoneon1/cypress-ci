@@ -136,7 +136,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import jwtDecode from 'jwt-decode';
-import { LoginData } from '~/types/LoginData'
+import { LoginData } from '~/types/LoginData';
 
 @Component
 export default class Profile extends Vue {

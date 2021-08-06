@@ -19,6 +19,12 @@ export interface QnaResponseData {
   employee_email_y: string;
   employee_image_url_x: string;
   employee_image_url_y: string;
+  employee_business_unit_x: string;
+  employee_business_unit_y: string;
+  employee_organization_full_text_x: string;
+  employee_organization_full_text_y: string;
+  employee_organization_x: string;
+  employee_organization_y: string;
   /* eslint-enable camelcase */
 }
 export interface QnaResponse {
@@ -77,21 +83,22 @@ export default class QnaModule extends VuexModule {
   @Mutation
   setSubmit(value: SubmitResponse): void {
     /* eslint no-param-reassign: "error" */
-    const whitelistJson = localStorage.getItem('rrs_whitelist');
+    // const whitelistJson = localStorage.getItem('rrs_whitelist');
 
-    // count progress with filter
-    const totalEmployeePercentage = value.data.percent_progress;
-    const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    const countEmployee = this.dataCounter;
+    // // count progress with filter
+    // const totalEmployeePercentage = value.data.percent_progress;
+    // const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
+    // const countEmployee = this.dataCounter;
 
-    // count whitelist from check & from organization
-    const countWhitelist = whitelistCheck;
+    // // count whitelist from check & from organization
+    // const countWhitelist = whitelistCheck;
 
-    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-    const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
+    // const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+    // const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
+    // const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
-    value.data.percent_progress_filter = percentageForUser;
+    // value.data.percent_progress_filter = percentageForUser;
+    value.data.percent_progress_filter = 0;
     this.submitResponse = value;
   }
 
@@ -102,6 +109,7 @@ export default class QnaModule extends VuexModule {
 
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
+    console.log('getQna', payload);
     const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.post(`${url}pair_data/get_next`, payload, {
@@ -119,7 +127,8 @@ export default class QnaModule extends VuexModule {
           data: [],
         });
       }
-    } catch {
+    } catch (e) {
+      // TODO : handdle when employee habis
       this.setQna({
         response_code: '401',
         message: 'unautorized',

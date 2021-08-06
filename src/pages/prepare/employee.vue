@@ -161,8 +161,8 @@ import { Vue, Component, Watch } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
-import { LoginData } from '~/types/LoginData'
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
 const _ = require('lodash');
 

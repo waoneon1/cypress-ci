@@ -1,12 +1,20 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
+    <div v-if="loadSwipableComponent">
+      <div class="relative">
+        <SwipeableCard
+          :domain="this.domain"
+          @swipableData="initSwipableData"
+        />
+      </div>
+    </div>
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
       || help
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
-      v-if="swipe"
+      v-else
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
@@ -61,12 +69,12 @@
             <div
               v-for="(item, i) in answersObject"
               :key="i"
-              @click="answerAdd(item.email)"
+              @click="answerAdd(item.employee_email)"
               class="relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
-                v-show="selectedAnswer.includes(item.email)"
+                v-show="selectedAnswer.includes(item.employee_email)"
               >
                 <svg class="fill-current text-success" width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
@@ -75,17 +83,17 @@
               <div
                 class="rounded-xl overflow-hidden cursor-pointer"
                 :class="
-                  selectedAnswer.includes(item.email)
+                  selectedAnswer.includes(item.employee_email)
                   ? `opacity-30 shadow-md hover:opacity-50`
                   : `shadow-lg`
                 "
               >
                 <div class="bg-gray-50 w-full overflow-hidden relative pulse" style="padding-bottom: 100%;">
-                  <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
-                  <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                  <v-lazy-image v-if="item.employee_image_url" :src="item.employee_image_url" src-placeholder="/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                  <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
                 </div>
                 <div class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden">
-                  <small class="text-primary autotrim">{{ item.name }}</small>
+                  <small class="text-primary autotrim">{{ item.employee_name }}</small>
                 </div>
               </div>
             </div>
@@ -164,21 +172,12 @@
       <!-- Help -->
       <Help :title="domain.criteria_name" :show="help" :qnaHelp="true"></Help>
     </div>
-    <div v-else>
-      <!-- Content: Criteria List -->
-      <div class="relative" v-if="loading">
-        loading . . .
-      </div>
-      <div class="relative" v-else>
-        <SwipeableCard :cards="getUniqueEmployees()"/>
-      </div>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { qnaModule, QnaResponse, QnaResponseData } from '@/store/qna';
+import { qnaModule, QnaResponse } from '@/store/qna';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
@@ -187,9 +186,10 @@ import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 
-import { LoginData } from '~/types/LoginData'
-import { QnaSubmit } from '~/types/QnaSubmit'
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
+import { LoginData } from '~/types/LoginData';
+import { QnaSubmit } from '~/types/QnaSubmit';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { AnswersObject } from '~/types/AnswersObject';
 
 const _ = require('lodash');
 
@@ -207,19 +207,15 @@ export default class Qna extends Vue {
     slug: '',
   }
 
-  swipe: boolean = false
-
   token: string | null = localStorage.getItem('token');
 
-  employees: QnaResponseData[] = [];
+  blacklist: string | null = localStorage.getItem('rrs_blacklist');
 
   employeeFilter: EmployeeResponseData[] = [];
 
   employeeCounterData = { all: 0, org: 0 }
 
   questions: string = '';
-
-  local: string | null = localStorage.getItem('rss_criteria');
 
   loading: boolean = true;
 
@@ -229,192 +225,64 @@ export default class Qna extends Vue {
 
   progressCounter: number = 0;
 
-  progressCheckpoint: number = 1;
-
-  // data answer
   selectedAnswer: string[] = [];
 
   allSelectedAnswer: string[][] = [];
 
   answers: string[] = [];
 
-  answersObject: { name?: string; email?: string; image?: string; }[] = [];
+  answersObject: AnswersObject[] = [];
 
   maxSelectedAnswer = 3;
 
   indenClass: string[] = ['', '-left-2', '-left-3.5'];
 
-  // pagination
   pages: number = 999;
 
   currentPages: number = 1;
 
   thankyouPage: boolean = false;
 
-  async getUniqueEmployees() {
-    // buat array unique employee
-    try {
-      this.employees.forEach((e) => {
-        // check employee x
-        if (!this.answers.includes(e.employee_email_x)) {
-          // add data
-          this.answers.push(e.employee_email_x);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_x,
-            email: e.employee_email_x,
-            image: e.employee_image_url_x,
-          });
-        }
-        // check employee y
-        if (!this.answers.includes(e.employee_email_y)) {
-          // add data
-          this.answers.push(e.employee_email_y);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_y,
-            email: e.employee_email_y,
-            image: e.employee_image_url_y,
-          });
-        }
-      });
-      await this.checkDataAnswer();
-    } catch (e) {
-      // error code
-    }
-  }
+  loadSwipableComponent: boolean = false;
 
-  async checkDataAnswer() {
-    // cek jika belum mendapatkan 9 unique employee
-    if (this.employees.length === 0) { this.thankyouPage = true; }
-    if (this.answers.length < 9 && this.employees.length >= 10) {
-      // get 3 data lagi sampai dapat 9 unique employee
-      await this.loadEmployeeData();
-    } else {
-      this.answers.splice(9);
-      this.answersObject.splice(9);
-    }
-  }
+  // move to swipeable card :
+  // async loadEmployeeData()
+  // async getUniqueEmployees()
+  // async checkDataAnswer()
 
-  selectedAnswerImage(email: string) {
-    const i = this.answersObject.filter(
-      (ao) => ao.email === email,
-    );
-    return i[0]?.image;
-  }
-
-  async nextPage(): Promise<void> {
+  /* PROCESS nextPage */
+  /* Result: qnaModule.submitResponse */
+  public async nextPage(): Promise<void> {
     this.loading = true;
     if (this.pages > this.currentPages) {
-      // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
+      // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadSwipableComponent()
       await this.submitEmployeeData();
-      // success : console.log(response.response_code === '0000')
+
       // reload data
       this.answers.splice(0);
       this.answersObject.splice(0);
-      await this.loadEmployeeData().then(() => { this.loading = false; });
-      // go to the next page
       this.allSelectedAnswer.push(this.selectedAnswer);
       this.selectedAnswer = [];
       this.currentPages += 1;
+
+      // go to the next page
+      this.loadSwipableComponent = true;
     } else {
       this.thankyouPage = true;
     }
   }
 
-  answerAdd(email: string): void {
-    const index = this.selectedAnswer.indexOf(email);
-    if (index === -1) {
-      if (this.selectedAnswer.length < this.maxSelectedAnswer) {
-        this.selectedAnswer.push(email);
-      }
-    } else {
-      this.selectedAnswer.splice(index, 1);
+  async submitEmployeeData(): Promise<QnaResponse | object> {
+    if (this.prepareSubmit().length) {
+      const data = {
+        payload: this.prepareSubmit(),
+        criteriaId: this.domain.id,
+        counter: this.employeeCounterData,
+      };
+      await qnaModule.submitQna(data);
+      return qnaModule.submitResponse;
     }
-  }
-
-  async setSelectedCriteria() {
-    await this.getEmployeeStore();
-    await this.getCriteriaStore();
-  }
-
-  async getEmployeeStore() {
-    let allEmployee:EmployeeResponseData[] = [];
-    let employeeFiltered = [];
-    await employeeModule.getEmployee().then(() => {
-      const org = this.decodeDataEmployee().user_organization;
-      allEmployee = employeeModule.dataEmployee.data;
-      employeeFiltered = _.filter(
-        employeeModule.dataEmployee.data,
-        (o:EmployeeResponseData) => o.employee_organization === org,
-      );
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
-      this.employeeFilter = allEmployee;
-      return true;
-    });
-  }
-
-  async getCriteriaStore() {
-    const criteria = this.$route.params.domain;
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
-      const allCriteria = criteriaModule.dataCriteria.data;
-      // set domain variable
-      this.domain = _.find(allCriteria, { slug: criteria });
-    });
-  }
-
-  decodeDataEmployee(): LoginData {
-    const jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-    return this.token ? jwtDecode(this.token) : jsonPayload;
-  }
-
-  async init() {
-    await this.setSelectedCriteria().then(() => {
-      this.allPageLoading = false;
-
-      // load employee data
-      this.loadEmployeeData().then(() => { this.loading = false; });
-
-      // set employee counter
-      qnaModule.setCounter(this.employeeCounterData);
-      // set initial progress
-      qnaModule.setSubmit({
-        response_code: '',
-        message: '',
-        data: {
-          count_submitted: 0,
-          percent_progress: this.domain.percent_progress,
-          percent_progress_filter: this.domain.percent_progress_filter,
-        },
-      });
-
-      // set initial checkpoint progress
-      this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 10);
-    });
-  }
-
-  async loadEmployeeData(): Promise<void> {
-    const whitelistJson = localStorage.getItem('rrs_whitelist');
-    const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : [];
-
-    await qnaModule.getQna({
-      criteria_id: this.domain.id,
-      limit: 10,
-      filter: {
-        emails: whitelist,
-      },
-    });
-    this.employees = qnaModule.dataQna.data;
-    this.getUniqueEmployees();
+    return {};
   }
 
   prepareSubmit(): QnaSubmit[] {
@@ -433,32 +301,139 @@ export default class Qna extends Vue {
     });
     return data;
   }
+  /* END PROCESS nextPage */
 
-  async submitEmployeeData(): Promise<QnaResponse | object> {
-    if (this.prepareSubmit().length) {
-      const data = {
-        payload: this.prepareSubmit(),
-        criteriaId: this.domain.id,
-        counter: this.employeeCounterData,
-      };
-      await qnaModule.submitQna(data);
-      return qnaModule.submitResponse;
+  /*
+  * GET CRITERIA DATA
+  * endpoint  : criteriaModule.getCriteria
+  * result    : this.domain
+  */
+  async setSelectedCriteria() {
+    // TODO: butuh remove get employee (kemungkinan g perlu ini buat persentage)
+    // TODO: Hardcoade employee counter data
+    console.log('setSelectedCriteria');
+    this.employeeCounterData = { all: 45, org: 45 };
+    // await this.getEmployeeStore();
+    await this.getCriteriaStore();
+  }
+
+  async getCriteriaStore() {
+    const criteria = this.$route.params.domain;
+    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
+    });
+  }
+  /* END GET CRITERIA DATA */
+
+  /*
+  * GET EMPLOYEE DATA
+  * endpoint  : employeeModule.getEmployee()
+  * result    : this.employeeCounterData => count all employee, this.employeeFilter => all employee data
+  * //TODO    : Still Need this method?
+  */
+  async getEmployeeStore() {
+    let allEmployee:EmployeeResponseData[] = [];
+    let employeeFiltered = [];
+    await employeeModule.getEmployee().then(() => {
+      const org = this.decodeDataEmployee().user_organization;
+      allEmployee = employeeModule.dataEmployee.data;
+      employeeFiltered = _.filter(
+        employeeModule.dataEmployee.data,
+        (o:EmployeeResponseData) => o.employee_organization === org,
+      );
+      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+      this.employeeFilter = allEmployee;
+      return true;
+    });
+  }
+
+  decodeDataEmployee(): LoginData {
+    const jsonPayload: LoginData = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+    return this.token ? jwtDecode(this.token) : jsonPayload;
+  }
+  /* END GET EMPLOYEE DATA */
+
+  /*
+  * UTILITIES
+  */
+  public answerAdd(email: string): void {
+    const index = this.selectedAnswer.indexOf(email);
+    if (index === -1) {
+      if (this.selectedAnswer.length < this.maxSelectedAnswer) {
+        this.selectedAnswer.push(email);
+      }
+    } else {
+      this.selectedAnswer.splice(index, 1);
     }
-    return {};
   }
 
-  mounted() {
-    this.init();
+  public selectedAnswerImage(email: string) {
+    const i = this.answersObject.filter(
+      (ao) => ao.employee_email === email,
+    );
+    return i[0]?.employee_image_url;
   }
 
-  criteriaProgressCount() {
+  public criteriaProgressCount() {
     return qnaModule.submitResponse.data.percent_progress_filter === 0
       ? _.round(this.domain.percent_progress_filter, 2)
       : _.round(qnaModule.submitResponse.data.percent_progress_filter, 2);
   }
+  /* END UTILITIES */
 
-  progressCheckpointFloor() {
-    this.progressCheckpoint = _.floor(this.progressCheckpoint + 10);
+  async init() {
+    await this.setSelectedCriteria().then(() => {
+      this.allPageLoading = false;
+      // set employee counter
+      qnaModule.setCounter(this.employeeCounterData);
+      // set initial progress
+      qnaModule.setSubmit({
+        response_code: '',
+        message: '',
+        data: {
+          count_submitted: 0,
+          percent_progress: this.domain.percent_progress,
+          percent_progress_filter: this.domain.percent_progress_filter,
+        },
+      });
+
+      // load employee data
+      // if whitelist store exist use that data instead
+      // else not load swipeable card component
+      this.loadSwipableComponent = true;
+    });
+  }
+
+  initSwipableData(payload) {
+    // set loading
+    this.loading = true;
+    this.allPageLoading = true;
+    // set data
+    this.answers = _.take(payload.employee, 9);
+    this.answersObject = _.take(payload.employeeObject, 9);
+    // replace blacklist data
+    localStorage.setItem('rrs_blacklist', JSON.stringify(payload.blacklist));
+    localStorage.setItem('rrs_whitelist', JSON.stringify(payload.whitelist));
+    // set loading = false and close swipable component
+    this.loading = false;
+    this.allPageLoading = false;
+    this.loadSwipableComponent = false;
+  }
+
+  mounted() {
+    console.log(this.loadSwipableComponent, 'run mounted');
+    this.init();
   }
 }
 </script>

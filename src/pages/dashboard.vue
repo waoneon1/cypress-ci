@@ -187,8 +187,8 @@ import { alertModule } from '@/store/alert';
 import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
 
-import { LoginData } from '~/types/LoginData'
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
 const _ = require('lodash');
 
@@ -238,7 +238,7 @@ export default class Dashboard extends Vue {
     const criteria = _.clone(this.criteria);
     return _.minBy(
       criteria,
-      object => object.percent_progress,
+      (object) => object.percent_progress,
     );
   }
 
@@ -251,7 +251,6 @@ export default class Dashboard extends Vue {
       // this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
       // TODO: Remove this
       this.criteria = allCriteria;
-        console.log(this.setRecommendation(), 'object.percent_progress')
       this.recommendation = this.setRecommendation();
     });
   }

@@ -87,70 +87,16 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { employeeModule } from '@/store/employee';
-import jwtDecode from 'jwt-decode';
-import SwipeableCard from '~/components/SwipeableCard.vue';
 import Help from '~/components/utilities/HelpSwipe.vue';
-
-import { LoginData } from '~/types/LoginData'
-import { EmployeeResponseData } from '~/types/EmployeeResponseData'
-
-const _ = require('lodash');
 
 @Component({
   components: {
-    SwipeableCard,
     Help,
   },
 })
 export default class Whitelist extends Vue {
   loading: boolean = true;
 
-  token = localStorage.getItem('token');
-
   help: boolean = false;
-
-  employee: EmployeeResponseData[] = [
-    {
-      id: '',
-      employee_name: '',
-      employee_email: '',
-      employee_image_url: '',
-      employee_alt_id: '',
-      employee_organization: '',
-      employee_organization_full_text: '',
-      employee_business_unit: '',
-      created_at: '',
-      updated_at: '',
-    },
-  ];
-
-  decodeDataEmployee(): LoginData {
-    const jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-
-    return this.token ? jwtDecode(this.token) : jsonPayload;
-  }
-
-  async init() {
-    // Get Employee All
-    await employeeModule.getEmployee().then(() => {
-      this.loading = false;
-      const allEmployee:EmployeeResponseData[] = _.reject(employeeModule.dataEmployee.data, ['employee_email', this.decodeDataEmployee().user_email]);
-      this.employee = allEmployee;
-    });
-  }
-
-  mounted() {
-    this.init();
-  }
 }
 </script>
