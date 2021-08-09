@@ -8,7 +8,7 @@
       <div class="px-5">
         <div class="flex justify-center relative py-5">
           <h1 class="text-primary text-sm capitalize">
-            Mempersiapkan Data Alterran
+            Apakah ada alterran lain yang bisa anda nilai ?
           </h1>
         </div>
       </div>
@@ -16,13 +16,6 @@
 
       <!-- Content: Answer -->
       <div class="px-5 pt-5">
-        <!-- Title -->
-        <div class="relative">
-          <p class="mb-5 text-sm">
-            Pilih alterran yang ingin kamu nilai di luar organisasi
-            <strong>{{ this.decodeDataEmployee().user_business_unit }}</strong>
-          </p>
-        </div>
         <!-- Search -->
         <div class="relative">
           <input
@@ -116,7 +109,7 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-5 bg-white"
         >
-          <div class="flex justify-end items-center">
+          <div class="flex justify-center items-center">
             <div class="inline-block flex">
               <button
                 class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
@@ -144,8 +137,11 @@
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span class="font-bold text-sm">
-                  Simpan & Lanjutkan
+                <span v-if="selected.length" class="font-bold text-sm">
+                  Pilih Alterran Ini Untuk dinilai ({{ selected.length }})
+                </span>
+                <span v-else class="font-bold text-sm">
+                  Saya Belum Bisa Menilai Alterran Lain
                 </span>
               </button>
             </div>
@@ -157,7 +153,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import {
+  Vue, Component, Watch, Emit,
+} from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
@@ -179,6 +177,10 @@ export default class PrepareEmployee extends Vue {
   employee: EmployeeResponseData[] = [];
 
   employeeSearch: EmployeeResponseData[] = [];
+
+  localStorageBlacklist = localStorage.getItem('rrs_blacklist')
+
+  localStorageWhitelist = localStorage.getItem('rrs_whitelist')
 
   toggleSelect(email: string): void {
     const index = this.selected.indexOf(email);
@@ -203,12 +205,13 @@ export default class PrepareEmployee extends Vue {
     return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
+  @Emit('closePrepareEmployee')
   save(): void {
-    const payload = {
-      selected: this.selected,
-    };
-    localStorage.setItem('rrs_selected', JSON.stringify(payload));
-    this.$router.push('/dashboard');
+    const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+    const selected = _.clone(this.selected);
+
+    const newWhitelist: string[] = [...whitelist, ...selected];
+    localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
   }
 
   @Watch('empSearch')
@@ -220,10 +223,16 @@ export default class PrepareEmployee extends Vue {
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      const org = this.decodeDataEmployee().user_organization;
+      // const org = this.decodeDataEmployee().user_organization;
+      let blacklist: string[] = [];
+      let whitelist: string[] = [];
+      blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+      whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+      const selectedTotal = [...blacklist, ...whitelist];
+
       const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
-        (o: EmployeeResponseData) => o.employee_organization !== org,
+        (o: EmployeeResponseData) => !selectedTotal.includes(o.employee_email),
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;

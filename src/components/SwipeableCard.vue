@@ -1,182 +1,187 @@
 <template>
-  <div
-    class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28"
-  >
-    <!-- Heading -->
-    <div class="flex justify-between relative py-5">
-      <div>
-        <!-- Added back button in here -->
-      </div>
-      <h1 class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
-      <div
-        class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
-        @click="help = !help"
-      >
-        <span v-if="help" class="text-xs text-gray-400">x</span>
-        <span v-else class="text-xs text-gray-400">?</span>
-      </div>
-    </div>
+  <div>
+    <PrepareEmployee v-if="moreWhitelist" @closePrepareEmployee="closePrepareEmployee"/>
+    <div v-else class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28">
+      <!-- Heading -->
 
-    <!-- Content: Criteria List -->
-
-    <h2 v-if="debug"> index : {{ index }} || iterasi swipeable : {{ iteration }} || selected : {{ this.selected.employee.length }}</h2>
-    <div class="relative" v-if="loading">
-      <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-    </div>
-    <div class="relative" v-else>
-      <!-- Alert -->
-      <div class="font-mulish fixed max-w-md left-0 right-0 m-auto z-50" v-show="alert">
-        <div class="flex justify-between px-6 py-4 items-center bg-blue-300">
-          <div :class="`flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`">
-            <img src="~/static/img/svg/exclamation.svg" alt="toast icon error"/>
-          </div>
-          <div class="flex-grow relative ml-5">
-            <h4 class="text-sm font-bold text-white">Sudah mencapai minimum Alterran</h4>
-            <p class="text-xs font-light text-white">Kamu sudah memilih Alterrans, kamu bisa masuk dimenu memilih alterrans.</p>
-          </div>
-          <div @click="alert = false" :class="`flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`">
-            <img src="~/static/img/svg/cross.svg" alt="toast icon close" />
-          </div>
+      <div class="flex justify-between relative py-5">
+        <div>
+          <!-- Added back button in here -->
+        </div>
+        <h1 class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
+        <div
+          class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
+          @click="help = !help"
+        >
+          <span v-if="help" class="text-xs text-gray-400">x</span>
+          <span v-else class="text-xs text-gray-400">?</span>
         </div>
       </div>
-      <div
-        class="flex flex-col"
-        :class="loadingDelay ? 'overflow-hidden' : ''"
-        style="height:70vh;"
-      >
-        <div class="w-11/12 flex-grow">
-          <div  class="h-full w-full relative">
-            <!-- one -->
-            <div
-              v-if="current"
-              style="z-index: 3"
-              :class="{ 'transition': isVisible }">
-              <Vue2InteractDraggable
-                v-if="isVisible"
-                :interact-out-of-sight-x-coordinate="500"
-                :interact-max-rotation="15"
-                :interact-x-threshold="200"
-                :interact-y-threshold="200"
-                :interact-event-bus-events="interactEventBus"
-                interact-block-drag-down
-                @draggedRight="emitAndNext('match')"
-                @draggedLeft="emitAndNext('reject')"
-                class="absolute mt-4 ml-4 w-full h-full rounded-lg border cursor-pointer shadow-lg  bg-white" style="z-index: 3">
-                <div class="h-full">
-                  <img class="w-full" :src="current.employee_image_url" :alt="current.employee_name">
-                  <div class="p-3">
-                    <h2 class="text-sm text-primary font-bold">{{current.employee_name}}</h2>
-                    <span class="text-xs block pt-1">Bussines Unit: {{current.employee_business_unit}}</span>
-                    <span class="text-xs block pt-1">Organisasi: {{current.employee_organization}}</span>
+
+      <!-- Content: Criteria List -->
+      <div v-if="debug" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
+        <p> index : {{ index }} | iswipeable : {{ iteration }} | selected : {{ selected.employee.length }} | iteration : {{ currentPages }}</p>
+        <p> counterSelected : {{ counterSelected }} | total swipe : {{ selected.whitelist.length + selected.blacklist.length }}</p>
+        <p> blacklist : {{ selected.blacklist.length }} | whitelist : {{ selected.whitelist.length }} | selected : {{ selected.employee.length }}</p>
+      </div>
+      <div class="relative" v-if="loading">
+        <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <div class="relative" v-else>
+        <!-- Alert -->
+        <div class="font-mulish fixed max-w-md left-0 right-0 m-auto z-50" v-show="alert">
+          <div class="flex justify-between px-6 py-4 items-center bg-blue-300">
+            <div :class="`flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`">
+              <img src="~/static/img/svg/exclamation.svg" alt="toast icon error"/>
+            </div>
+            <div class="flex-grow relative ml-5">
+              <h4 class="text-sm font-bold text-white">Sudah mencapai minimum Alterran</h4>
+              <p class="text-xs font-light text-white">Kamu sudah memilih Alterrans, kamu bisa masuk dimenu memilih alterrans.</p>
+            </div>
+            <div @click="alert = false" :class="`flex items-center justify-center flex-none rounded-full w-5 h-5 font-bold cursor-pointer`">
+              <img src="~/static/img/svg/cross.svg" alt="toast icon close" />
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col"
+          :class="loadingDelay ? 'overflow-hidden' : ''"
+          style="height:70vh;"
+        >
+          <div class="w-11/12 flex-grow">
+            <div  class="h-full w-full relative">
+              <!-- one -->
+              <div
+                v-if="current"
+                style="z-index: 3"
+                :class="{ 'transition': isVisible }">
+                <Vue2InteractDraggable
+                  v-if="isVisible"
+                  :interact-out-of-sight-x-coordinate="500"
+                  :interact-max-rotation="15"
+                  :interact-x-threshold="200"
+                  :interact-y-threshold="200"
+                  :interact-event-bus-events="interactEventBus"
+                  interact-block-drag-down
+                  @draggedRight="emitAndNext('match')"
+                  @draggedLeft="emitAndNext('reject')"
+                  class="absolute mt-4 ml-4 w-full h-full rounded-lg border cursor-pointer shadow-lg  bg-white" style="z-index: 3">
+                  <div class="h-full">
+                    <img class="w-full" :src="current.employee_image_url" :alt="current.employee_name">
+                    <div class="p-3">
+                      <h2 class="text-sm text-primary font-bold">{{current.employee_name}}</h2>
+                      <span class="text-xs block pt-1">Bussines Unit: {{current.employee_business_unit}}</span>
+                      <span class="text-xs block pt-1">Organisasi: {{current.employee_organization}}</span>
+                    </div>
                   </div>
-                </div>
-              </Vue2InteractDraggable>
-            </div>
-            <!-- two -->
-            <div
-              v-if="next"
-              style="z-index: 2"
-              class="absolute mt-2 ml-2 w-full h-full rounded-lg border cursor-pointer shadow-lg bg-white">
-                <div class="h-full">
-                  <img :src="next.employee_image_url" :alt="next.employee_name">
-                  <div class="p-3">
-                    <h2 class="text-sm text-primary font-bold">{{next.employee_name}}</h2>
-                    <span class="text-xs block pt-1">Bussines Unit: {{next.employee_business_unit}}</span>
-                    <span class="text-xs block pt-1">Organisasi: {{next.employee_organization}}</span>
+                </Vue2InteractDraggable>
+              </div>
+              <!-- two -->
+              <div
+                v-if="next"
+                style="z-index: 2"
+                class="absolute mt-2 ml-2 w-full h-full rounded-lg border cursor-pointer shadow-lg bg-white">
+                  <div class="h-full">
+                    <img :src="next.employee_image_url" :alt="next.employee_name">
+                    <div class="p-3">
+                      <h2 class="text-sm text-primary font-bold">{{next.employee_name}}</h2>
+                      <span class="text-xs block pt-1">Bussines Unit: {{next.employee_business_unit}}</span>
+                      <span class="text-xs block pt-1">Organisasi: {{next.employee_organization}}</span>
+                    </div>
                   </div>
-                </div>
-            </div>
-            <!-- three -->
-            <div
-              v-if="index + 2 < answersObject.length"
-              style="z-index: 1;background-color: #f0f0f2;"
-              class="absolute w-full h-full rounded-lg border cursor-pointer shadow-lg bg-white">
-                <img :src="next2.employee_image_url" :alt="next2.employee_name">
-                <div class="p-3">
-                  <h2 class="text-sm text-primary font-bold">{{next2.employee_name}}</h2>
-                  <span class="text-xs block pt-1">Bussines Unit: {{next2.employee_business_unit}}</span>
-                  <span class="text-xs block pt-1">Organisasi: {{next2.employee_organization}}</span>
-                </div>
+              </div>
+              <!-- three -->
+              <div
+                v-if="index + 2 < answersObject.length"
+                style="z-index: 1;background-color: #f0f0f2;"
+                class="absolute w-full h-full rounded-lg border cursor-pointer shadow-lg bg-white">
+                  <img :src="next2.employee_image_url" :alt="next2.employee_name">
+                  <div class="p-3">
+                    <h2 class="text-sm text-primary font-bold">{{next2.employee_name}}</h2>
+                    <span class="text-xs block pt-1">Bussines Unit: {{next2.employee_business_unit}}</span>
+                    <span class="text-xs block pt-1">Organisasi: {{next2.employee_organization}}</span>
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex-none h-10">
-          <div class="flex justify-around mt-10">
-            <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
-              :class="btnDisabled ? 'bg-gray-400' : 'bg-danger'"
-              :disabled="btnDisabled"
-              @click="reject()">
-              <img class="w-9 h-9" src="~/static/img/svg/cross.svg" alt="toast icon close" />
-            </button>
-            <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
-              :class="btnDisabled ? 'bg-gray-400' : 'bg-success'"
-              :disabled="btnDisabled"
-              @click="match()">
-              <img class="w-9 h-9" src="~/static/img/svg/check.svg" alt="toast icon success "/>
-            </button>
+          <div class="flex-none h-10">
+            <div class="flex justify-around mt-10">
+              <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+                :class="btnDisabled ? 'bg-gray-400' : 'bg-danger'"
+                :disabled="btnDisabled"
+                @click="reject()">
+                <img class="w-9 h-9" src="~/static/img/svg/cross.svg" alt="toast icon close" />
+              </button>
+              <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+                :class="btnDisabled ? 'bg-gray-400' : 'bg-success'"
+                :disabled="btnDisabled"
+                @click="match()">
+                <img class="w-9 h-9" src="~/static/img/svg/check.svg" alt="toast icon success "/>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- footer -->
-    <div class="fixed bottom-0 left-0 right-0 z-10">
-      <!-- navigation circle -->
-      <div
-        class="mx-auto max-w-md bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
-      ></div>
-      <div class="mx-auto max-w-md bg-white px-5 pb-5 rounded-t-xl shadow-lg">
-        <ul class="flex justify-between px-10">
-          <li class="cursor-pointer hover:text-secondary">
-            <nuxt-link to="/dashboard">
-              <svg
-                class="fill-current"
-                width="24"
-                height="21"
-                viewBox="0 0 24 21"
-              >
-                <path
-                  d="M9.6 20.4V13.2H14.4V20.4H20.4V10.8H24L12 0L0 10.8H3.6V20.4H9.6Z"
-                />
-              </svg>
-            </nuxt-link>
-          </li>
-          <li class="cursor-pointer hover:text-secondary text-gray-400">
-            <nuxt-link to="/faq">
-              <svg
-                class="fill-current"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z"
-                />
-              </svg>
-            </nuxt-link>
-          </li>
-          <li class="cursor-pointer hover:text-secondary text-gray-400">
-            <nuxt-link to="/profile">
-              <svg
-                class="fill-current"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM13.61 6.34C14.68 6.34 15.54 7.2 15.54 8.27C15.54 9.34 14.68 10.2 13.61 10.2C12.54 10.2 11.68 9.34 11.68 8.27C11.67 7.2 12.54 6.34 13.61 6.34ZM7.61 4.76C8.91 4.76 9.97 5.82 9.97 7.12C9.97 8.42 8.91 9.48 7.61 9.48C6.31 9.48 5.25 8.42 5.25 7.12C5.25 5.81 6.3 4.76 7.61 4.76ZM7.61 13.89V17.64C5.21 16.89 3.31 15.04 2.47 12.68C3.52 11.56 6.14 10.99 7.61 10.99C8.14 10.99 8.81 11.07 9.51 11.21C7.87 12.08 7.61 13.23 7.61 13.89ZM10 18C9.73 18 9.47 17.99 9.21 17.96V13.89C9.21 12.47 12.15 11.76 13.61 11.76C14.68 11.76 16.53 12.15 17.45 12.91C16.28 15.88 13.39 18 10 18Z"
-                />
-              </svg>
-            </nuxt-link>
-          </li>
-        </ul>
+      <!-- footer -->
+      <div class="fixed bottom-0 left-0 right-0 z-10">
+        <!-- navigation circle -->
+        <div
+          class="mx-auto max-w-md bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
+        ></div>
+        <div class="mx-auto max-w-md bg-white px-5 pb-5 rounded-t-xl shadow-lg">
+          <ul class="flex justify-between px-10">
+            <li class="cursor-pointer hover:text-secondary">
+              <nuxt-link to="/dashboard">
+                <svg
+                  class="fill-current"
+                  width="24"
+                  height="21"
+                  viewBox="0 0 24 21"
+                >
+                  <path
+                    d="M9.6 20.4V13.2H14.4V20.4H20.4V10.8H24L12 0L0 10.8H3.6V20.4H9.6Z"
+                  />
+                </svg>
+              </nuxt-link>
+            </li>
+            <li class="cursor-pointer hover:text-secondary text-gray-400">
+              <nuxt-link to="/faq">
+                <svg
+                  class="fill-current"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 17H9V15H11V17ZM13.07 9.25L12.17 10.17C11.45 10.9 11 11.5 11 13H9V12.5C9 11.4 9.45 10.4 10.17 9.67L11.41 8.41C11.78 8.05 12 7.55 12 7C12 5.9 11.1 5 10 5C8.9 5 8 5.9 8 7H6C6 4.79 7.79 3 10 3C12.21 3 14 4.79 14 7C14 7.88 13.64 8.68 13.07 9.25Z"
+                  />
+                </svg>
+              </nuxt-link>
+            </li>
+            <li class="cursor-pointer hover:text-secondary text-gray-400">
+              <nuxt-link to="/profile">
+                <svg
+                  class="fill-current"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM13.61 6.34C14.68 6.34 15.54 7.2 15.54 8.27C15.54 9.34 14.68 10.2 13.61 10.2C12.54 10.2 11.68 9.34 11.68 8.27C11.67 7.2 12.54 6.34 13.61 6.34ZM7.61 4.76C8.91 4.76 9.97 5.82 9.97 7.12C9.97 8.42 8.91 9.48 7.61 9.48C6.31 9.48 5.25 8.42 5.25 7.12C5.25 5.81 6.3 4.76 7.61 4.76ZM7.61 13.89V17.64C5.21 16.89 3.31 15.04 2.47 12.68C3.52 11.56 6.14 10.99 7.61 10.99C8.14 10.99 8.81 11.07 9.51 11.21C7.87 12.08 7.61 13.23 7.61 13.89ZM10 18C9.73 18 9.47 17.99 9.21 17.96V13.89C9.21 12.47 12.15 11.76 13.61 11.76C14.68 11.76 16.53 12.15 17.45 12.91C16.28 15.88 13.39 18 10 18Z"
+                  />
+                </svg>
+              </nuxt-link>
+            </li>
+          </ul>
+        </div>
       </div>
+      <!-- Help -->
+      <Help :show="help" class="z-40"></Help>
     </div>
-    <!-- Help -->
-    <Help :show="help" class="z-40"></Help>
   </div>
 </template>
 
@@ -187,6 +192,7 @@ import {
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
 import Help from '~/components/utilities/HelpSwipe.vue';
+import PrepareEmployee from '~/components/prepareEmployee.vue';
 
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 import { AnswersObject } from '~/types/AnswersObject';
@@ -210,6 +216,7 @@ const EVENTS = {
   components: {
     Vue2InteractDraggable,
     Help,
+    PrepareEmployee,
   },
 })
 export default class SwipeableCard extends Vue {
@@ -255,7 +262,9 @@ export default class SwipeableCard extends Vue {
 
   limitEmp: number = 9
 
-  limitSwipe: number = 50
+  limitSwipe1: number = 20
+
+  limitSwipe2: number = 20
 
   counterSelected: number = 0
 
@@ -265,8 +274,13 @@ export default class SwipeableCard extends Vue {
 
   answersObject: AnswersObject[] = [];
 
+  moreWhitelist: boolean = false;
+
   @Prop({ required: true, type: Object })
   domain!: EmployeeResponseData;
+
+  @Prop({ required: true, type: Number })
+  currentPages!: number;
 
   // Computed: {}
   current: AnswersObject | {} = {}
@@ -298,10 +312,7 @@ export default class SwipeableCard extends Vue {
     console.log('check blacklist', this.selected.blacklist);
     console.log('check whitelist', this.selected.whitelist);
     console.log('check selected', this.selected.employee);
-    console.log(this.counterSelected, this.answers.length, 'all');
-
     if (this.selected.employee.length === this.limitEmp) {
-      console.log(this.selected, 'GO to the qna page');
       this.proceedQnaPage();
     } else if (this.counterSelected === this.answers.length) {
       // reload data
@@ -311,20 +322,15 @@ export default class SwipeableCard extends Vue {
       this.loading = true;
       this.loadingDelay = true;
       this.iteration += 1;
-
-      console.log('end');
-      console.log(' this.answers', this.answers);
-      console.log(' this.answersObject', this.answersObject);
-      console.log(' xxx', this.counterSelected, this.loading, this.loadingDelay);
       console.log(' selected', this.selected);
 
       this.init();
     }
+    // check for popup whitelist
+    this.checkTotalSwipe();
   }
 
   emitAndNext(event: 'match' | 'reject') {
-    console.log('emitAndNext', this.answersObject);
-    console.log('emitAndNext', this.index);
     this.$emit(event, this.index);
     if (event === 'match') {
       this.selected.employee.push(this.answersObject[this.index].employee_email);
@@ -356,15 +362,12 @@ export default class SwipeableCard extends Vue {
   }
 
   async init() {
-    await this.loadEmployeeData().then(() => {
-
-    });
+    await this.loadEmployeeData();
   }
 
   async loadEmployeeData(): Promise<void> {
     let blacklist: string[] = [];
     let whitelist: string[] = [];
-    // iteration 1 : get blacklist from local storage
     if (this.iteration === 1) {
       blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
       whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
@@ -373,9 +376,6 @@ export default class SwipeableCard extends Vue {
     } else {
       blacklist = _.clone(this.selected.blacklist);
     }
-
-    console.log('blacklist we get prepare for endpoint', blacklist);
-    console.log('blacklist we get prepare for  this.selected.blacklist', this.selected.blacklist);
 
     // POST : /pair_data/get_next
     await qnaModule.getQna({
@@ -387,7 +387,6 @@ export default class SwipeableCard extends Vue {
       },
     }).then(() => {
       this.employees = qnaModule.dataQna.data;
-      console.log(this.employees, 'this.employees');
       this.getUniqueEmployees();
     });
   }
@@ -452,17 +451,10 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkDataAnswer() {
-    console.log('checkDataAnswer');
-    console.log(this.answers.length);
-    console.log(this.employees.length);
-    console.log('fldksjflkdsjaflkjdslfk jdslgkjdslkjfdslkajf;ldks');
-    console.log(this.answers.length < 9 && this.employees.length >= this.limitPair);
     // cek jika belum mendapatkan 9 unique employee
     // TODO: Take care of thankyou page later
     // if (this.employees.length === 0) { this.thankyouPage = true; }
-    console.log(this.selected.employee, 'fldsjafljdsalkfjdsa');
     if (this.answers.length < this.limitEmp && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
-      console.log('if');
       // get 3 data lagi sampai dapat 9 unique employee
       await this.loadEmployeeData();
     } else {
@@ -470,12 +462,11 @@ export default class SwipeableCard extends Vue {
         localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
       }
       this.index = this.iteration === 1 ? 0 : -1;
-      this.current = this.answersObject[0];
-      this.next = this.answersObject[1];
-      this.next2 = this.answersObject[2];
+      this.current = _.clone(this.answersObject[0]);
+      this.next = _.clone(this.answersObject[1]);
+      this.next2 = _.clone(this.answersObject[2]);
 
       if (this.selected.employee.length >= 9) {
-        console.log(this.selected, 'GO to the qna page');
         this.proceedQnaPage();
       } else {
         this.loading = false;
@@ -483,16 +474,40 @@ export default class SwipeableCard extends Vue {
           this.loadingDelay = false;
         }, 500);
       }
-
-      console.log(this.selected, 'selected');
-      console.log('we got the employee target', this.answers, this.answers.length);
     }
   }
 
   @Emit('swipableData')
   proceedQnaPage() {
+    this.replaceBlackWhitelist();
     const selected = _.clone(this.selected);
     return selected;
+  }
+
+  replaceBlackWhitelist() {
+    // replace blacklist and whitelist data
+    localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
+    localStorage.setItem('rrs_whitelist', JSON.stringify(this.selected.whitelist));
+  }
+
+  checkTotalSwipe(): boolean {
+    const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
+    if (this.currentPages === 1) {
+      if (bnwTotal === this.limitSwipe1) {
+        this.moreWhitelist = true;
+      }
+    } else if (bnwTotal === this.limitSwipe2) {
+      this.moreWhitelist = true;
+    }
+    return true;
+  }
+
+  closePrepareEmployee() {
+    this.moreWhitelist = false;
+    this.loading = true;
+    this.localStorageBlacklist = localStorage.getItem('rrs_blacklist');
+    this.localStorageWhitelist = localStorage.getItem('rrs_whitelist');
+    this.init();
   }
 }
 </script>

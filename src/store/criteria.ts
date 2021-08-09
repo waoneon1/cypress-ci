@@ -170,7 +170,6 @@ export default class CriteriaModule extends VuexModule {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response, 'citeria axios');
 
       if (response.data.data) {
         this.setCounter(payload);

@@ -4,6 +4,7 @@
       <div class="relative">
         <SwipeableCard
           :domain="this.domain"
+          :currentPages="this.currentPages"
           @swipableData="initSwipableData"
         />
       </div>
@@ -311,7 +312,6 @@ export default class Qna extends Vue {
   async setSelectedCriteria() {
     // TODO: butuh remove get employee (kemungkinan g perlu ini buat persentage)
     // TODO: Hardcoade employee counter data
-    console.log('setSelectedCriteria');
     this.employeeCounterData = { all: 45, org: 45 };
     // await this.getEmployeeStore();
     await this.getCriteriaStore();
@@ -416,15 +416,13 @@ export default class Qna extends Vue {
   }
 
   initSwipableData(payload) {
+    console.log(payload, 'hasil');
     // set loading
     this.loading = true;
     this.allPageLoading = true;
     // set data
     this.answers = _.take(payload.employee, 9);
     this.answersObject = _.take(payload.employeeObject, 9);
-    // replace blacklist data
-    localStorage.setItem('rrs_blacklist', JSON.stringify(payload.blacklist));
-    localStorage.setItem('rrs_whitelist', JSON.stringify(payload.whitelist));
     // set loading = false and close swipable component
     this.loading = false;
     this.allPageLoading = false;
@@ -432,7 +430,6 @@ export default class Qna extends Vue {
   }
 
   mounted() {
-    console.log(this.loadSwipableComponent, 'run mounted');
     this.init();
   }
 }

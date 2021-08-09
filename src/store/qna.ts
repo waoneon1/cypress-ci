@@ -109,7 +109,6 @@ export default class QnaModule extends VuexModule {
 
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
-    console.log('getQna', payload);
     const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.post(`${url}pair_data/get_next`, payload, {
