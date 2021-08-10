@@ -194,7 +194,7 @@ import { qnaModule, QnaResponseData } from '@/store/qna';
 import Help from '~/components/utilities/HelpSwipe.vue';
 import PrepareEmployee from '~/components/prepareEmployee.vue';
 
-import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { CriteriaResponseData } from '@/store/criteria';
 import { AnswersObject } from '~/types/AnswersObject';
 
 export interface SelectedSwipeable {
@@ -277,7 +277,7 @@ export default class SwipeableCard extends Vue {
   moreWhitelist: boolean = false;
 
   @Prop({ required: true, type: Object })
-  domain!: EmployeeResponseData;
+  domain!: CriteriaResponseData;
 
   @Prop({ required: true, type: Number })
   currentPages!: number;
@@ -309,9 +309,11 @@ export default class SwipeableCard extends Vue {
 
   async checkWhitelist() {
     this.counterSelected += 1;
-    console.log('check blacklist', this.selected.blacklist);
-    console.log('check whitelist', this.selected.whitelist);
-    console.log('check selected', this.selected.employee);
+    // console.log('check blacklist', this.selected.blacklist);
+    // console.log('check whitelist', this.selected.whitelist);
+    // console.log('check selected', this.selected.employee);
+    console.log(this.selected.employee.length, 'employee test');
+    console.log(this.limitEmp, 'limitEmp test');
     if (this.selected.employee.length === this.limitEmp) {
       this.proceedQnaPage();
     } else if (this.counterSelected === this.answers.length) {
@@ -322,7 +324,7 @@ export default class SwipeableCard extends Vue {
       this.loading = true;
       this.loadingDelay = true;
       this.iteration += 1;
-      console.log(' selected', this.selected);
+      //console.log(' selected', this.selected);
 
       this.init();
     }
@@ -393,6 +395,7 @@ export default class SwipeableCard extends Vue {
 
   async getUniqueEmployees() {
     // buat array unique employee
+    console.log(this.employees, 'test this.employees')
     this.employees.forEach((e) => {
       // check employee x
       if (!this.selected.employee.includes(e.employee_email_x)) {

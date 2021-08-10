@@ -74,6 +74,7 @@
                   style="padding-bottom: 100%;"
                 >
                   <v-lazy-image
+                    :name="item.employee_name"
                     v-if="item.employee_image_url"
                     :src="item.employee_image_url"
                     src-placeholder="/img/blank.jpeg"
@@ -191,19 +192,19 @@ export default class PrepareEmployee extends Vue {
     }
   }
 
-  decodeDataEmployee(): LoginData {
-    const jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-    return this.token ? jwtDecode(this.token) : jsonPayload;
-  }
+  // decodeDataEmployee(): LoginData {
+  //   const jsonPayload: LoginData = {
+  //     exp: 1,
+  //     user_business_unit: 'nodata',
+  //     user_email: 'nodata',
+  //     user_id: 'nodata',
+  //     user_name: 'nodata',
+  //     user_oauth_id: 'nodata',
+  //     user_organization: 'nodata',
+  //     user_organization_full_text: 'nodata',
+  //   };
+  //   return this.token ? jwtDecode(this.token) : jsonPayload;
+  // }
 
   @Emit('closePrepareEmployee')
   save(): void {

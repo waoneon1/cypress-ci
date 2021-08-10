@@ -1,4 +1,4 @@
-import Employee from '@/pages/prepare/employee.vue';
+import PrepareEmployee from '@/components/prepareEmployee.vue';
 import { expect, it, describe } from '@jest/globals';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EmployeeModule from '@/store/employee';
@@ -25,7 +25,32 @@ const mockedResponse: AxiosResponse = {
   data: {
     response_code: '0000',
     message: 'test success',
-    data: {},
+    data: [
+      {
+        created_at: "2021-06-10T07:58:00.730000",
+        employee_alt_id: "1506180007",
+        employee_business_unit: "HO - Technology",
+        employee_email: "ekky@alterra.id",
+        employee_image_url: "https://talenta.s3.ap-southeast-1.amazonaws.com/avatar/CspYQOuMSoci5qemjeTMCB5INttwkphG.jpg",
+        employee_name: "Ekky Patria Kencana",
+        employee_organization: "TEC - ENG",
+        employee_organization_full_text: "Technology - Engineering",
+        id: "60c1c6088b9165fab214c6d0",
+        updated_at: "2021-06-10T07:58:00.730000",
+      },
+      {
+        created_at: "2021-06-10T07:58:00.730000",
+        employee_alt_id: "1506180007",
+        employee_business_unit: "HO - Technology",
+        employee_email: "waone@alterra.id",
+        employee_image_url: "https://talenta.s3.ap-southeast-1.amazonaws.com/avatar/CspYQOuMSoci5qemjeTMCB5INttwkphG.jpg",
+        employee_name: "Dharmawan Sukma",
+        employee_organization: "TEC - ENG",
+        employee_organization_full_text: "Technology - Engineering",
+        id: "60c1c6088b9165fab214c6d0",
+        updated_at: "2021-06-10T07:58:00.730000",
+      }
+    ],
   },
   status: 200,
   statusText: 'OK',
@@ -36,8 +61,8 @@ mockedAxios.get.mockResolvedValue(mockedResponse);
 
 describe('pages > Faq.vue', () => {
   // mounting component
-  it('berhasil mounting komponen', () => {
-    const wrapper: any = shallowMount(Employee, {
+  it('berhasil mounting komponen', async () => {
+    const wrapper: any = shallowMount(PrepareEmployee, {
       stubs: ['nuxt-link'],
       data() {
         return {
@@ -45,12 +70,24 @@ describe('pages > Faq.vue', () => {
         };
       },
     });
+    const service = employeeModule();
+    await service.getEmployee();
+    expect(axios.get).toHaveBeenCalled();
     expect(wrapper.vm).toBeTruthy();
+    expect(wrapper.vm.employeeSearch.length).toBe(2);
+    wrapper.setData({ empSearch: 'dhar' });
+
   });
 
   it('berhasil mounting komponen tanpa token', () => {
-    const wrapper: any = shallowMount(Employee, {
+    const wrapper: any = shallowMount(PrepareEmployee, {
       stubs: ['nuxt-link'],
+      data() {
+        return {
+          localStorageBlacklist: '[]',
+          localStorageWhitelist: '[]'
+        };
+      },
     });
     expect(wrapper.vm).toBeTruthy();
   });
@@ -62,7 +99,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('test toggleSelect(email)', () => {
-    const wrapper: any = shallowMount(Employee, {
+    const wrapper: any = shallowMount(PrepareEmployee, {
       stubs: ['nuxt-link'],
       data() {
         return {
@@ -78,7 +115,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('test save()', () => {
-    const wrapper: any = shallowMount(Employee, {
+    const wrapper: any = shallowMount(PrepareEmployee, {
       stubs: ['nuxt-link'],
       mocks: {
         $router: {
@@ -88,9 +125,25 @@ describe('pages > Faq.vue', () => {
       data() {
         return {
           selected: ['a@alterra.id', 'c@alterra.id', 'd@alterra.id'],
+          localStorageBlacklist: '',
+          localStorageWhitelist: ''
         };
       },
     });
     wrapper.vm.save();
   });
+
+  it('test save() empty', () => {
+    const wrapper: any = shallowMount(PrepareEmployee, {
+      stubs: ['nuxt-link'],
+      mocks: {
+        $router: {
+          push: jest.fn(),
+        },
+      },
+    });
+    wrapper.vm.save();
+  });
+  
+  
 });
