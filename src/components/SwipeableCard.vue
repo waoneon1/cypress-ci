@@ -274,7 +274,7 @@ export default class SwipeableCard extends Vue {
 
   answersObject: AnswersObject[] = [];
 
-  moreWhitelist: boolean = true;
+  moreWhitelist: boolean = false;
 
   @Prop({ required: true, type: Object })
   domain!: CriteriaResponseData;
