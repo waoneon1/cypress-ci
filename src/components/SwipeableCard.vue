@@ -497,10 +497,14 @@ export default class SwipeableCard extends Vue {
     const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
     if (this.currentPages === 1) {
       if (bnwTotal === this.limitSwipe1) {
+        this.replaceBlackWhitelist();
         this.moreWhitelist = true;
       }
-    } else if (bnwTotal === this.limitSwipe2) {
-      this.moreWhitelist = true;
+    } else {
+      if (bnwTotal === this.limitSwipe2) {
+        this.replaceBlackWhitelist();
+        this.moreWhitelist = true;
+      }
     }
     return true;
   }
