@@ -110,7 +110,11 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-5 bg-white"
         >
-          <div class="flex justify-center items-center">
+          <div class="flex justify-between items-center">
+            <div class="text-gray-400">
+              <div v-if="selected.length">Terpilih {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length }} orang</div>
+              <div v-else></div>
+            </div>
             <div class="inline-block flex">
               <button
                 class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
@@ -139,7 +143,7 @@
                   ></path>
                 </svg>
                 <span v-if="selected.length" class="font-bold text-sm">
-                  Pilih Alterran Ini Untuk dinilai ({{ selected.length }})
+                  Lanjutkan Penilaian
                 </span>
                 <span v-else class="font-bold text-sm">
                   Saya Belum Bisa Menilai Alterran Lain
@@ -192,19 +196,19 @@ export default class PrepareEmployee extends Vue {
     }
   }
 
-  // decodeDataEmployee(): LoginData {
-  //   const jsonPayload: LoginData = {
-  //     exp: 1,
-  //     user_business_unit: 'nodata',
-  //     user_email: 'nodata',
-  //     user_id: 'nodata',
-  //     user_name: 'nodata',
-  //     user_oauth_id: 'nodata',
-  //     user_organization: 'nodata',
-  //     user_organization_full_text: 'nodata',
-  //   };
-  //   return this.token ? jwtDecode(this.token) : jsonPayload;
-  // }
+  decodeDataEmployee(): LoginData {
+    const jsonPayload: LoginData = {
+      exp: 1,
+      user_business_unit: 'nodata',
+      user_email: 'nodata',
+      user_id: 'nodata',
+      user_name: 'nodata',
+      user_oauth_id: 'nodata',
+      user_organization: 'nodata',
+      user_organization_full_text: 'nodata',
+    };
+    return this.token ? jwtDecode(this.token) : jsonPayload;
+  }
 
   @Emit('closePrepareEmployee')
   save(): void {
@@ -233,7 +237,7 @@ export default class PrepareEmployee extends Vue {
 
       const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
-        (o: EmployeeResponseData) => !selectedTotal.includes(o.employee_email),
+        (o: EmployeeResponseData) => !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email,
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;
