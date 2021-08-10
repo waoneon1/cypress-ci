@@ -32,7 +32,7 @@
           <!--eslint-enable-->
           <div class="flex space-x-4">
             <div class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
-              @click="checkWhiteList()"
+              @click="goToQnaPage()"
             >
               Mulai
             </div>
@@ -108,19 +108,6 @@ export default class Criteria extends Vue {
 
   goToQnaPage(): void {
     this.$router.push(`/qna/${this.domain.criteria_name.toLowerCase()}`);
-  }
-
-  checkWhiteList() {
-    if (this.whitelist) {
-      const whitelist = JSON.parse(this.whitelist);
-      if (whitelist.selected.length >= 9) {
-        this.goToQnaPage();
-      } else {
-        this.skeletonQna = true;
-      }
-    } else {
-      this.skeletonQna = true;
-    }
   }
 
   async setSelectedCriteria() {
