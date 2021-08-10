@@ -274,7 +274,7 @@ export default class SwipeableCard extends Vue {
 
   answersObject: AnswersObject[] = [];
 
-  moreWhitelist: boolean = false;
+  moreWhitelist: boolean = true;
 
   @Prop({ required: true, type: Object })
   domain!: CriteriaResponseData;
@@ -509,12 +509,20 @@ export default class SwipeableCard extends Vue {
     return true;
   }
 
-  closePrepareEmployee() {
+  closePrepareEmployee(payload) {
     this.moreWhitelist = false;
     this.loading = true;
     this.localStorageBlacklist = localStorage.getItem('rrs_blacklist');
     this.localStorageWhitelist = localStorage.getItem('rrs_whitelist');
-    this.init();
+
+    console.log( this.localStorageWhitelist, 'closePrepareEmployee' )
+    this.selected.employeeObject = payload
+    this.selected.employee = _.map(payload, 'employee_email')
+    this.selected.blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+    this.selected.whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+
+    this.proceedQnaPage();
+    
   }
 }
 </script>

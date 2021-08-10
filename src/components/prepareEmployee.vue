@@ -48,12 +48,12 @@
             <div
               v-for="(item, i) in employeeSearch"
               :key="i"
-              @click="toggleSelect(item.employee_email)"
+              @click="toggleSelect(item)"
               class="relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
-                v-show="selected.includes(item.employee_email)"
+                v-show="checkEmp(item)"
               >
                 <svg
                   class="fill-current text-success"
@@ -117,9 +117,16 @@
             </div>
             <div class="inline-block flex">
               <button
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
-                :disabled="loading"
-                @click="save"
+                class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
+                :class="((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  && selected.length !== 0
+                  ? 'border-gray-400 bg-gray-400 text-white' 
+                  : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
+                :disabled="loading 
+                  || ((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  && selected.length !== 0
+                "
+                @click="save()"
               >
                 <svg
                   v-show="loading"
@@ -159,13 +166,21 @@
 
 <script lang="ts">
 import {
-  Vue, Component, Watch, Emit,
+  Vue, Component, Watch, Emit, Prop,
 } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
 import { LoginData } from '~/types/LoginData';
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { AnswersObject } from '~/types/AnswersObject';
+
+export interface SelectedSwipeable {
+  employee: string[],
+  blacklist: string[],
+  whitelist: string[],
+  employeeObject: AnswersObject[],
+}
 
 const _ = require('lodash');
 
@@ -175,9 +190,11 @@ export default class PrepareEmployee extends Vue {
 
   token = localStorage.getItem('token');
 
+  minimumData: number = 4
+
   empSearch: string = '';
 
-  selected: string[] = [];
+  selected: EmployeeResponseData[] = [];
 
   employee: EmployeeResponseData[] = [];
 
@@ -187,10 +204,12 @@ export default class PrepareEmployee extends Vue {
 
   localStorageWhitelist = localStorage.getItem('rrs_whitelist')
 
-  toggleSelect(email: string): void {
-    const index = this.selected.indexOf(email);
+  selectedFromSwipeable: EmployeeResponseData[] = []
+
+  toggleSelect(item: EmployeeResponseData): void {
+    const index = this.selected.indexOf(item);
     if (index === -1) {
-      this.selected.push(email);
+      this.selected.push(item);
     } else {
       this.selected.splice(index, 1);
     }
@@ -211,12 +230,15 @@ export default class PrepareEmployee extends Vue {
   }
 
   @Emit('closePrepareEmployee')
-  save(): void {
+  save(): EmployeeResponseData[] {
     const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
-    const selected = _.clone(this.selected);
+    const selected = _.map(this.selected, 'employee_email');
 
     const newWhitelist: string[] = [...whitelist, ...selected];
+    console.log(newWhitelist, 'newWhitelist')
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
+  
+    return [...this.selectedFromSwipeable, ...this.selected]
   }
 
   @Watch('empSearch')
@@ -237,11 +259,20 @@ export default class PrepareEmployee extends Vue {
 
       const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
-        (o: EmployeeResponseData) => !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email,
+        (o: EmployeeResponseData) => {
+          if (whitelist.includes(o.employee_email)) {
+            this.selectedFromSwipeable.push(o)
+          }
+          return !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email
+        },
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;
     });
+  }
+
+  checkEmp(item) {
+    return _.find(this.selected, ['employee_email', item.employee_email])
   }
 
   mounted() {
