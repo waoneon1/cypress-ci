@@ -192,10 +192,10 @@ import {
 } from 'vue-property-decorator';
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
+import { CriteriaResponseData } from '@/store/criteria';
 import Help from '~/components/utilities/HelpSwipe.vue';
 import PrepareEmployee from '~/components/prepareEmployee.vue';
 
-import { CriteriaResponseData } from '@/store/criteria';
 import { AnswersObject } from '~/types/AnswersObject';
 
 export interface SelectedSwipeable {
@@ -313,8 +313,6 @@ export default class SwipeableCard extends Vue {
     // console.log('check blacklist', this.selected.blacklist);
     // console.log('check whitelist', this.selected.whitelist);
     // console.log('check selected', this.selected.employee);
-    console.log(this.selected.employee.length, 'employee test');
-    console.log(this.limitEmp, 'limitEmp test');
     if (this.selected.employee.length === this.limitEmp) {
       this.proceedQnaPage();
     } else if (this.counterSelected === this.answers.length) {
@@ -325,7 +323,6 @@ export default class SwipeableCard extends Vue {
       this.loading = true;
       this.loadingDelay = true;
       this.iteration += 1;
-      //console.log(' selected', this.selected);
 
       this.init();
     }
@@ -335,6 +332,7 @@ export default class SwipeableCard extends Vue {
 
   emitAndNext(event: 'match' | 'reject') {
     this.$emit(event, this.index);
+
     if (event === 'match') {
       this.selected.employee.push(this.answersObject[this.index].employee_email);
       this.selected.whitelist.push(this.answersObject[this.index].employee_email);
@@ -396,7 +394,6 @@ export default class SwipeableCard extends Vue {
 
   async getUniqueEmployees() {
     // buat array unique employee
-    console.log(this.employees, 'test this.employees')
     this.employees.forEach((e) => {
       // check employee x
       if (!this.selected.employee.includes(e.employee_email_x)) {
@@ -501,11 +498,9 @@ export default class SwipeableCard extends Vue {
         this.replaceBlackWhitelist();
         this.moreWhitelist = true;
       }
-    } else {
-      if (bnwTotal === this.limitSwipe2) {
-        this.replaceBlackWhitelist();
-        this.moreWhitelist = true;
-      }
+    } else if (bnwTotal === this.limitSwipe2) {
+      this.replaceBlackWhitelist();
+      this.moreWhitelist = true;
     }
     return true;
   }
@@ -516,14 +511,12 @@ export default class SwipeableCard extends Vue {
     this.localStorageBlacklist = localStorage.getItem('rrs_blacklist');
     this.localStorageWhitelist = localStorage.getItem('rrs_whitelist');
 
-    console.log( this.localStorageWhitelist, 'closePrepareEmployee' )
-    this.selected.employeeObject = payload
-    this.selected.employee = _.map(payload, 'employee_email')
+    this.selected.employeeObject = payload;
+    this.selected.employee = _.map(payload, 'employee_email');
     this.selected.blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
     this.selected.whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
 
     this.proceedQnaPage();
-    
   }
 }
 </script>

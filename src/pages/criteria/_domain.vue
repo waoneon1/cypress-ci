@@ -124,7 +124,7 @@ export default class Criteria extends Vue {
 
   decodeDataEmployee() {
     const jsonPayload: LoginData = loginDataDefault;
-    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
+    this.loginData = (this.token !== undefined && this.token !== null) ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {

@@ -132,78 +132,6 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     }
   });
 
-  it('Test > getUniqueEmployees()', async () => {
-    expect.assertions(2);
-    try {
-      await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.answers.length).toBe(0);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-
-    wrapper.setData({
-      employees: [
-        {
-          criteria_id: 'string',
-          criteria_name: 'design',
-          employee_name_x: 'waone',
-          employee_name_y: 'dodi',
-          employee_email_x: '1@alterra.id',
-          employee_email_y: '2@alterra.id',
-          employee_image_url_x: '',
-          employee_image_url_y: '',
-        },
-        {
-          criteria_id: 'string',
-          criteria_name: 'design',
-          employee_name_x: 'waone',
-          employee_name_y: 'dodi',
-          employee_email_x: '3@alterra.id',
-          employee_email_y: '4@alterra.id',
-          employee_image_url_x: '',
-          employee_image_url_y: '',
-        },
-        {
-          criteria_id: 'string',
-          criteria_name: 'design',
-          employee_name_x: 'waone',
-          employee_name_y: 'dodi',
-          employee_email_x: '5@alterra.id',
-          employee_email_y: '6@alterra.id',
-          employee_image_url_x: '',
-          employee_image_url_y: '',
-        },
-        {
-          criteria_id: 'string',
-          criteria_name: 'design',
-          employee_name_x: 'waone',
-          employee_name_y: 'dodi',
-          employee_email_x: '7@alterra.id',
-          employee_email_y: '8@alterra.id',
-          employee_image_url_x: '',
-          employee_image_url_y: '',
-        },
-        {
-          criteria_id: 'string',
-          criteria_name: 'design',
-          employee_name_x: 'waone',
-          employee_name_y: 'dodi',
-          employee_email_x: '9@alterra.id',
-          employee_email_y: '10@alterra.id',
-          employee_image_url_x: '',
-          employee_image_url_y: '',
-        },
-      ],
-    });
-
-    try {
-      await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.answers.length).toBe(9);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
-  });
-
   it('Test > submitEmployeeData()', async () => {
     expect.assertions(1);
     try {
@@ -261,8 +189,22 @@ describe('Pages > index.vue > Kondisi Normal', () => {
     expect(prepareSubmit.length).toBe(2);
   });
 
-  it('Test > progressCheckpointFloor()', () => {
-    wrapper.vm.progressCheckpointFloor();
+  it('Test > getEmployeeStore()', async () => {
+    await wrapper.vm.getEmployeeStore();
+  });
+
+  it('Test > initSwipableData()', () => {
+    wrapper.vm.initSwipableData({
+      selected: {
+        employee: [],
+        blacklist: [],
+        whitelist: [],
+        employeeObject: [],
+      },
+    });
+    expect(wrapper.vm.loading).toBe(false);
+    expect(wrapper.vm.allPageLoading).toBe(false);
+    expect(wrapper.vm.loadSwipableComponent).toBe(false);
   });
 });
 
@@ -369,13 +311,8 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
   });
 
   it('Test > nextPage() : this.pages == this.currentPages', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.nextPage();
-      expect(wrapper.vm.thankyouPage).toBe(true);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
+    await wrapper.vm.nextPage();
+    expect(wrapper.vm.thankyouPage).toBe(true);
   });
 });
 
@@ -428,16 +365,6 @@ describe('Pages > index.vue : kondisi ke 3', () => {
       },
       mixins: [override],
     });
-  });
-
-  it('Test > getUniqueEmployees() : employee_email_x === undefined && employee_email_y === undefined', async () => {
-    expect.assertions(1);
-    try {
-      await wrapper.vm.getUniqueEmployees();
-      expect(wrapper.vm.employees.length).toBe(1);
-    } catch (err) {
-      expect(err).toEqual(new Error());
-    }
   });
 
   it('Test > prepareSubmit() selectedAnswer include answer', () => {
@@ -583,9 +510,5 @@ describe('Pages > index.vue : kondisi ke 4', () => {
     wrapper.setData({ selectedAnswer: ['xxx@alterra.id', 'xx@alterra.id'] });
     wrapper.vm.prepareSubmit();
     expect(wrapper.vm.prepareSubmit().length).toBe(4);
-  });
-
-  it('Test > checkDataAnswer()', () => {
-    wrapper.vm.checkDataAnswer();
   });
 });

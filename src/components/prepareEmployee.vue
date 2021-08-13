@@ -120,9 +120,9 @@
                 class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
                 :class="((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
-                  ? 'border-gray-400 bg-gray-400 text-white' 
+                  ? 'border-gray-400 bg-gray-400 text-white'
                   : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
-                :disabled="loading 
+                :disabled="loading
                   || ((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
                 "
@@ -166,7 +166,7 @@
 
 <script lang="ts">
 import {
-  Vue, Component, Watch, Emit, Prop,
+  Vue, Component, Watch, Emit,
 } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
@@ -235,10 +235,9 @@ export default class PrepareEmployee extends Vue {
     const selected = _.map(this.selected, 'employee_email');
 
     const newWhitelist: string[] = [...whitelist, ...selected];
-    console.log(newWhitelist, 'newWhitelist')
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
-  
-    return [...this.selectedFromSwipeable, ...this.selected]
+
+    return [...this.selectedFromSwipeable, ...this.selected];
   }
 
   @Watch('empSearch')
@@ -261,9 +260,9 @@ export default class PrepareEmployee extends Vue {
         employeeModule.dataEmployee.data,
         (o: EmployeeResponseData) => {
           if (whitelist.includes(o.employee_email)) {
-            this.selectedFromSwipeable.push(o)
+            this.selectedFromSwipeable.push(o);
           }
-          return !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email
+          return !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email;
         },
       );
       this.employee = allEmployee;
@@ -272,7 +271,7 @@ export default class PrepareEmployee extends Vue {
   }
 
   checkEmp(item) {
-    return _.find(this.selected, ['employee_email', item.employee_email])
+    return _.find(this.selected, ['employee_email', item.employee_email]);
   }
 
   mounted() {

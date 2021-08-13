@@ -10,7 +10,7 @@ let wrapper: Wrapper<any>;
 describe('Components > Utilities > HelpSwipe.vue', () => {
   beforeEach(() => {
     wrapper = shallowMount(HelpSwipe, {
-        
+
     });
   });
 

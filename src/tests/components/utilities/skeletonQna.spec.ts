@@ -10,7 +10,10 @@ let wrapper: Wrapper<any>;
 describe('Components > Utilities > SkeletonQna.vue', () => {
   beforeEach(() => {
     wrapper = shallowMount(SkeletonQna, {
-        
+      propsData: {
+        criteria: '12345',
+      },
+      stubs: ['nuxt-link'],
     });
   });
 

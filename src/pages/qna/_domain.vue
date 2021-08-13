@@ -417,7 +417,6 @@ export default class Qna extends Vue {
   }
 
   initSwipableData(payload) {
-    console.log(payload, 'hasil');
     // set loading
     this.loading = true;
     this.allPageLoading = true;

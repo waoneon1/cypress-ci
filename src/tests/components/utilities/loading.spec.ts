@@ -10,7 +10,7 @@ let wrapper: Wrapper<any>;
 describe('Components > Utilities > Loading.vue', () => {
   beforeEach(() => {
     wrapper = shallowMount(Loading, {
-        
+
     });
   });
 
