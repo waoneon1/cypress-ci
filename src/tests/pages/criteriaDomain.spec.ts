@@ -91,30 +91,4 @@ describe('Pages > criteria/_domain.vue', () => {
     });
     wrapper.vm.goToQnaPage();
   });
-
-  it('test checkWhiteList()', () => {
-    const mockRouterPush = jest.fn();
-    const wrapper: any = shallowMount(CriteriaDomain, {
-      stubs: ['nuxt-link'],
-      mocks: {
-        $router: {
-          push: mockRouterPush,
-        },
-        $route: {
-          params: { domain: 'requirements' },
-        },
-      },
-    });
-    wrapper.vm.checkWhiteList();
-
-    wrapper.setData({
-      whitelist: '{"selected":["ekky@alterra.id","iman@alterra.id","bayu@alterra.id","rakha@alterra.id","vino@alterra.id","arief@alterra.id","poby@alterra.id","fransiska@alterra.id","fiqri@alterra.id"]}',
-    });
-    wrapper.vm.checkWhiteList();
-
-    wrapper.setData({
-      whitelist: '{"selected":["ekky@alterra.id"]}',
-    });
-    wrapper.vm.checkWhiteList();
-  });
 });

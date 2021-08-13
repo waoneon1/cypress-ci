@@ -8,7 +8,7 @@
       <div class="px-5">
         <div class="flex justify-center relative py-5">
           <h1 class="text-primary text-sm capitalize">
-            Mempersiapkan Data Alterran
+            Apakah ada alterran lain yang bisa anda nilai ?
           </h1>
         </div>
       </div>
@@ -16,13 +16,6 @@
 
       <!-- Content: Answer -->
       <div class="px-5 pt-5">
-        <!-- Title -->
-        <div class="relative">
-          <p class="mb-5 text-sm">
-            Pilih alterran yang ingin kamu nilai di luar organisasi
-            <strong>{{ this.decodeDataEmployee().user_business_unit }}</strong>
-          </p>
-        </div>
         <!-- Search -->
         <div class="relative">
           <input
@@ -55,12 +48,12 @@
             <div
               v-for="(item, i) in employeeSearch"
               :key="i"
-              @click="toggleSelect(item.employee_email)"
+              @click="toggleSelect(item)"
               class="relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
-                v-show="selected.includes(item.employee_email)"
+                v-show="checkEmp(item)"
               >
                 <svg
                   class="fill-current text-success"
@@ -81,6 +74,7 @@
                   style="padding-bottom: 100%;"
                 >
                   <v-lazy-image
+                    :name="item.employee_name"
                     v-if="item.employee_image_url"
                     :src="item.employee_image_url"
                     src-placeholder="/img/blank.jpeg"
@@ -116,12 +110,23 @@
         <div
           class="mx-auto max-w-md bg-white px-5 pb-5 bg-white"
         >
-          <div class="flex justify-end items-center">
+          <div class="flex justify-between items-center">
+            <div class="text-gray-400">
+              <div v-if="selected.length">Terpilih {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length }} orang</div>
+              <div v-else></div>
+            </div>
             <div class="inline-block flex">
               <button
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
-                :disabled="loading"
-                @click="save"
+                class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
+                :class="((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  && selected.length !== 0
+                  ? 'border-gray-400 bg-gray-400 text-white'
+                  : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
+                :disabled="loading
+                  || ((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  && selected.length !== 0
+                "
+                @click="save()"
               >
                 <svg
                   v-show="loading"
@@ -144,8 +149,11 @@
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span class="font-bold text-sm">
-                  Simpan & Lanjutkan
+                <span v-if="selected.length" class="font-bold text-sm">
+                  Lanjutkan Penilaian
+                </span>
+                <span v-else class="font-bold text-sm">
+                  Saya Belum Bisa Menilai Alterran Lain
                 </span>
               </button>
             </div>
@@ -157,36 +165,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import {
+  Vue, Component, Watch, Emit,
+} from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { AnswersObject } from '~/types/AnswersObject';
 
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
+export interface SelectedSwipeable {
+  employee: string[],
+  blacklist: string[],
+  whitelist: string[],
+  employeeObject: AnswersObject[],
 }
 
 const _ = require('lodash');
@@ -197,44 +190,26 @@ export default class PrepareEmployee extends Vue {
 
   token = localStorage.getItem('token');
 
+  minimumData: number = 4
+
   empSearch: string = '';
 
-  selected: string[] = [];
+  selected: EmployeeResponseData[] = [];
 
-  employee: EmployeeResponseData[] = [
-    {
-      id: '',
-      employee_name: '',
-      employee_email: '',
-      employee_image_url: '',
-      employee_alt_id: '',
-      employee_organization: '',
-      employee_organization_full_text: '',
-      employee_business_unit: '',
-      created_at: '',
-      updated_at: '',
-    },
-  ];
+  employee: EmployeeResponseData[] = [];
 
-  employeeSearch: EmployeeResponseData[] = [
-    {
-      id: '',
-      employee_name: '',
-      employee_email: '',
-      employee_image_url: '',
-      employee_alt_id: '',
-      employee_organization: '',
-      employee_organization_full_text: '',
-      employee_business_unit: '',
-      created_at: '',
-      updated_at: '',
-    },
-  ];
+  employeeSearch: EmployeeResponseData[] = [];
 
-  toggleSelect(email: string): void {
-    const index = this.selected.indexOf(email);
+  localStorageBlacklist = localStorage.getItem('rrs_blacklist')
+
+  localStorageWhitelist = localStorage.getItem('rrs_whitelist')
+
+  selectedFromSwipeable: EmployeeResponseData[] = []
+
+  toggleSelect(item: EmployeeResponseData): void {
+    const index = this.selected.indexOf(item);
     if (index === -1) {
-      this.selected.push(email);
+      this.selected.push(item);
     } else {
       this.selected.splice(index, 1);
     }
@@ -254,12 +229,15 @@ export default class PrepareEmployee extends Vue {
     return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
-  save(): void {
-    const payload = {
-      selected: this.selected,
-    };
-    localStorage.setItem('rrs_selected', JSON.stringify(payload));
-    this.$router.push('/dashboard');
+  @Emit('closePrepareEmployee')
+  save(): EmployeeResponseData[] {
+    const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+    const selected = _.map(this.selected, 'employee_email');
+
+    const newWhitelist: string[] = [...whitelist, ...selected];
+    localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
+
+    return [...this.selectedFromSwipeable, ...this.selected];
   }
 
   @Watch('empSearch')
@@ -271,14 +249,29 @@ export default class PrepareEmployee extends Vue {
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      const org = this.decodeDataEmployee().user_organization;
+      // const org = this.decodeDataEmployee().user_organization;
+      let blacklist: string[] = [];
+      let whitelist: string[] = [];
+      blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+      whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+      const selectedTotal = [...blacklist, ...whitelist];
+
       const allEmployee:EmployeeResponseData[] = _.filter(
         employeeModule.dataEmployee.data,
-        (o: EmployeeResponseData) => o.employee_organization !== org,
+        (o: EmployeeResponseData) => {
+          if (whitelist.includes(o.employee_email)) {
+            this.selectedFromSwipeable.push(o);
+          }
+          return !selectedTotal.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email;
+        },
       );
       this.employee = allEmployee;
       this.employeeSearch = allEmployee;
     });
+  }
+
+  checkEmp(item) {
+    return _.find(this.selected, ['employee_email', item.employee_email]);
   }
 
   mounted() {

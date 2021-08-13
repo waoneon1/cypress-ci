@@ -14,6 +14,14 @@ describe('layout > Login.vue', () => {
           push: router,
         },
       },
+      head() {
+        return {
+          bodyAttrs: {
+            /* eslint-disable-next-line no-use-before-define */
+            class: 'class login',
+          },
+        };
+      },
     });
 
     wrapper.vm.pageStatus = true;

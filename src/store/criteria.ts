@@ -16,7 +16,7 @@ export interface CriteriaResponseData {
   id: string;
   criteria_name: string;
   percent_progress: number;
-  percent_progress_filter?: number;
+  percent_progress_filter: number;
   slug?: string;
   description?: string;
   shortdec?: string;
@@ -47,8 +47,9 @@ export default class CriteriaModule extends VuexModule {
 
   @Mutation
   setCriteria(value: CriteriaResponse): void {
+    // TODO: Persentage (take care later)
     const intro = 'Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk';
-    const whitelistJson = localStorage.getItem('rrs_whitelist');
+    // const whitelistJson = localStorage.getItem('rrs_whitelist');
     const dataCriteria = [
       {
         criteria_name: 'Design',
@@ -140,18 +141,18 @@ export default class CriteriaModule extends VuexModule {
       // making slug by lowercase criteria name
       obj.slug = obj.criteria_name.toLowerCase();
 
-      // count progress with filter
-      const totalEmployeePercentage = obj.percent_progress;
-      const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-      const countEmployee = this.dataCounter;
-      // count whitelist from check & from organization
-      const countWhitelist = whitelistCheck;
+      // // count progress with filter
+      // const totalEmployeePercentage = obj.percent_progress;
+      // const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
+      // const countEmployee = this.dataCounter;
+      // // count whitelist from check & from organization
+      // const countWhitelist = whitelistCheck;
 
-      const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-      const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-      const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
+      // const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
+      // const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
+      // const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
-      obj.percent_progress_filter = percentageForUser;
+      obj.percent_progress_filter = 0;
 
       return obj;
     });

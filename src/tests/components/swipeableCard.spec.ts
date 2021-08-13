@@ -1,49 +1,127 @@
-// import { shallowMount } from 'ts-jest/utils';
 import SwipeableCard from '@/components/SwipeableCard.vue';
 import Vuex from 'vuex';
 import { expect, it, describe } from '@jest/globals';
+
 import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import axios, { AxiosResponse } from 'axios';
 
 let wrapper: Wrapper<any>;
 
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
+//= =========================================================
+jest.mock('axios');
+const mockedAxiosGet = axios as jest.Mocked<typeof axios>;
+const mockedResponseGet: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: [
+      {
+        id: '',
+        criteria_name: 'Design',
+        percent_progress: 0,
+      },
+      {
+        id: '65a248199ad87f22412ad',
+        criteria_name: 'HCI',
+        percent_progress: 20,
+      },
+    ],
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+mockedAxiosGet.get.mockResolvedValue(mockedResponseGet);
+//= =========================================================
+
+jest.mock('axios');
+const mockedAxiosPost = axios as jest.Mocked<typeof axios>;
+
+const mockedQnaResponseData: AxiosResponse = {
+  data: {
+    response_code: '0000',
+    message: 'test success',
+    data: [{
+      id: '123',
+      employee_name: 'waone',
+      employee_email: 'waone@gmail.com',
+      employee_image_url: 'x',
+      employee_alt_id: 'x',
+      employee_organization: 'x',
+      employee_organization_full_text: 'x',
+      employee_business_unit: 'x',
+      created_at: 'x',
+      updated_at: 'x',
+    }],
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+};
+
+//= =========================================================
+
 describe('components > SwipeableCard.vue', () => {
   jest.useFakeTimers();
 
   beforeEach(() => {
     wrapper = shallowMount(SwipeableCard, {
+      stubs: ['nuxt-link'],
       propsData: {
-        cards: [{
-          id: 1,
-          employee_name: 'emp1',
-          employee_email: 'emp1@gmail.com',
-          employee_image_url: 'emp1',
-          employee_alt_id: 'emp1',
-          employee_organization: 'emp1',
-          employee_organization_full_text: 'emp1',
-          employee_business_unit: 'emp1',
-          created_at: 'emp1',
-          updated_at: 'emp1',
-        }, {
-          id: 2,
-          employee_name: 'emp2',
-          employee_email: 'emp2@gmail.com',
-          employee_image_url: 'emp2',
-          employee_alt_id: 'emp2',
-          employee_organization: 'emp2',
-          employee_organization_full_text: 'emp2',
-          employee_business_unit: 'emp2',
-          created_at: 'emp2',
-          updated_at: 'emp2',
-        }],
-      },
-      mocks: {
-        $router: { push: jest.fn() },
-        $route: {
-          query: { callback: 'requirements' },
+        domain: {
+          id: '65a248199ad87f22412ad',
+          criteria_name: 'Testing',
+          percent_progress: 10,
+          percent_progress_filter: '',
+          slug: '',
+          description: '',
+          shortdec: '',
         },
+        currentPages: 1,
+      },
+      data() {
+        return {
+          index: 0,
+          selected: {
+            employee: ['wawan@alterra.id'],
+            blacklist: [],
+            whitelist: ['wawan@alterra.id', 'user2@alterra.id'],
+            employeeObject: [
+              {
+                employee_name: 'wawan',
+                employee_email: 'wawan@alterra.id',
+                employee_image_url: 'wawan.jpg',
+                employee_organization: 'org',
+                employee_organization_full_text: 'organization',
+                employee_business_unit: 'ho',
+              },
+            ],
+          },
+          answersObject: [{
+            employee_name: 'wawan',
+            employee_email: 'wawan@alterra.id',
+            employee_image_url: 'wawan.jpg',
+            employee_organization: 'org',
+            employee_organization_full_text: 'organization',
+            employee_business_unit: 'ho',
+          }, {
+            employee_name: 'user2',
+            employee_email: 'user2@alterra.id',
+            employee_image_url: 'user2.jpg',
+            employee_organization: 'org',
+            employee_organization_full_text: 'organization',
+            employee_business_unit: 'ho',
+          }],
+          counterSelected: 1,
+          answers: ['wawan@alterra.id', 'user2@alterra.id'],
+          localStorageBlacklist: '[xxx@alterra.id]',
+          localStorageWhitelist: '[yyy@alterra.id]',
+        };
       },
     });
   });
@@ -54,8 +132,8 @@ describe('components > SwipeableCard.vue', () => {
   });
 
   it('Test currentComputed() & nextComputed() index', () => {
-    wrapper.setData({ index: 1 });
-    expect(wrapper.vm.next.employee_name).toBe('emp2');
+    wrapper.setData({ index: 2 });
+    expect(wrapper.vm.next.employee_name).toBe(undefined);
   });
 
   it('Test match()', () => {
@@ -76,28 +154,35 @@ describe('components > SwipeableCard.vue', () => {
     }, 500);
   });
 
-  it('Test checkWhitelist()', () => {
-    wrapper.vm.checkWhitelist();
-    expect(wrapper.vm.alert).toBe(false);
-
-    wrapper.setData({ selected: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] });
-    wrapper.vm.checkWhitelist();
-    expect(wrapper.vm.alert).toBe(false);
-    expect(wrapper.vm.selected.length).toBe(11);
-
-    wrapper.setData({ selected: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
-    wrapper.vm.checkWhitelist();
-    expect(wrapper.vm.alert).toBe(true);
-    expect(wrapper.vm.selected.length).toBe(9);
-  });
-
   it('Test emitAndNext()', () => {
     jest.useFakeTimers();
-    wrapper.vm.emitAndNext('match');
-    expect(wrapper.vm.btnDisabled).toBe(true);
-    expect(setTimeout).toHaveBeenCalledTimes(2);
     wrapper.vm.emitAndNext('reject');
+    expect(wrapper.vm.btnDisabled).toBe(true);
+    wrapper.setData({
+      answersObject: [{
+        employee_name: 'wawan',
+        employee_email: 'wawan@alterra.id',
+        employee_image_url: 'wawan.jpg',
+        employee_organization: 'org',
+        employee_organization_full_text: 'organization',
+        employee_business_unit: 'ho',
+      }, {
+        employee_name: 'user2',
+        employee_email: 'user2@alterra.id',
+        employee_image_url: 'user2.jpg',
+        employee_organization: 'org',
+        employee_organization_full_text: 'organization',
+        employee_business_unit: 'ho',
+      }],
+    });
+    wrapper.vm.emitAndNext('match');
     expect(setTimeout).toHaveBeenCalledTimes(4);
+  });
+
+  it('Test checkWhitelist()', () => {
+    wrapper.vm.checkWhitelist();
+    wrapper.setData({ limitEmp: 0 });
+    wrapper.vm.checkWhitelist();
   });
 
   it('Test visibleTrue()', () => {
@@ -112,7 +197,229 @@ describe('components > SwipeableCard.vue', () => {
     expect(wrapper.vm.isVisible).toBe(false);
   });
 
-  it('Test save()', () => {
-    wrapper.vm.save();
+  it('Test getUniqueEmployees()', () => {
+    mockedAxiosPost.post.mockResolvedValue(mockedQnaResponseData);
+    wrapper.vm.getUniqueEmployees();
+    expect(wrapper.vm.answers.length).toBe(2);
+
+    wrapper.setData({
+      employees: [
+        {
+          criteria_id: 'string',
+          criteria_name: 'design',
+          employee_name_x: 'waone',
+          employee_name_y: 'dodi',
+          employee_email_x: '1@alterra.id',
+          employee_email_y: '2@alterra.id',
+          employee_image_url_x: '',
+          employee_image_url_y: '',
+        },
+        {
+          criteria_id: 'string',
+          criteria_name: 'design',
+          employee_name_x: 'waone',
+          employee_name_y: 'dodi',
+          employee_email_x: '3@alterra.id',
+          employee_email_y: '4@alterra.id',
+          employee_image_url_x: '',
+          employee_image_url_y: '',
+        },
+        {
+          criteria_id: 'string',
+          criteria_name: 'design',
+          employee_name_x: 'waone',
+          employee_name_y: 'dodi',
+          employee_email_x: '5@alterra.id',
+          employee_email_y: '6@alterra.id',
+          employee_image_url_x: '',
+          employee_image_url_y: '',
+        },
+        {
+          criteria_id: 'string',
+          criteria_name: 'design',
+          employee_name_x: 'waone',
+          employee_name_y: 'dodi',
+          employee_email_x: '7@alterra.id',
+          employee_email_y: '8@alterra.id',
+          employee_image_url_x: '',
+          employee_image_url_y: '',
+        },
+        {
+          criteria_id: 'string',
+          criteria_name: 'design',
+          employee_name_x: 'waone',
+          employee_name_y: 'dodi',
+          employee_email_x: '9@alterra.id',
+          employee_email_y: '10@alterra.id',
+          employee_image_url_x: '',
+          employee_image_url_y: '',
+        },
+      ],
+    });
+
+    wrapper.vm.getUniqueEmployees();
+    expect(wrapper.vm.answers.length).toBe(12);
+  });
+
+  it('Test proceedQnaPage()', () => {
+    wrapper.vm.proceedQnaPage();
+    expect(wrapper.vm.proceedQnaPage().employee[0]).toBe('wawan@alterra.id');
+  });
+
+  it('Test checkTotalSwipe()', () => {
+    expect(wrapper.vm.moreWhitelist).toBeFalsy();
+    wrapper.setData({
+      selected: {
+        whitelist: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        blacklist: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+    });
+    wrapper.vm.checkTotalSwipe();
+    expect(wrapper.vm.moreWhitelist).toBeTruthy();
+  });
+
+  it('Test closePrepareEmployee()', () => {
+    wrapper.vm.closePrepareEmployee([
+      {
+        id: 'string;',
+        employee_name: 'string;',
+        employee_email: 'xx@gmail.com',
+        employee_image_url: 'string;',
+        employee_alt_id: 'string;',
+        employee_organization: 'string;',
+        employee_organization_full_text: 'string;',
+        employee_business_unit: 'string;',
+        created_at: 'string;',
+        updated_at: 'string;',
+      },
+    ]);
+  });
+});
+
+describe('components > SwipeableCard.vue case 2', () => {
+  jest.useFakeTimers();
+
+  beforeEach(() => {
+    wrapper = shallowMount(SwipeableCard, {
+      stubs: ['nuxt-link'],
+      propsData: {
+        domain: {
+          id: '65a248199ad87f22412ad',
+          criteria_name: 'Testing',
+          percent_progress: 10,
+          percent_progress_filter: '',
+          slug: '',
+          description: '',
+          shortdec: '',
+        },
+        currentPages: 0,
+      },
+      data() {
+        return {
+          index: 0,
+          selected: {
+            employee: ['wawan@alterra.id'],
+            blacklist: [],
+            whitelist: ['wawan@alterra.id', 'user2@alterra.id'],
+            employeeObject: [
+              {
+                employee_name: 'wawan',
+                employee_email: 'wawan@alterra.id',
+                employee_image_url: 'wawan.jpg',
+                employee_organization: 'org',
+                employee_organization_full_text: 'organization',
+                employee_business_unit: 'ho',
+              },
+            ],
+          },
+          answersObject: [{
+            employee_name: 'wawan',
+            employee_email: 'wawan@alterra.id',
+            employee_image_url: 'wawan.jpg',
+            employee_organization: 'org',
+            employee_organization_full_text: 'organization',
+            employee_business_unit: 'ho',
+          }, {
+            employee_name: 'user2',
+            employee_email: 'user2@alterra.id',
+            employee_image_url: 'user2.jpg',
+            employee_organization: 'org',
+            employee_organization_full_text: 'organization',
+            employee_business_unit: 'ho',
+          }],
+          counterSelected: 1,
+          answers: ['wawan@alterra.id', 'user2@alterra.id'],
+          localStorageBlacklist: '  ',
+          localStorageWhitelist: '  ',
+        };
+      },
+    });
+  });
+
+  it('Test checkTotalSwipe()', () => {
+    expect(wrapper.vm.moreWhitelist).toBeFalsy();
+    wrapper.setData({
+      selected: {
+        whitelist: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        blacklist: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+    });
+    wrapper.vm.checkTotalSwipe();
+    expect(wrapper.vm.moreWhitelist).toBeTruthy();
+  });
+});
+
+describe('components > SwipeableCard.vue case 3', () => {
+  beforeEach(() => {
+    wrapper = shallowMount(SwipeableCard, {
+      stubs: ['nuxt-link'],
+      propsData: {
+        domain: {
+          id: '65a248199ad87f22412ad',
+          criteria_name: 'Testing',
+          percent_progress: 10,
+          percent_progress_filter: '',
+          slug: '',
+          description: '',
+          shortdec: '',
+        },
+        currentPages: 0,
+      },
+      data() {
+        return {
+          localStorageBlacklist: undefined,
+          localStorageWhitelist: null,
+        };
+      },
+    });
+  });
+
+  it('Test closePrepareEmployee() else case 3', () => {
+    wrapper.setData({
+      localStorageBlacklist: undefined,
+      localStorageWhitelist: null,
+    });
+    wrapper.vm.closePrepareEmployee([
+      {
+        id: 'string;',
+        employee_name: 'string;',
+        employee_email: 'xx@gmail.com',
+        employee_image_url: 'string;',
+        employee_alt_id: 'string;',
+        employee_organization: 'string;',
+        employee_organization_full_text: 'string;',
+        employee_business_unit: 'string;',
+        created_at: 'string;',
+        updated_at: 'string;',
+      },
+    ]);
+  });
+
+  it('Test checkDataAnswer()', () => {
+    wrapper.setData({
+      selected: {
+        employee: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+    });
   });
 });
