@@ -152,10 +152,11 @@
               </div>
             </div>
             <div class="inline-block flex">
+              <!-- :disabled="loading" -->
               <button
-                :disabled="loading"
+                :disabled="true"
                 @click="nextPage();"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white hover:bg-white hover:text-secondary focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-gray-400 bg-gray-400 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

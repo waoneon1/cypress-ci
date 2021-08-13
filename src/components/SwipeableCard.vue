@@ -127,7 +127,7 @@
       </div>
 
       <!-- footer -->
-      <div class="fixed bottom-0 left-0 right-0 z-10">
+      <div class="fixed bottom-0 left-0 right-0 z-10" style="margin-bottom: -1px">
         <!-- navigation circle -->
         <div
           class="mx-auto max-w-md bg-white rounded-b-xl shadow-lg w-full h-4 transform rotate-180"
@@ -179,6 +179,7 @@
           </ul>
         </div>
       </div>
+
       <!-- Help -->
       <Help :show="help" class="z-40"></Help>
     </div>
@@ -221,7 +222,7 @@ const EVENTS = {
 })
 export default class SwipeableCard extends Vue {
   // Data: {}
-  debug:boolean = true
+  debug:boolean = false
 
   isVisible:boolean = true
 
