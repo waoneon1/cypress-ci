@@ -194,7 +194,7 @@ import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
 import { CriteriaResponseData } from '@/store/criteria';
 import Help from '~/components/utilities/HelpSwipe.vue';
-import PrepareEmployee from '~/components/prepareEmployee.vue';
+import PrepareEmployee from '~/components/PrepareEmployee.vue';
 
 import { AnswersObject } from '~/types/AnswersObject';
 
@@ -222,7 +222,8 @@ const EVENTS = {
 })
 export default class SwipeableCard extends Vue {
   // Data: {}
-  debug:boolean = false
+  // TODO: disable before push
+  debug:boolean = true
 
   isVisible:boolean = true
 
@@ -309,6 +310,7 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkWhitelist() {
+    console.log('checkWhitelist');
     this.counterSelected += 1;
     // console.log('check blacklist', this.selected.blacklist);
     // console.log('check whitelist', this.selected.whitelist);
@@ -452,6 +454,12 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkDataAnswer() {
+    console.log('checkDataAnswer');
+
+    if (this.employees.length < 9) {
+      this.proceedQnaPage();
+    }
+
     // cek jika belum mendapatkan 9 unique employee
     // TODO: Take care of thankyou page later
     // if (this.employees.length === 0) { this.thankyouPage = true; }

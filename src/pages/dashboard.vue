@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              item.percent_progress_filter <= 100 || whitelist === null ? goToQnaPage(item) : null
+              criteriaProgressCount(item) <= 100 || whitelist === null ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,7 +61,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress_filter < 100 || whitelist === null
+                    criteriaProgressCount(item) < 100 || whitelist === null
                       ? 'hover:bg-blue-100'
                       : ''
                   }`
@@ -82,7 +82,7 @@
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
                           `width:${roundedNumber(
-                            item.percent_progress_filter
+                            criteriaProgressCount(item)
                           )}%`
                         "
                       ></div>
@@ -90,12 +90,12 @@
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="item.percent_progress_filter < 100 || whitelist === null"
+                    v-if="criteriaProgressCount(item) < 100 || whitelist === null"
                     class="text-xs inline-block text-primary"
                     >{{
-                      item.percent_progress_filter === 0 || whitelist === null
+                      criteriaProgressCount(item) === 0 || whitelist === null
                         ? 0
-                        : roundedNumber(item.percent_progress_filter)
+                        : roundedNumber(criteriaProgressCount(item))
                     }}%</span
                   >
                   <div
@@ -180,7 +180,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component, Mixins } from 'vue-property-decorator';
+import Percentage from '@/mixins/Percentage';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
@@ -195,7 +196,7 @@ const _ = require('lodash');
 @Component({
   components: { Alert },
 })
-export default class Dashboard extends Vue {
+export default class Dashboard extends Mixins(Percentage) {
   title: string = 'RRS Dashboard';
 
   alert: boolean = false;
@@ -206,7 +207,7 @@ export default class Dashboard extends Vue {
 
   loading: boolean = true;
 
-  employeeCounterData = { all: 0, org: 0 }
+  employee:EmployeeResponseData[] = []
 
   loginData: LoginData = {
     exp: 1,
@@ -245,10 +246,11 @@ export default class Dashboard extends Vue {
   roundedNumber = (val: number): number => _.round(val, 2);
 
   async loadCriteriaData(): Promise<void> {
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+    await criteriaModule.getCriteria().then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+
       this.recommendation = this.setRecommendation();
     });
   }
@@ -276,16 +278,9 @@ export default class Dashboard extends Vue {
 
   async EmployeeCounter() {
     // Get Employee filter by ORG and BU
-    let allEmployee:EmployeeResponseData[] = [];
-    let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      allEmployee = employeeModule.dataEmployee.data;
-      employeeFiltered = _.filter(allEmployee, {
-        // employee_organization : TEC - ENG
-        employee_organization: this.loginData.user_organization,
-      });
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+      this.employee = employeeModule.dataEmployee.data;
     });
   }
 
@@ -303,6 +298,10 @@ export default class Dashboard extends Vue {
     ]).then(() => {
       this.loadCriteriaData();
     });
+  }
+
+  public criteriaProgressCount(categories) {
+    return _.round(this.calc(categories, this.employee.length), 2);
   }
 
   created() {

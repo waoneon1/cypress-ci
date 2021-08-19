@@ -16,7 +16,6 @@ export interface CriteriaResponseData {
   id: string;
   criteria_name: string;
   percent_progress: number;
-  percent_progress_filter: number;
   slug?: string;
   description?: string;
   shortdec?: string;
@@ -37,13 +36,6 @@ export default class CriteriaModule extends VuexModule {
     message: '',
     data: [],
   };
-
-  public dataCounter = { all: 0, org: 0 };
-
-  @Mutation
-  setCounter(value: { all: number, org: number }): void {
-    this.dataCounter = value;
-  }
 
   @Mutation
   setCriteria(value: CriteriaResponse): void {
@@ -140,20 +132,6 @@ export default class CriteriaModule extends VuexModule {
       const obj = a;
       // making slug by lowercase criteria name
       obj.slug = obj.criteria_name.toLowerCase();
-
-      // // count progress with filter
-      // const totalEmployeePercentage = obj.percent_progress;
-      // const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-      // const countEmployee = this.dataCounter;
-      // // count whitelist from check & from organization
-      // const countWhitelist = whitelistCheck;
-
-      // const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-      // const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-      // const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
-
-      obj.percent_progress_filter = 0;
-
       return obj;
     });
 
@@ -162,7 +140,7 @@ export default class CriteriaModule extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async getCriteria(payload: { all: number, org: number }): Promise<void> {
+  async getCriteria(): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
       const response = await axios.get(`${url}criteria_user`, {
@@ -172,7 +150,6 @@ export default class CriteriaModule extends VuexModule {
       });
 
       if (response.data.data) {
-        this.setCounter(payload);
         this.setCriteria(response.data);
       } else {
         this.setCriteria({

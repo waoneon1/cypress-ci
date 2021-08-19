@@ -237,6 +237,20 @@ export default class PrepareEmployee extends Vue {
     const newWhitelist: string[] = [...whitelist, ...selected];
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
 
+    // if user select less then 9, send all employee to blacklist
+    if ([...this.selectedFromSwipeable, ...this.selected].length < 9) {
+      const prepareBlacklist:string[] = [];
+      _.map(
+        this.employee,
+        (o: EmployeeResponseData) => {
+          if (!selected.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email) {
+            prepareBlacklist.push(o.employee_email);
+          }
+        },
+      );
+      localStorage.setItem('rrs_blacklist', JSON.stringify(prepareBlacklist));
+    }
+
     return [...this.selectedFromSwipeable, ...this.selected];
   }
 

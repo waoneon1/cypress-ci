@@ -1,10 +1,10 @@
-import PrepareEmployee from '@/components/prepareEmployee.vue';
 import { expect, it, describe } from '@jest/globals';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import EmployeeModule from '@/store/employee';
 import Vuex from 'vuex';
 import { getModule } from 'vuex-module-decorators';
 import axios, { AxiosResponse } from 'axios';
+import PrepareEmployee from '~/components/PrepareEmployee.vue';
 
 const Vue = createLocalVue();
 Vue.use(Vuex);
