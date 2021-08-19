@@ -461,16 +461,8 @@ export default class SwipeableCard extends Vue {
   async checkDataAnswer() {
     // console.log(this.allEmployee.length, 'checkDataAnswer');
     // const allEmployeeFilter = this.allEmployee.length -
-
-    const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
-    const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
-    const countRemain = this.allEmployee.length - (blacklist.length + whitelist.length);
-
-    if (countRemain === 0) {
-      this.proceedQnaPage();
-    } else if (this.employees.length < 9) {
-      this.proceedQnaPage();
-    } else if (this.answers.length < 5 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+    
+    if (this.answers.length < 5 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
       // cek jika belum mendapatkan 9 unique employee
       // TODO: Take care of thankyou page later
       // get 3 data lagi sampai dapat 9 unique employee
