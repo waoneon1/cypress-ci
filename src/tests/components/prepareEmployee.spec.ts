@@ -6,7 +6,6 @@ import { getModule } from 'vuex-module-decorators';
 import axios, { AxiosResponse } from 'axios';
 import PrepareEmployee from '~/components/PrepareEmployee.vue';
 
-
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
