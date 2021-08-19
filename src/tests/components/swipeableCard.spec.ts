@@ -89,7 +89,7 @@ describe('components > SwipeableCard.vue', () => {
           employee_alt_id: 'string',
           employee_organization: 'string',
           employee_organization_full_text: 'string',
-        },{
+        }, {
           id: 'string',
           employee_name: 'string',
           employee_email: 'string',

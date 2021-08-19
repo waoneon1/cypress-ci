@@ -461,7 +461,7 @@ export default class SwipeableCard extends Vue {
   async checkDataAnswer() {
     // console.log(this.allEmployee.length, 'checkDataAnswer');
     // const allEmployeeFilter = this.allEmployee.length -
-    
+
     if (this.answers.length < 5 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
       // cek jika belum mendapatkan 9 unique employee
       // TODO: Take care of thankyou page later
