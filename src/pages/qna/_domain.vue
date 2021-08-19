@@ -279,7 +279,6 @@ export default class Qna extends Mixins(Percentage) {
         criteriaId: this.domain.id,
       };
 
-      console.log(data);
       await qnaModule.submitQna(data);
       return qnaModule.submitResponse;
     }

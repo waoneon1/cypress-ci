@@ -4,7 +4,7 @@ import EmployeeModule from '@/store/employee';
 import Vuex from 'vuex';
 import { getModule } from 'vuex-module-decorators';
 import axios, { AxiosResponse } from 'axios';
-import PrepareEmployee from '~/components/PrepareEmployee.vue';
+import PrepareEmployee from '@/components/PrepareEmployee.vue';
 
 const Vue = createLocalVue();
 Vue.use(Vuex);
@@ -28,7 +28,7 @@ const mockedResponse: AxiosResponse = {
     data: [
       {
         created_at: '2021-06-10T07:58:00.730000',
-        employee_alt_id: '1506180007',
+        employee_alt_id: '1506180007d',
         employee_business_unit: 'HO - Technology',
         employee_email: 'ekky@alterra.id',
         employee_image_url: 'https://talenta.s3.ap-southeast-1.amazonaws.com/avatar/CspYQOuMSoci5qemjeTMCB5INttwkphG.jpg',

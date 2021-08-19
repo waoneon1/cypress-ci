@@ -317,7 +317,6 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkWhitelist() {
-    console.log('checkWhitelist');
     this.counterSelected += 1;
     if (this.selected.employee.length === this.limitEmp) {
       this.proceedQnaPage();
