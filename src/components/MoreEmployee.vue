@@ -185,7 +185,7 @@ export interface SelectedSwipeable {
 const _ = require('lodash');
 
 @Component
-export default class PrepareEmployee extends Vue {
+export default class MoreEmployee extends Vue {
   loading: boolean = true;
 
   token = localStorage.getItem('token');
@@ -229,7 +229,7 @@ export default class PrepareEmployee extends Vue {
     return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
-  @Emit('closePrepareEmployee')
+  @Emit('closeMoreEmployee')
   save(): EmployeeResponseData[] {
     const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
     const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);

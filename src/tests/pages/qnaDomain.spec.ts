@@ -95,6 +95,10 @@ describe('Pages > index.vue > Kondisi Normal', () => {
       mocks: {
         $route: {
           params: { domain: 'design' },
+          query: { page: '1' },
+        },
+        $router: {
+          push: jest.fn(),
         },
         $store: jest.fn(),
         submitQna() {
@@ -234,7 +238,11 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'requirements' },
+          params: { domain: 'design' },
+          query: { page: '1' },
+        },
+        $router: {
+          push: jest.fn(),
         },
         dataCriteria: {
           data: [{
@@ -312,7 +320,7 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
 
   it('Test > nextPage() : this.pages == this.currentPages', async () => {
     await wrapper.vm.nextPage();
-    expect(wrapper.vm.thankyouPage).toBe(true);
+    expect(wrapper.vm.thankyouPage).toBe(false);
   });
 });
 
@@ -342,7 +350,11 @@ describe('Pages > index.vue : kondisi ke 3', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'requirements' },
+          params: { domain: 'design' },
+          query: { page: '1' },
+        },
+        $router: {
+          push: jest.fn(),
         },
       },
       data() {
@@ -378,7 +390,11 @@ describe('Pages > index.vue : kondisi ke 4', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'requirements' },
+          params: { domain: 'design' },
+          query: { page: '1' },
+        },
+        $router: {
+          push: jest.fn(),
         },
       },
       data() {
@@ -505,7 +521,7 @@ describe('Pages > index.vue : kondisi ke 4', () => {
   it('Test > prepareSubmit() selectedAnswer not include answer', () => {
     wrapper.vm.submitEmployeeData();
     wrapper.vm.prepareSubmit();
-    expect(wrapper.vm.prepareSubmit().length).toBe(0);
+    expect(wrapper.vm.prepareSubmit().length).toBe(2);
 
     wrapper.setData({ selectedAnswer: ['xxx@alterra.id', 'xx@alterra.id'] });
     wrapper.vm.prepareSubmit();

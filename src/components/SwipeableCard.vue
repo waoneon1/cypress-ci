@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PrepareEmployee v-if="moreWhitelist" @closePrepareEmployee="closePrepareEmployee"/>
+    <MoreEmployee v-if="moreWhitelist" @closeMoreEmployee="closeMoreEmployee"/>
     <div v-else class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28">
       <!-- Heading -->
 
@@ -196,7 +196,7 @@ import { CriteriaResponseData } from '@/store/criteria';
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
 import Help from '~/components/utilities/HelpSwipe.vue';
-import PrepareEmployee from '~/components/PrepareEmployee.vue';
+import MoreEmployee from '~/components/MoreEmployee.vue';
 
 import { AnswersObject } from '~/types/AnswersObject';
 
@@ -219,7 +219,7 @@ const EVENTS = {
   components: {
     Vue2InteractDraggable,
     Help,
-    PrepareEmployee,
+    MoreEmployee,
   },
 })
 export default class SwipeableCard extends Vue {
@@ -522,7 +522,7 @@ export default class SwipeableCard extends Vue {
     return true;
   }
 
-  closePrepareEmployee(payload) {
+  closeMoreEmployee(payload) {
     this.moreWhitelist = false;
     this.loading = true;
     this.localStorageBlacklist = localStorage.getItem('rrs_blacklist');

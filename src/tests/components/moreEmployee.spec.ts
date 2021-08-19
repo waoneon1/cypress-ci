@@ -4,7 +4,7 @@ import EmployeeModule from '@/store/employee';
 import Vuex from 'vuex';
 import { getModule } from 'vuex-module-decorators';
 import axios, { AxiosResponse } from 'axios';
-import PrepareEmployee from '@/components/PrepareEmployee.vue';
+import MoreEmployee from '@/components/MoreEmployee.vue';
 
 const Vue = createLocalVue();
 Vue.use(Vuex);
@@ -62,7 +62,7 @@ mockedAxios.get.mockResolvedValue(mockedResponse);
 describe('pages > Faq.vue', () => {
   // mounting component
   it('berhasil mounting komponen', async () => {
-    const wrapper: any = shallowMount(PrepareEmployee, {
+    const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
@@ -79,7 +79,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('berhasil mounting komponen tanpa token', () => {
-    const wrapper: any = shallowMount(PrepareEmployee, {
+    const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
@@ -98,7 +98,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('test toggleSelect(email)', () => {
-    const wrapper: any = shallowMount(PrepareEmployee, {
+    const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
@@ -114,7 +114,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('test save()', () => {
-    const wrapper: any = shallowMount(PrepareEmployee, {
+    const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $router: {
@@ -133,7 +133,7 @@ describe('pages > Faq.vue', () => {
   });
 
   it('test save() empty', () => {
-    const wrapper: any = shallowMount(PrepareEmployee, {
+    const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $router: {
