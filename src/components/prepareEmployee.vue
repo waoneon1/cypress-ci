@@ -232,13 +232,15 @@ export default class PrepareEmployee extends Vue {
   @Emit('closePrepareEmployee')
   save(): EmployeeResponseData[] {
     const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+    const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+
     const selected = _.map(this.selected, 'employee_email');
 
     const newWhitelist: string[] = [...whitelist, ...selected];
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
 
     // if user select less then 9, send all employee to blacklist
-    if ([...this.selectedFromSwipeable, ...this.selected].length < 9) {
+    if (this.selected.length < 5) {
       const prepareBlacklist:string[] = [];
       _.map(
         this.employee,
@@ -248,7 +250,10 @@ export default class PrepareEmployee extends Vue {
           }
         },
       );
-      localStorage.setItem('rrs_blacklist', JSON.stringify(prepareBlacklist));
+      console.log(this.employee, this.employee.length, 'employee')
+      console.log(this.selected, this.selected.length, 'selected')
+      console.log([...prepareBlacklist, ...blacklist], 'bls')
+      localStorage.setItem('rrs_blacklist', JSON.stringify([...prepareBlacklist, ...blacklist]));
     }
 
     return [...this.selectedFromSwipeable, ...this.selected];

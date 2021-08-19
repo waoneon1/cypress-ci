@@ -5,6 +5,7 @@
         <SwipeableCard
           :domain="this.domain"
           :currentPages="this.currentPages"
+          :allEmployee="this.employee"
           @swipableData="initSwipableData"
         />
       </div>
@@ -265,6 +266,7 @@ export default class Qna extends Mixins(Percentage) {
 
       // go to the next page
       this.loadSwipableComponent = true;
+      this.$router.push(`?page=${this.currentPages}`);
     } else {
       this.thankyouPage = true;
     }
@@ -367,7 +369,9 @@ export default class Qna extends Mixins(Percentage) {
   }
 
   public criteriaProgressCount() {
-    const progress = qnaModule.submitResponse.data;
+    const progress:CriteriaResponseData = _.clone(this.domain)
+    progress.percent_progress = qnaModule.submitResponse.data.percent_progress
+
     return progress.percent_progress === 0
       ? _.round(this.calc(this.domain, this.employee.length), 2)
       : _.round(this.calc(progress, this.employee.length), 2);
@@ -375,6 +379,14 @@ export default class Qna extends Mixins(Percentage) {
   /* END UTILITIES */
 
   async init() {
+    
+    // set current page
+    if(typeof this.$route.query.page === 'string') {
+      this.currentPages = parseInt(this.$route.query.page) 
+    } else {
+      this.currentPages = 1
+    }
+
     await this.setSelectedCriteria().then(() => {
       this.allPageLoading = false;
       // set initial progress

@@ -21,7 +21,7 @@
       <!-- Content: Criteria List -->
       <div v-if="debug" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
         <p> index : {{ index }} | iswipeable : {{ iteration }} | selected : {{ selected.employee.length }} | iteration : {{ currentPages }}</p>
-        <p> counterSelected : {{ counterSelected }} | total swipe : {{ selected.whitelist.length + selected.blacklist.length }}</p>
+        <p> counterSelected : {{ counterSelected }} | total swipe : {{ totalSwipe }}</p>
         <p> blacklist : {{ selected.blacklist.length }} | whitelist : {{ selected.whitelist.length }} | selected : {{ selected.employee.length }}</p>
       </div>
       <div class="relative" v-if="loading">
@@ -193,6 +193,8 @@ import {
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
 import { CriteriaResponseData } from '@/store/criteria';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+
 import Help from '~/components/utilities/HelpSwipe.vue';
 import PrepareEmployee from '~/components/PrepareEmployee.vue';
 
@@ -230,6 +232,8 @@ export default class SwipeableCard extends Vue {
   btnDisabled:boolean = false
 
   index:number = 0
+
+  totalSwipe:number = 0
 
   localStorageBlacklist = localStorage.getItem('rrs_blacklist')
 
@@ -284,6 +288,9 @@ export default class SwipeableCard extends Vue {
   @Prop({ required: true, type: Number })
   currentPages!: number;
 
+  @Prop({ required: true, type: Array })
+  allEmployee!: EmployeeResponseData[];
+
   // Computed: {}
   current: AnswersObject | {} = {}
 
@@ -312,9 +319,6 @@ export default class SwipeableCard extends Vue {
   async checkWhitelist() {
     console.log('checkWhitelist');
     this.counterSelected += 1;
-    // console.log('check blacklist', this.selected.blacklist);
-    // console.log('check whitelist', this.selected.whitelist);
-    // console.log('check selected', this.selected.employee);
     if (this.selected.employee.length === this.limitEmp) {
       this.proceedQnaPage();
     } else if (this.counterSelected === this.answers.length) {
@@ -352,6 +356,7 @@ export default class SwipeableCard extends Vue {
 
   visibleTrue() {
     this.index += 1;
+    this.totalSwipe += 1;
     this.isVisible = true;
     this.btnDisabled = false;
   }
@@ -365,6 +370,12 @@ export default class SwipeableCard extends Vue {
   }
 
   async init() {
+    // set current page
+    // if (typeof this.$route.query.page === 'string') {
+    //   console.log('tlejlksjfkldsjflkdsj')
+    //   this.currentPages = parseInt(this.$route.query.page) 
+    // } 
+
     await this.loadEmployeeData();
   }
 
@@ -395,6 +406,7 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
+    // _.isEqual(_.sortBy(array1), _.sortBy(array2))
     // buat array unique employee
     this.employees.forEach((e) => {
       // check employee x
@@ -454,16 +466,20 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkDataAnswer() {
-    console.log('checkDataAnswer');
+    //console.log(this.allEmployee.length, 'checkDataAnswer');
+    //const allEmployeeFilter = this.allEmployee.length - 
 
-    if (this.employees.length < 9) {
+   const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+   const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+   const countRemain = this.allEmployee.length - (blacklist.length + whitelist.length)
+    
+    if (countRemain === 0) {
       this.proceedQnaPage();
-    }
-
-    // cek jika belum mendapatkan 9 unique employee
-    // TODO: Take care of thankyou page later
-    // if (this.employees.length === 0) { this.thankyouPage = true; }
-    if (this.answers.length < this.limitEmp && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+    } else if (this.employees.length < 9) {
+      this.proceedQnaPage();
+    } else if (this.answers.length < 5 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+      // cek jika belum mendapatkan 9 unique employee
+      // TODO: Take care of thankyou page later
       // get 3 data lagi sampai dapat 9 unique employee
       await this.loadEmployeeData();
     } else {
@@ -500,13 +516,13 @@ export default class SwipeableCard extends Vue {
   }
 
   checkTotalSwipe(): boolean {
-    const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
+    //const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
     if (this.currentPages === 1) {
-      if (bnwTotal === this.limitSwipe1) {
+      if (this.totalSwipe === (this.limitSwipe1 - 1)) {
         this.replaceBlackWhitelist();
         this.moreWhitelist = true;
       }
-    } else if (bnwTotal === this.limitSwipe2) {
+    } else if (this.totalSwipe === (this.limitSwipe2 - 1)) {
       this.replaceBlackWhitelist();
       this.moreWhitelist = true;
     }

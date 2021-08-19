@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              criteriaProgressCount(item) <= 100 || whitelist === null ? goToQnaPage(item) : null
+              criteriaProgressCount(item) <= 100 ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,7 +61,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    criteriaProgressCount(item) < 100 || whitelist === null
+                    criteriaProgressCount(item) < 100
                       ? 'hover:bg-blue-100'
                       : ''
                   }`
@@ -81,22 +81,16 @@
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
-                          `width:${roundedNumber(
-                            criteriaProgressCount(item)
-                          )}%`
+                          `width:${criteriaProgressCount(item)}%`
                         "
                       ></div>
                     </div>
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="criteriaProgressCount(item) < 100 || whitelist === null"
+                    v-if="criteriaProgressCount(item) < 100"
                     class="text-xs inline-block text-primary"
-                    >{{
-                      criteriaProgressCount(item) === 0 || whitelist === null
-                        ? 0
-                        : roundedNumber(criteriaProgressCount(item))
-                    }}%</span
+                    >{{criteriaProgressCount(item)}}%</span
                   >
                   <div
                     v-else

@@ -14,7 +14,7 @@ class Percentage extends Vue {
 
   blacklistJson = localStorage.getItem('rrs_blacklist');
 
-  public calc(categories: CriteriaResponseData | SubmitResponseData, employeeLength: number) {
+  public calc(categories: CriteriaResponseData, employeeLength: number) {
     // count progress with filter
     const totalEmployeePercentage = categories.percent_progress;
     const blacklist = this.blacklistJson ? JSON.parse(this.blacklistJson).length : 0;
@@ -27,6 +27,7 @@ class Percentage extends Vue {
     const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
     const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
+    console.log(employeeLength, categories.criteria_name, 'category')
     console.log('countWhitelist : ', countWhitelist);
     console.log('totalEmployeePercentage : ', totalEmployeePercentage);
     console.log('totalEmployeePair : ', totalEmployeePair);
