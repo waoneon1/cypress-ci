@@ -27,7 +27,7 @@ class Percentage extends Vue {
     const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
     const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
 
-    console.log(employeeLength, categories.criteria_name, 'category')
+    console.log(employeeLength, categories.criteria_name, 'category');
     console.log('countWhitelist : ', countWhitelist);
     console.log('totalEmployeePercentage : ', totalEmployeePercentage);
     console.log('totalEmployeePair : ', totalEmployeePair);

@@ -84,7 +84,7 @@ export default class QnaModule extends VuexModule {
         },
       });
 
-      console.log(response.data.data, 'pair')
+      console.log(response.data.data, 'pair');
 
       if (response.data.data) {
         this.setQna(response.data);

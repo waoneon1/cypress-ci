@@ -369,8 +369,8 @@ export default class Qna extends Mixins(Percentage) {
   }
 
   public criteriaProgressCount() {
-    const progress:CriteriaResponseData = _.clone(this.domain)
-    progress.percent_progress = qnaModule.submitResponse.data.percent_progress
+    const progress:CriteriaResponseData = _.clone(this.domain);
+    progress.percent_progress = qnaModule.submitResponse.data.percent_progress;
 
     return progress.percent_progress === 0
       ? _.round(this.calc(this.domain, this.employee.length), 2)
@@ -379,12 +379,9 @@ export default class Qna extends Mixins(Percentage) {
   /* END UTILITIES */
 
   async init() {
-    
     // set current page
-    if(typeof this.$route.query.page === 'string') {
-      this.currentPages = parseInt(this.$route.query.page) 
-    } else {
-      this.currentPages = 1
+    if (typeof this.$route.query.page === 'string') {
+      this.currentPages = Number(this.$route.query.page);
     }
 
     await this.setSelectedCriteria().then(() => {

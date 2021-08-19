@@ -250,9 +250,6 @@ export default class PrepareEmployee extends Vue {
           }
         },
       );
-      console.log(this.employee, this.employee.length, 'employee')
-      console.log(this.selected, this.selected.length, 'selected')
-      console.log([...prepareBlacklist, ...blacklist], 'bls')
       localStorage.setItem('rrs_blacklist', JSON.stringify([...prepareBlacklist, ...blacklist]));
     }
 

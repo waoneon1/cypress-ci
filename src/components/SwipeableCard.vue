@@ -370,12 +370,6 @@ export default class SwipeableCard extends Vue {
   }
 
   async init() {
-    // set current page
-    // if (typeof this.$route.query.page === 'string') {
-    //   console.log('tlejlksjfkldsjflkdsj')
-    //   this.currentPages = parseInt(this.$route.query.page) 
-    // } 
-
     await this.loadEmployeeData();
   }
 
@@ -466,13 +460,13 @@ export default class SwipeableCard extends Vue {
   }
 
   async checkDataAnswer() {
-    //console.log(this.allEmployee.length, 'checkDataAnswer');
-    //const allEmployeeFilter = this.allEmployee.length - 
+    // console.log(this.allEmployee.length, 'checkDataAnswer');
+    // const allEmployeeFilter = this.allEmployee.length -
 
-   const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
-   const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
-   const countRemain = this.allEmployee.length - (blacklist.length + whitelist.length)
-    
+    const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+    const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+    const countRemain = this.allEmployee.length - (blacklist.length + whitelist.length);
+
     if (countRemain === 0) {
       this.proceedQnaPage();
     } else if (this.employees.length < 9) {
@@ -516,7 +510,7 @@ export default class SwipeableCard extends Vue {
   }
 
   checkTotalSwipe(): boolean {
-    //const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
+    // const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
     if (this.currentPages === 1) {
       if (this.totalSwipe === (this.limitSwipe1 - 1)) {
         this.replaceBlackWhitelist();
