@@ -17,7 +17,7 @@
         <p>
           employee : {{ employee.length }} |
           white : {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) }} |
-          black : {{ (this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist).length : 0) }} |  
+          black : {{ (this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist).length : 0) }} |
           select : {{ selected.length }} | selectBefore : {{ swipeableData.employee.length }}
         </p>
       </div>

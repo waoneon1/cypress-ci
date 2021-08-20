@@ -18,7 +18,7 @@ class Percentage extends Vue {
     // count progress with filter
     const totalEmployeePercentage = categories.percent_progress;
     const blacklist = this.blacklistJson ? JSON.parse(this.blacklistJson).length : 0;
-    const countEmployee = (employeeLength - 1);
+    const countEmployee = (employeeLength - 1); // 49
 
     // count whitelist from check & from organization
     const countWhitelist = countEmployee - blacklist;
@@ -32,7 +32,7 @@ class Percentage extends Vue {
     // console.log('totalEmployeePercentage : ', totalEmployeePercentage);
     // console.log('totalEmployeePair : ', totalEmployeePair);
     // console.log('totalWhitelistPair : ', totalWhitelistPair);
-    // console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) : ', percentageForUser);
+    console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) : ', percentageForUser);
 
     return percentageForUser;
   }

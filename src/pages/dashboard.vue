@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              criteriaProgressCount(item) <= 100 ? goToQnaPage(item) : null
+              criteriaProgressCount(item) <= 100 || whitelist === null ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,7 +61,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    criteriaProgressCount(item) < 100
+                    criteriaProgressCount(item) < 100 || whitelist === null
                       ? 'hover:bg-blue-100'
                       : ''
                   }`
@@ -88,7 +88,7 @@
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="criteriaProgressCount(item) < 100"
+                    v-if="criteriaProgressCount(item) < 100 || whitelist === null"
                     class="text-xs inline-block text-primary"
                     >{{criteriaProgressCount(item)}}%</span
                   >
@@ -299,7 +299,7 @@ export default class Dashboard extends Mixins(Percentage) {
   }
 
   created() {
-    setInterval(() => {
+    setTimeout(() => {
       this.alert = false;
       alertModule.setAlertFalse();
     }, 4000);

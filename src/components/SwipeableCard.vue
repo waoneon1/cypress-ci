@@ -391,8 +391,8 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
-    let pairToEmployee:AnswersObject[] = []
-    let uniqueEmployee:AnswersObject[] = []
+    const pairToEmployee:AnswersObject[] = [];
+    let uniqueEmployee:AnswersObject[] = [];
 
     // 1. get unique employee
     _.map(this.employees, (object) => {
@@ -403,7 +403,7 @@ export default class SwipeableCard extends Vue {
         employee_organization: object.employee_organization_x,
         employee_organization_full_text: object.employee_organization_full_text_x,
         employee_business_unit: object.employee_business_unit_x,
-      }
+      };
       const yObj = {
         employee_name: object.employee_name_y,
         employee_email: object.employee_email_y,
@@ -411,48 +411,44 @@ export default class SwipeableCard extends Vue {
         employee_organization: object.employee_organization_y,
         employee_organization_full_text: object.employee_organization_full_text_y,
         employee_business_unit: object.employee_business_unit_y,
-      }
+      };
 
-      pairToEmployee.push(xObj)
-      pairToEmployee.push(yObj)
-    })
+      pairToEmployee.push(xObj);
+      pairToEmployee.push(yObj);
+    });
     uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
 
     // 2. get whitelist object base on unique employee
-    const whitelistObject: AnswersObject[]  = _.filter(uniqueEmployee, (o:AnswersObject) => {
-      return this.selected.whitelist.includes(o.employee_email);
-    })
-   
+    const whitelistObject: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email));
+    console.log(this.employees, 'uniqueEmployee');
+
     // 3. prioritize non whitelist employee
-    const prioritize: AnswersObject[]  = _.filter(uniqueEmployee, (o:AnswersObject) => {
-      return !this.selected.whitelist.includes(o.employee_email);
-    })
+    const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
     // 4. check if prioritize non whitelist !== 0
-    let uniqueEmployeeReady: AnswersObject[] = whitelistObject
+    let uniqueEmployeeReady: AnswersObject[] = whitelistObject;
     // const takeWhitelist: number = 9 - prioritize.length
-    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9)
+    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9);
     if (prioritize.length !== 0) {
-      uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist]
+      uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist];
     } else {
-      uniqueEmployeeReady = shuffleWhitelist
+      uniqueEmployeeReady = shuffleWhitelist;
     }
 
     // 5. asign to variable to selected and swipeable
     if (prioritize.length < 9) {
-      const takeSelected = 9 - prioritize.length 
-      this.selected.employee = _.take(_.map(uniqueEmployeeReady, 'employee_email'), takeSelected)
-      this.selected.employeeObject = _.take(uniqueEmployeeReady, takeSelected)
+      const takeSelected = 9 - prioritize.length;
+      this.selected.employee = _.take(_.map(uniqueEmployeeReady, 'employee_email'), takeSelected);
+      this.selected.employeeObject = _.take(uniqueEmployeeReady, takeSelected);
     }
-    this.answers = _.map(prioritize, 'employee_email')
-    this.answersObject = prioritize
-
+    this.answers = _.map(prioritize, 'employee_email');
+    this.answersObject = prioritize;
 
     // console.log(_.map(this.employees, 'employee_email_x'), _.map(this.employees, 'employee_email_y'), 'get from api')
     // console.log(pairToEmployee, 'pairToEmployee')
     // console.log(uniqueEmployee, 'uniqueEmployee')
-    console.log(prioritize.length, 'prioritize user')
-    console.log(_.map(uniqueEmployeeReady, 'employee_email'), uniqueEmployeeReady, 'uniqueEmployeeReady')
+    console.log(prioritize.length, 'prioritize user');
+    console.log(_.map(uniqueEmployeeReady, 'employee_email'), uniqueEmployeeReady, 'uniqueEmployeeReady');
 
     await this.checkDataAnswer();
   }
@@ -461,31 +457,32 @@ export default class SwipeableCard extends Vue {
     this.checkEmployeeRemain();
 
     //   this.proceedQnaPage();
-    console.log( ' lop')
-    //if (this.answers.length < 9 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
-    //if (this.answers.length < 3) {
-      // cek jika belum mendapatkan 9 unique employee
-      // get 3 data lagi sampai dapat 9 unique employee
-      // await this.loadEmployeeData();
-      
-    //} else {
-      if (this.iteration > 1) {
-        localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
-      }
-      this.index = this.iteration === 1 ? 0 : -1;
-      this.current = _.clone(this.answersObject[0]);
-      this.next = _.clone(this.answersObject[1]);
-      this.next2 = _.clone(this.answersObject[2]);
+    console.log('lop');
+    // if (this.answers.length < 9 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+    // if (this.answers.length < 3) {
+    // cek jika belum mendapatkan 9 unique employee
+    // get 3 data lagi sampai dapat 9 unique employee
+    // await this.loadEmployeeData();
 
-      if (this.selected.employee.length >= 9) {
-        this.proceedQnaPage();
-      } else {
-        this.loading = false;
-        setTimeout(() => {
-          this.loadingDelay = false;
-        }, 500);
-      }
-    //}
+    // } else {
+
+    if (this.iteration > 1) {
+      localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
+    }
+    this.index = this.iteration === 1 ? 0 : -1;
+    this.current = _.clone(this.answersObject[0]);
+    this.next = _.clone(this.answersObject[1]);
+    this.next2 = _.clone(this.answersObject[2]);
+
+    if (this.selected.employee.length >= 9) {
+      this.proceedQnaPage();
+    } else {
+      this.loading = false;
+      setTimeout(() => {
+        this.loadingDelay = false;
+      }, 500);
+    }
+    // }
   }
 
   @Emit('swipableData')
@@ -531,7 +528,7 @@ export default class SwipeableCard extends Vue {
 
   checkEmployeeRemain() {
     const countRemain = this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1;
-    console.log('employee remain', countRemain)
+    console.log('employee remain', countRemain);
     if (countRemain <= 0) {
       this.proceedQnaPage();
     }

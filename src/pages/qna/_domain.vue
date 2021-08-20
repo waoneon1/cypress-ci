@@ -401,12 +401,17 @@ export default class Qna extends Mixins(Percentage) {
   }
 
   initSwipableData(payload) {
+    if (this.criteriaProgressCount() >= 100) {
+      this.thankyouPage = true;
+    }
+
     // set loading
     this.loading = true;
     this.allPageLoading = true;
     // set data
     this.answers = _.take(payload.employee, 9);
     this.answersObject = _.take(payload.employeeObject, 9);
+    this.calc;
     // set loading = false and close swipable component
     this.loading = false;
     this.allPageLoading = false;
