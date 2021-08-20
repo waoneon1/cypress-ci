@@ -13,7 +13,14 @@
         </div>
       </div>
       <div class="h-1 w-full border-b"></div>
-
+      <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2 mx-3 mt-4">
+        <p>
+          employee : {{ employee.length }} |
+          white : {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) }} |
+          black : {{ (this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist).length : 0) }} |  
+          select : {{ selected.length }} | selectBefore : {{ swipeableData.employee.length }}
+        </p>
+      </div>
       <!-- Content: Answer -->
       <div class="px-5 pt-5">
         <!-- Search -->
@@ -112,18 +119,18 @@
         >
           <div class="flex justify-between items-center">
             <div class="text-gray-400">
-              <div v-if="selected.length">Terpilih {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length }} orang</div>
+              <div v-if="selected.length">Terpilih {{ (swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length }} orang</div>
               <div v-else></div>
             </div>
             <div class="inline-block flex">
               <button
                 class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
-                :class="((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                :class="((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
                   ? 'border-gray-400 bg-gray-400 text-white'
                   : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
                 :disabled="loading
-                  || ((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  || ((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
                 "
                 @click="save()"
@@ -166,26 +173,22 @@
 
 <script lang="ts">
 import {
-  Vue, Component, Watch, Emit,
+  Vue, Component, Watch, Emit, Prop,
 } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
 import { LoginData } from '~/types/LoginData';
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
-import { AnswersObject } from '~/types/AnswersObject';
-
-export interface SelectedSwipeable {
-  employee: string[],
-  blacklist: string[],
-  whitelist: string[],
-  employeeObject: AnswersObject[],
-}
+import { SelectedSwipeable } from '~/types/SelectedSwipeable';
 
 const _ = require('lodash');
 
 @Component
 export default class MoreEmployee extends Vue {
+  // TODO: remove debug
+  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
+
   loading: boolean = true;
 
   token = localStorage.getItem('token');
@@ -205,6 +208,9 @@ export default class MoreEmployee extends Vue {
   localStorageWhitelist = localStorage.getItem('rrs_whitelist')
 
   selectedFromSwipeable: EmployeeResponseData[] = []
+
+  @Prop({ required: true, type: Object })
+  swipeableData!: SelectedSwipeable;
 
   toggleSelect(item: EmployeeResponseData): void {
     const index = this.selected.indexOf(item);
@@ -240,7 +246,7 @@ export default class MoreEmployee extends Vue {
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
 
     // if user select less then 9, send all employee to blacklist
-    if (this.selected.length < 5) {
+    if ((this.selected.length + this.swipeableData.employee.length) < 9) {
       const prepareBlacklist:string[] = [];
       _.map(
         this.employee,
@@ -265,7 +271,6 @@ export default class MoreEmployee extends Vue {
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      // const org = this.decodeDataEmployee().user_organization;
       let blacklist: string[] = [];
       let whitelist: string[] = [];
       blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);

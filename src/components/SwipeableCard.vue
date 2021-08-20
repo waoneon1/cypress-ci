@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MoreEmployee v-if="moreWhitelist" @closeMoreEmployee="closeMoreEmployee"/>
+    <MoreEmployee v-if="moreWhitelist" :swipeableData="selected" @closeMoreEmployee="closeMoreEmployee"/>
     <div v-else class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28">
       <!-- Heading -->
 
@@ -19,9 +19,9 @@
       </div>
 
       <!-- Content: Criteria List -->
-      <div v-if="debug" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
+      <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
         <p> index : {{ index }} | iswipeable : {{ iteration }} | selected : {{ selected.employee.length }} | iteration : {{ currentPages }}</p>
-        <p> counterSelected : {{ counterSelected }} | total swipe : {{ totalSwipe }}</p>
+        <p> counterSelected : {{ counterSelected }} | total swipe : {{ totalSwipe }} | remaining em : {{ this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1 }}</p>
         <p> blacklist : {{ selected.blacklist.length }} | whitelist : {{ selected.whitelist.length }} | selected : {{ selected.employee.length }}</p>
       </div>
       <div class="relative" v-if="loading">
@@ -192,20 +192,13 @@ import {
 } from 'vue-property-decorator';
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
-import { CriteriaResponseData } from '@/store/criteria';
-import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
+import { CriteriaResponseData } from '@/store/criteria';
 import Help from '~/components/utilities/HelpSwipe.vue';
 import MoreEmployee from '~/components/MoreEmployee.vue';
 
-import { AnswersObject } from '~/types/AnswersObject';
-
-export interface SelectedSwipeable {
-  employee: string[],
-  blacklist: string[],
-  whitelist: string[],
-  employeeObject: AnswersObject[],
-}
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { SelectedSwipeable, AnswersObject } from '~/types/SelectedSwipeable';
 
 // Data
 const _ = require('lodash');
@@ -224,8 +217,7 @@ const EVENTS = {
 })
 export default class SwipeableCard extends Vue {
   // Data: {}
-  // TODO: disable before push
-  debug:boolean = true
+  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
 
   isVisible:boolean = true
 
@@ -399,75 +391,84 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
-    // _.isEqual(_.sortBy(array1), _.sortBy(array2))
-    // buat array unique employee
-    this.employees.forEach((e) => {
-      // check employee x
-      if (!this.selected.employee.includes(e.employee_email_x)) {
-        if (this.selected.whitelist.includes(e.employee_email_x)) {
-          this.selected.employee.push(e.employee_email_x);
-          this.selected.employeeObject.push({
-            employee_name: e.employee_name_x,
-            employee_email: e.employee_email_x,
-            employee_image_url: e.employee_image_url_x,
-            employee_organization: e.employee_organization_x,
-            employee_organization_full_text: e.employee_organization_full_text_x,
-            employee_business_unit: e.employee_business_unit_x,
-          });
-        } else if (!this.answers.includes(e.employee_email_x)) {
-          // add data
-          this.answers.push(e.employee_email_x);
-          // add detail data
-          this.answersObject.push({
-            employee_name: e.employee_name_x,
-            employee_email: e.employee_email_x,
-            employee_image_url: e.employee_image_url_x,
-            employee_organization: e.employee_organization_x,
-            employee_organization_full_text: e.employee_organization_full_text_x,
-            employee_business_unit: e.employee_business_unit_x,
-          });
-        }
+    let pairToEmployee:AnswersObject[] = []
+    let uniqueEmployee:AnswersObject[] = []
+
+    // 1. get unique employee
+    _.map(this.employees, (object) => {
+      const xObj = {
+        employee_name: object.employee_name_x,
+        employee_email: object.employee_email_x,
+        employee_image_url: object.employee_image_url_x,
+        employee_organization: object.employee_organization_x,
+        employee_organization_full_text: object.employee_organization_full_text_x,
+        employee_business_unit: object.employee_business_unit_x,
       }
-      // check employee y
-      if (!this.selected.employee.includes(e.employee_email_y)) {
-        if (this.selected.whitelist.includes(e.employee_email_y)) {
-          this.selected.employee.push(e.employee_email_y);
-          this.selected.employeeObject.push({
-            employee_name: e.employee_name_y,
-            employee_email: e.employee_email_y,
-            employee_image_url: e.employee_image_url_y,
-            employee_organization: e.employee_organization_y,
-            employee_organization_full_text: e.employee_organization_full_text_y,
-            employee_business_unit: e.employee_business_unit_y,
-          });
-        } else if (!this.answers.includes(e.employee_email_y)) {
-          // add data
-          this.answers.push(e.employee_email_y);
-          // add detail data
-          this.answersObject.push({
-            employee_name: e.employee_name_y,
-            employee_email: e.employee_email_y,
-            employee_image_url: e.employee_image_url_y,
-            employee_organization: e.employee_organization_y,
-            employee_organization_full_text: e.employee_organization_full_text_y,
-            employee_business_unit: e.employee_business_unit_y,
-          });
-        }
+      const yObj = {
+        employee_name: object.employee_name_y,
+        employee_email: object.employee_email_y,
+        employee_image_url: object.employee_image_url_y,
+        employee_organization: object.employee_organization_y,
+        employee_organization_full_text: object.employee_organization_full_text_y,
+        employee_business_unit: object.employee_business_unit_y,
       }
-    });
+
+      pairToEmployee.push(xObj)
+      pairToEmployee.push(yObj)
+    })
+    uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
+
+    // 2. get whitelist object base on unique employee
+    const whitelistObject: AnswersObject[]  = _.filter(uniqueEmployee, (o:AnswersObject) => {
+      return this.selected.whitelist.includes(o.employee_email);
+    })
+   
+    // 3. prioritize non whitelist employee
+    const prioritize: AnswersObject[]  = _.filter(uniqueEmployee, (o:AnswersObject) => {
+      return !this.selected.whitelist.includes(o.employee_email);
+    })
+
+    // 4. check if prioritize non whitelist !== 0
+    let uniqueEmployeeReady: AnswersObject[] = whitelistObject
+    // const takeWhitelist: number = 9 - prioritize.length
+    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9)
+    if (prioritize.length !== 0) {
+      uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist]
+    } else {
+      uniqueEmployeeReady = shuffleWhitelist
+    }
+
+    // 5. asign to variable to selected and swipeable
+    if (prioritize.length < 9) {
+      const takeSelected = 9 - prioritize.length 
+      this.selected.employee = _.take(_.map(uniqueEmployeeReady, 'employee_email'), takeSelected)
+      this.selected.employeeObject = _.take(uniqueEmployeeReady, takeSelected)
+    }
+    this.answers = _.map(prioritize, 'employee_email')
+    this.answersObject = prioritize
+
+
+    // console.log(_.map(this.employees, 'employee_email_x'), _.map(this.employees, 'employee_email_y'), 'get from api')
+    // console.log(pairToEmployee, 'pairToEmployee')
+    // console.log(uniqueEmployee, 'uniqueEmployee')
+    console.log(prioritize.length, 'prioritize user')
+    console.log(_.map(uniqueEmployeeReady, 'employee_email'), uniqueEmployeeReady, 'uniqueEmployeeReady')
+
     await this.checkDataAnswer();
   }
 
   async checkDataAnswer() {
-    // console.log(this.allEmployee.length, 'checkDataAnswer');
-    // const allEmployeeFilter = this.allEmployee.length -
+    this.checkEmployeeRemain();
 
-    if (this.answers.length < 5 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+    //   this.proceedQnaPage();
+    console.log( ' lop')
+    //if (this.answers.length < 9 && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
+    //if (this.answers.length < 3) {
       // cek jika belum mendapatkan 9 unique employee
-      // TODO: Take care of thankyou page later
       // get 3 data lagi sampai dapat 9 unique employee
-      await this.loadEmployeeData();
-    } else {
+      // await this.loadEmployeeData();
+      
+    //} else {
       if (this.iteration > 1) {
         localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
       }
@@ -484,7 +485,7 @@ export default class SwipeableCard extends Vue {
           this.loadingDelay = false;
         }, 500);
       }
-    }
+    //}
   }
 
   @Emit('swipableData')
@@ -526,6 +527,14 @@ export default class SwipeableCard extends Vue {
     this.selected.whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
 
     this.proceedQnaPage();
+  }
+
+  checkEmployeeRemain() {
+    const countRemain = this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1;
+    console.log('employee remain', countRemain)
+    if (countRemain <= 0) {
+      this.proceedQnaPage();
+    }
   }
 }
 </script>
