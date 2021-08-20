@@ -10,20 +10,20 @@ export interface SubmitResponseData {
 
 @Component
 class Percentage extends Vue {
-  blacklist = 0
+  bl = 0
 
   public calc(categories: CriteriaResponseData, employeeLength: number) {
-    this.blacklist = 0;
+    this.bl = 0;
     const blacklistJson = localStorage.getItem('rrs_blacklist');
     if (blacklistJson !== null && typeof blacklistJson === 'string') {
-      this.blacklist = blacklistJson ? JSON.parse(blacklistJson).length : 0;
+      this.bl = blacklistJson ? JSON.parse(blacklistJson).length : 0;
     }
     // count progress with filter
     const totalEmployeePercentage = categories.percent_progress;
     const countEmployee = (employeeLength - 1); // 49
 
     // count whitelist from check & from organization
-    const countWhitelist = countEmployee - (this.blacklist + 1);
+    const countWhitelist = countEmployee - (this.bl + 1);
 
     const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
     const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
