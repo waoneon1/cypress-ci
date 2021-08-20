@@ -64,6 +64,14 @@ describe('pages > employee.vue', () => {
   it('berhasil mounting komponen', async () => {
     const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
+      mocks: {
+        $router: {
+          push: jest.fn(),
+        },
+        $route: {
+          query: { page: '1' },
+        },
+      },
       data() {
         return {
           debug: 'false',
@@ -91,6 +99,14 @@ describe('pages > employee.vue', () => {
   it('berhasil mounting komponen tanpa token', () => {
     const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
+      mocks: {
+        $router: {
+          push: jest.fn(),
+        },
+        $route: {
+          query: { page: '1' },
+        },
+      },
       data() {
         return {
           debug: 'false',
@@ -120,6 +136,14 @@ describe('pages > employee.vue', () => {
   it('test toggleSelect(email)', () => {
     const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
+      mocks: {
+        $router: {
+          push: jest.fn(),
+        },
+        $route: {
+          query: { page: '1' },
+        },
+      },
       data() {
         return {
           debug: 'false',
@@ -150,6 +174,9 @@ describe('pages > employee.vue', () => {
         $router: {
           push: jest.fn(),
         },
+        $route: {
+          query: { page: '1' },
+        },
       },
       data() {
         return {
@@ -178,6 +205,9 @@ describe('pages > employee.vue', () => {
       mocks: {
         $router: {
           push: jest.fn(),
+        },
+        $route: {
+          query: { page: '1' },
         },
       },
       data() {

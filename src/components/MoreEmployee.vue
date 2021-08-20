@@ -16,6 +16,15 @@
 
       <!-- Content: Answer -->
       <div class="px-5 pt-5">
+
+        <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2 mx-3 mt-4">
+          <p>
+            employee : {{ employee.length }} |
+            white : {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) }} |
+            black : {{ (this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist).length : 0) }} |
+            select : {{ selected.length }} | selectBefore : {{ swipeableData.employee.length }}
+          </p>
+        </div>
         <!-- Search -->
         <div class="relative">
           <input
@@ -119,12 +128,12 @@
               <button
                 class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
                 :class="((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
-                  && selected.length !== 0
+                  && selected.length !== 0 && currentPages === 1
                   ? 'border-gray-400 bg-gray-400 text-white'
                   : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
                 :disabled="loading
                   || ((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
-                  && selected.length !== 0
+                  && selected.length !== 0 && currentPages === 1
                 "
                 @click="save()"
               >
@@ -201,6 +210,8 @@ export default class MoreEmployee extends Vue {
 
   selectedFromSwipeable: EmployeeResponseData[] = []
 
+  currentPages: number = 1
+
   @Prop({ required: true, type: Object })
   swipeableData!: SelectedSwipeable;
 
@@ -260,6 +271,10 @@ export default class MoreEmployee extends Vue {
   }
 
   async init() {
+    if (typeof this.$route.query.page === 'string') {
+      this.currentPages = Number(this.$route.query.page);
+    }
+
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
