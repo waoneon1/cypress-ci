@@ -188,8 +188,6 @@ const _ = require('lodash');
 
 @Component
 export default class MoreEmployee extends Vue {
-  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
-
   loading: boolean = true;
 
   token = localStorage.getItem('token');
