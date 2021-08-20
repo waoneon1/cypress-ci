@@ -77,11 +77,27 @@ describe('components > SwipeableCard.vue', () => {
           id: '65a248199ad87f22412ad',
           criteria_name: 'Testing',
           percent_progress: 10,
-          percent_progress_filter: '',
           slug: '',
           description: '',
           shortdec: '',
         },
+        allEmployee: [{
+          id: 'string',
+          employee_name: 'string',
+          employee_email: 'string',
+          employee_image_url: 'string',
+          employee_alt_id: 'string',
+          employee_organization: 'string',
+          employee_organization_full_text: 'string',
+        }, {
+          id: 'string',
+          employee_name: 'string',
+          employee_email: 'string',
+          employee_image_url: 'string',
+          employee_alt_id: 'string',
+          employee_organization: 'string',
+          employee_organization_full_text: 'string',
+        }],
         currentPages: 1,
       },
       data() {
@@ -200,7 +216,7 @@ describe('components > SwipeableCard.vue', () => {
   it('Test getUniqueEmployees()', () => {
     mockedAxiosPost.post.mockResolvedValue(mockedQnaResponseData);
     wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.answers.length).toBe(2);
+    expect(wrapper.vm.answers.length).toBe(0);
 
     wrapper.setData({
       employees: [
@@ -258,7 +274,7 @@ describe('components > SwipeableCard.vue', () => {
     });
 
     wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.answers.length).toBe(12);
+    expect(wrapper.vm.answers.length).toBe(10);
   });
 
   it('Test proceedQnaPage()', () => {
@@ -275,11 +291,11 @@ describe('components > SwipeableCard.vue', () => {
       },
     });
     wrapper.vm.checkTotalSwipe();
-    expect(wrapper.vm.moreWhitelist).toBeTruthy();
+    expect(wrapper.vm.moreWhitelist).toBe(false);
   });
 
-  it('Test closePrepareEmployee()', () => {
-    wrapper.vm.closePrepareEmployee([
+  it('Test closeMoreEmployee()', () => {
+    wrapper.vm.closeMoreEmployee([
       {
         id: 'string;',
         employee_name: 'string;',
@@ -307,11 +323,19 @@ describe('components > SwipeableCard.vue case 2', () => {
           id: '65a248199ad87f22412ad',
           criteria_name: 'Testing',
           percent_progress: 10,
-          percent_progress_filter: '',
           slug: '',
           description: '',
           shortdec: '',
         },
+        allEmployee: [{
+          id: 'string',
+          employee_name: 'string',
+          employee_email: 'string',
+          employee_image_url: 'string',
+          employee_alt_id: 'string',
+          employee_organization: 'string',
+          employee_organization_full_text: 'string',
+        }],
         currentPages: 0,
       },
       data() {
@@ -365,7 +389,7 @@ describe('components > SwipeableCard.vue case 2', () => {
       },
     });
     wrapper.vm.checkTotalSwipe();
-    expect(wrapper.vm.moreWhitelist).toBeTruthy();
+    expect(wrapper.vm.moreWhitelist).toBe(false);
   });
 });
 
@@ -378,11 +402,19 @@ describe('components > SwipeableCard.vue case 3', () => {
           id: '65a248199ad87f22412ad',
           criteria_name: 'Testing',
           percent_progress: 10,
-          percent_progress_filter: '',
           slug: '',
           description: '',
           shortdec: '',
         },
+        allEmployee: [{
+          id: 'string',
+          employee_name: 'string',
+          employee_email: 'string',
+          employee_image_url: 'string',
+          employee_alt_id: 'string',
+          employee_organization: 'string',
+          employee_organization_full_text: 'string',
+        }],
         currentPages: 0,
       },
       data() {
@@ -394,12 +426,12 @@ describe('components > SwipeableCard.vue case 3', () => {
     });
   });
 
-  it('Test closePrepareEmployee() else case 3', () => {
+  it('Test closeMoreEmployee() else case 3', () => {
     wrapper.setData({
       localStorageBlacklist: undefined,
       localStorageWhitelist: null,
     });
-    wrapper.vm.closePrepareEmployee([
+    wrapper.vm.closeMoreEmployee([
       {
         id: 'string;',
         employee_name: 'string;',

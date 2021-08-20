@@ -30,12 +30,6 @@ describe('QNA Store', () => {
     expect(service.dataQna).toBe('123');
   });
 
-  it('Mutation - setQuestion', () => {
-    const service = qnaModule();
-    service.setQuestion('123');
-    expect(service.dataQuestion).toBe('123');
-  });
-
   it('Action - getQna response true', async () => {
     const mockedAxios = axios as jest.Mocked<typeof axios>;
     const mockedResponsePost: AxiosResponse = {
@@ -164,22 +158,5 @@ describe('QNA Store', () => {
     await service.submitQna(payload).catch((e: any) => expect(e).toEqual({
       error: 'submitQna {} catch error',
     }));
-  });
-
-  it('Action - getQuestion', async () => {
-    const mockedAxios = axios as jest.Mocked<typeof axios>;
-    const mockedResponsePost: AxiosResponse = {
-      data: {},
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      config: {},
-    };
-    mockedAxios.get.mockResolvedValue(mockedResponsePost);
-
-    const service = qnaModule();
-    // expect(axios.post).not.toHaveBeenCalled()
-    await service.getQuestion({});
-    expect(axios.get).toHaveBeenCalled();
   });
 });

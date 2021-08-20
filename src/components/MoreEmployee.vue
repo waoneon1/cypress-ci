@@ -103,7 +103,7 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div class="fixed bottom-0 left-0 right-0 z-10">
+      <div class="fixed bottom-0 left-0 right-0 z-10 bg-white">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-5 transform rotate-180"
         ></div>
@@ -112,18 +112,18 @@
         >
           <div class="flex justify-between items-center">
             <div class="text-gray-400">
-              <div v-if="selected.length">Terpilih {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length }} orang</div>
+              <div v-if="selected.length">Terpilih {{ (swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length }} orang</div>
               <div v-else></div>
             </div>
             <div class="inline-block flex">
               <button
                 class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
-                :class="((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                :class="((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
                   ? 'border-gray-400 bg-gray-400 text-white'
                   : 'border-secondary bg-secondary hover:bg-yellow-700 text-white'"
                 :disabled="loading
-                  || ((this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) + selected.length) <= minimumData
+                  || ((swipeableData.employee.length ? swipeableData.employee.length : 0) + selected.length) <= minimumData
                   && selected.length !== 0
                 "
                 @click="save()"
@@ -166,26 +166,21 @@
 
 <script lang="ts">
 import {
-  Vue, Component, Watch, Emit,
+  Vue, Component, Watch, Emit, Prop,
 } from 'vue-property-decorator';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 
 import { LoginData } from '~/types/LoginData';
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
-import { AnswersObject } from '~/types/AnswersObject';
-
-export interface SelectedSwipeable {
-  employee: string[],
-  blacklist: string[],
-  whitelist: string[],
-  employeeObject: AnswersObject[],
-}
+import { SelectedSwipeable } from '~/types/SelectedSwipeable';
 
 const _ = require('lodash');
 
 @Component
-export default class PrepareEmployee extends Vue {
+export default class MoreEmployee extends Vue {
+  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
+
   loading: boolean = true;
 
   token = localStorage.getItem('token');
@@ -205,6 +200,9 @@ export default class PrepareEmployee extends Vue {
   localStorageWhitelist = localStorage.getItem('rrs_whitelist')
 
   selectedFromSwipeable: EmployeeResponseData[] = []
+
+  @Prop({ required: true, type: Object })
+  swipeableData!: SelectedSwipeable;
 
   toggleSelect(item: EmployeeResponseData): void {
     const index = this.selected.indexOf(item);
@@ -229,13 +227,29 @@ export default class PrepareEmployee extends Vue {
     return this.token ? jwtDecode(this.token) : jsonPayload;
   }
 
-  @Emit('closePrepareEmployee')
+  @Emit('closeMoreEmployee')
   save(): EmployeeResponseData[] {
     const whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
+    const blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);
+
     const selected = _.map(this.selected, 'employee_email');
 
     const newWhitelist: string[] = [...whitelist, ...selected];
     localStorage.setItem('rrs_whitelist', JSON.stringify(newWhitelist));
+
+    // if user select less then 9, send all employee to blacklist
+    if ((this.selected.length + this.swipeableData.employee.length) < 9) {
+      const prepareBlacklist:string[] = [];
+      _.map(
+        this.employee,
+        (o: EmployeeResponseData) => {
+          if (!selected.includes(o.employee_email) && this.decodeDataEmployee().user_email !== o.employee_email) {
+            prepareBlacklist.push(o.employee_email);
+          }
+        },
+      );
+      localStorage.setItem('rrs_blacklist', JSON.stringify([...prepareBlacklist, ...blacklist]));
+    }
 
     return [...this.selectedFromSwipeable, ...this.selected];
   }
@@ -249,7 +263,6 @@ export default class PrepareEmployee extends Vue {
     // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      // const org = this.decodeDataEmployee().user_organization;
       let blacklist: string[] = [];
       let whitelist: string[] = [];
       blacklist = _.clone(this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist) : []);

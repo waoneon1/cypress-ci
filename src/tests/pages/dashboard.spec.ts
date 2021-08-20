@@ -60,7 +60,7 @@ describe('Pages > dashboard.vue', () => {
 
     // jalankan setInterval
     jest.advanceTimersByTime(4000);
-    expect(setInterval).toBeCalled();
+    expect(setTimeout).toBeCalled();
     expect(wrapper.vm.alert).toBeFalsy();
   });
 

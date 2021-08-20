@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PrepareEmployee v-if="moreWhitelist" @closePrepareEmployee="closePrepareEmployee"/>
+    <MoreEmployee v-if="moreWhitelist" :swipeableData="selected" @closeMoreEmployee="closeMoreEmployee"/>
     <div v-else class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28">
       <!-- Heading -->
 
@@ -19,9 +19,9 @@
       </div>
 
       <!-- Content: Criteria List -->
-      <div v-if="debug" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
+      <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
         <p> index : {{ index }} | iswipeable : {{ iteration }} | selected : {{ selected.employee.length }} | iteration : {{ currentPages }}</p>
-        <p> counterSelected : {{ counterSelected }} | total swipe : {{ selected.whitelist.length + selected.blacklist.length }}</p>
+        <p> counterSelected : {{ counterSelected }} | total swipe : {{ totalSwipe }} | remaining em : {{ this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1 }}</p>
         <p> blacklist : {{ selected.blacklist.length }} | whitelist : {{ selected.whitelist.length }} | selected : {{ selected.employee.length }}</p>
       </div>
       <div class="relative" v-if="loading">
@@ -192,18 +192,13 @@ import {
 } from 'vue-property-decorator';
 import { Vue2InteractDraggable, InteractEventBus } from 'vue2-interact';
 import { qnaModule, QnaResponseData } from '@/store/qna';
+
 import { CriteriaResponseData } from '@/store/criteria';
 import Help from '~/components/utilities/HelpSwipe.vue';
-import PrepareEmployee from '~/components/prepareEmployee.vue';
+import MoreEmployee from '~/components/MoreEmployee.vue';
 
-import { AnswersObject } from '~/types/AnswersObject';
-
-export interface SelectedSwipeable {
-  employee: string[],
-  blacklist: string[],
-  whitelist: string[],
-  employeeObject: AnswersObject[],
-}
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { SelectedSwipeable, AnswersObject } from '~/types/SelectedSwipeable';
 
 // Data
 const _ = require('lodash');
@@ -217,18 +212,20 @@ const EVENTS = {
   components: {
     Vue2InteractDraggable,
     Help,
-    PrepareEmployee,
+    MoreEmployee,
   },
 })
 export default class SwipeableCard extends Vue {
   // Data: {}
-  debug:boolean = false
+  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
 
   isVisible:boolean = true
 
   btnDisabled:boolean = false
 
   index:number = 0
+
+  totalSwipe:number = 0
 
   localStorageBlacklist = localStorage.getItem('rrs_blacklist')
 
@@ -259,7 +256,7 @@ export default class SwipeableCard extends Vue {
   // Employee data
   iteration: number = 1
 
-  limitPair: number = 10
+  limitPair: number = 30
 
   limitEmp: number = 9
 
@@ -282,6 +279,9 @@ export default class SwipeableCard extends Vue {
 
   @Prop({ required: true, type: Number })
   currentPages!: number;
+
+  @Prop({ required: true, type: Array })
+  allEmployee!: EmployeeResponseData[];
 
   // Computed: {}
   current: AnswersObject | {} = {}
@@ -310,9 +310,6 @@ export default class SwipeableCard extends Vue {
 
   async checkWhitelist() {
     this.counterSelected += 1;
-    // console.log('check blacklist', this.selected.blacklist);
-    // console.log('check whitelist', this.selected.whitelist);
-    // console.log('check selected', this.selected.employee);
     if (this.selected.employee.length === this.limitEmp) {
       this.proceedQnaPage();
     } else if (this.counterSelected === this.answers.length) {
@@ -350,6 +347,7 @@ export default class SwipeableCard extends Vue {
 
   visibleTrue() {
     this.index += 1;
+    this.totalSwipe += 1;
     this.isVisible = true;
     this.btnDisabled = false;
   }
@@ -393,88 +391,79 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
-    // buat array unique employee
-    this.employees.forEach((e) => {
-      // check employee x
-      if (!this.selected.employee.includes(e.employee_email_x)) {
-        if (this.selected.whitelist.includes(e.employee_email_x)) {
-          this.selected.employee.push(e.employee_email_x);
-          this.selected.employeeObject.push({
-            employee_name: e.employee_name_x,
-            employee_email: e.employee_email_x,
-            employee_image_url: e.employee_image_url_x,
-            employee_organization: e.employee_organization_x,
-            employee_organization_full_text: e.employee_organization_full_text_x,
-            employee_business_unit: e.employee_business_unit_x,
-          });
-        } else if (!this.answers.includes(e.employee_email_x)) {
-          // add data
-          this.answers.push(e.employee_email_x);
-          // add detail data
-          this.answersObject.push({
-            employee_name: e.employee_name_x,
-            employee_email: e.employee_email_x,
-            employee_image_url: e.employee_image_url_x,
-            employee_organization: e.employee_organization_x,
-            employee_organization_full_text: e.employee_organization_full_text_x,
-            employee_business_unit: e.employee_business_unit_x,
-          });
-        }
-      }
-      // check employee y
-      if (!this.selected.employee.includes(e.employee_email_y)) {
-        if (this.selected.whitelist.includes(e.employee_email_y)) {
-          this.selected.employee.push(e.employee_email_y);
-          this.selected.employeeObject.push({
-            employee_name: e.employee_name_y,
-            employee_email: e.employee_email_y,
-            employee_image_url: e.employee_image_url_y,
-            employee_organization: e.employee_organization_y,
-            employee_organization_full_text: e.employee_organization_full_text_y,
-            employee_business_unit: e.employee_business_unit_y,
-          });
-        } else if (!this.answers.includes(e.employee_email_y)) {
-          // add data
-          this.answers.push(e.employee_email_y);
-          // add detail data
-          this.answersObject.push({
-            employee_name: e.employee_name_y,
-            employee_email: e.employee_email_y,
-            employee_image_url: e.employee_image_url_y,
-            employee_organization: e.employee_organization_y,
-            employee_organization_full_text: e.employee_organization_full_text_y,
-            employee_business_unit: e.employee_business_unit_y,
-          });
-        }
-      }
+    const pairToEmployee:AnswersObject[] = [];
+    let uniqueEmployee:AnswersObject[] = [];
+
+    // 1. get unique employee
+    _.map(this.employees, (object) => {
+      const xObj = {
+        employee_name: object.employee_name_x,
+        employee_email: object.employee_email_x,
+        employee_image_url: object.employee_image_url_x,
+        employee_organization: object.employee_organization_x,
+        employee_organization_full_text: object.employee_organization_full_text_x,
+        employee_business_unit: object.employee_business_unit_x,
+      };
+      const yObj = {
+        employee_name: object.employee_name_y,
+        employee_email: object.employee_email_y,
+        employee_image_url: object.employee_image_url_y,
+        employee_organization: object.employee_organization_y,
+        employee_organization_full_text: object.employee_organization_full_text_y,
+        employee_business_unit: object.employee_business_unit_y,
+      };
+
+      pairToEmployee.push(xObj);
+      pairToEmployee.push(yObj);
     });
+    uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
+
+    // 2. get whitelist object base on unique employee
+    const whitelistObject: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email));
+
+    // 3. prioritize non whitelist employee
+    const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
+
+    // 4. check if prioritize non whitelist !== 0
+    let uniqueEmployeeReady: AnswersObject[] = whitelistObject;
+
+    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9);
+    if (prioritize.length !== 0) {
+      uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist];
+    } else {
+      uniqueEmployeeReady = shuffleWhitelist;
+    }
+
+    // 5. asign to variable to selected and swipeable
+    if (prioritize.length < 9) {
+      const takeSelected = 9 - prioritize.length;
+      this.selected.employee = _.take(_.map(uniqueEmployeeReady, 'employee_email'), takeSelected);
+      this.selected.employeeObject = _.take(uniqueEmployeeReady, takeSelected);
+    }
+    this.answers = _.map(prioritize, 'employee_email');
+    this.answersObject = prioritize;
+
     await this.checkDataAnswer();
   }
 
   async checkDataAnswer() {
-    // cek jika belum mendapatkan 9 unique employee
-    // TODO: Take care of thankyou page later
-    // if (this.employees.length === 0) { this.thankyouPage = true; }
-    if (this.answers.length < this.limitEmp && this.employees.length >= this.limitPair && this.selected.employee.length < this.limitEmp) {
-      // get 3 data lagi sampai dapat 9 unique employee
-      await this.loadEmployeeData();
-    } else {
-      if (this.iteration > 1) {
-        localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
-      }
-      this.index = this.iteration === 1 ? 0 : -1;
-      this.current = _.clone(this.answersObject[0]);
-      this.next = _.clone(this.answersObject[1]);
-      this.next2 = _.clone(this.answersObject[2]);
+    this.checkEmployeeRemain();
 
-      if (this.selected.employee.length >= 9) {
-        this.proceedQnaPage();
-      } else {
-        this.loading = false;
-        setTimeout(() => {
-          this.loadingDelay = false;
-        }, 500);
-      }
+    if (this.iteration > 1) {
+      localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
+    }
+    this.index = this.iteration === 1 ? 0 : -1;
+    this.current = _.clone(this.answersObject[0]);
+    this.next = _.clone(this.answersObject[1]);
+    this.next2 = _.clone(this.answersObject[2]);
+
+    if (this.selected.employee.length >= 9) {
+      this.proceedQnaPage();
+    } else {
+      this.loading = false;
+      setTimeout(() => {
+        this.loadingDelay = false;
+      }, 500);
     }
   }
 
@@ -492,20 +481,19 @@ export default class SwipeableCard extends Vue {
   }
 
   checkTotalSwipe(): boolean {
-    const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
     if (this.currentPages === 1) {
-      if (bnwTotal === this.limitSwipe1) {
+      if (this.totalSwipe === (this.limitSwipe1 - 1)) {
         this.replaceBlackWhitelist();
         this.moreWhitelist = true;
       }
-    } else if (bnwTotal === this.limitSwipe2) {
+    } else if (this.totalSwipe === (this.limitSwipe2 - 1)) {
       this.replaceBlackWhitelist();
       this.moreWhitelist = true;
     }
     return true;
   }
 
-  closePrepareEmployee(payload) {
+  closeMoreEmployee(payload) {
     this.moreWhitelist = false;
     this.loading = true;
     this.localStorageBlacklist = localStorage.getItem('rrs_blacklist');
@@ -517,6 +505,13 @@ export default class SwipeableCard extends Vue {
     this.selected.whitelist = _.clone(this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist) : []);
 
     this.proceedQnaPage();
+  }
+
+  checkEmployeeRemain() {
+    const countRemain = this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1;
+    if (countRemain <= 0) {
+      this.proceedQnaPage();
+    }
   }
 }
 </script>

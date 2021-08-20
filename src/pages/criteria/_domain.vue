@@ -90,7 +90,6 @@ export default class Criteria extends Vue {
     shortdec: 'Loading ...',
     description: 'Loading ...',
     percent_progress: 0,
-    percent_progress_filter: 0,
     slug: '',
   }
 
@@ -114,7 +113,7 @@ export default class Criteria extends Vue {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+    await criteriaModule.getCriteria().then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable

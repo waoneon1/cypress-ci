@@ -107,7 +107,6 @@ export default class Onboarding extends Vue {
     },
     {
       title: 'Mempersiapkan Data Alterrans',
-      // TODO Tambahkan jika fitur whitelist aktif: Akan tetapi, kamu juga boleh menambahkan software engineer di luar business unit jika kamu menginginkan hal tersebut
       content:
         'Kamu diminta untuk memberikan ranking kepada software engineer sesuai dengan business unit kamu.',
       image: 'svg/onboard1.svg',

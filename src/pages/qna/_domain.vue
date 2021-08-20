@@ -5,6 +5,7 @@
         <SwipeableCard
           :domain="this.domain"
           :currentPages="this.currentPages"
+          :allEmployee="this.employee"
           @swipableData="initSwipableData"
         />
       </div>
@@ -103,9 +104,9 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0"></div>
+      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0 bg-white"></div>
       <div v-else-if="criteriaProgressCount() >= 100"></div>
-      <div v-else class="fixed bottom-0 left-0 right-0">
+      <div v-else class="fixed bottom-0 left-0 right-0 bg-white">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
         ></div>
@@ -154,9 +155,9 @@
             <div class="inline-block flex">
               <!-- :disabled="loading" -->
               <button
-                :disabled="true"
+                :disabled="loading"
                 @click="nextPage();"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-gray-400 bg-gray-400 text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -178,17 +179,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component, Mixins } from 'vue-property-decorator';
+import Percentage from '@/mixins/Percentage';
 import { qnaModule, QnaResponse } from '@/store/qna';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
-import jwtDecode from 'jwt-decode';
 
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SwipeableCard from '~/components/SwipeableCard.vue';
 
-import { LoginData } from '~/types/LoginData';
 import { QnaSubmit } from '~/types/QnaSubmit';
 import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 import { AnswersObject } from '~/types/AnswersObject';
@@ -198,14 +198,13 @@ const _ = require('lodash');
 @Component({
   components: { Thankyou, Help, SwipeableCard },
 })
-export default class Qna extends Vue {
+export default class Qna extends Mixins(Percentage) {
   domain: CriteriaResponseData = {
     id: '',
     criteria_name: 'Loading ...',
     shortdec: 'Loading ...',
     description: 'Loading ...',
     percent_progress: 0,
-    percent_progress_filter: 0,
     slug: '',
   }
 
@@ -213,9 +212,7 @@ export default class Qna extends Vue {
 
   blacklist: string | null = localStorage.getItem('rrs_blacklist');
 
-  employeeFilter: EmployeeResponseData[] = [];
-
-  employeeCounterData = { all: 0, org: 0 }
+  employee: EmployeeResponseData[] = [];
 
   questions: string = '';
 
@@ -269,6 +266,7 @@ export default class Qna extends Vue {
 
       // go to the next page
       this.loadSwipableComponent = true;
+      this.$router.push(`?page=${this.currentPages}`);
     } else {
       this.thankyouPage = true;
     }
@@ -279,8 +277,8 @@ export default class Qna extends Vue {
       const data = {
         payload: this.prepareSubmit(),
         criteriaId: this.domain.id,
-        counter: this.employeeCounterData,
       };
+
       await qnaModule.submitQna(data);
       return qnaModule.submitResponse;
     }
@@ -289,18 +287,25 @@ export default class Qna extends Vue {
 
   prepareSubmit(): QnaSubmit[] {
     const data: QnaSubmit[] = [];
+
     this.selectedAnswer.forEach((emailX) => {
       this.answers.forEach((emailY) => {
         if (!this.selectedAnswer.includes(emailY)) {
           data.push({
-            criteria_id: this.domain.id,
             selected_employee_email: emailX,
+            employee_email_x: emailX,
+            employee_email_y: emailY,
+          });
+        } else if (emailX !== emailY) {
+          data.push({
+            selected_employee_email: 'equal',
             employee_email_x: emailX,
             employee_email_y: emailY,
           });
         }
       });
     });
+
     return data;
   }
   /* END PROCESS nextPage */
@@ -311,16 +316,13 @@ export default class Qna extends Vue {
   * result    : this.domain
   */
   async setSelectedCriteria() {
-    // TODO: butuh remove get employee (kemungkinan g perlu ini buat persentage)
-    // TODO: Hardcoade employee counter data
-    this.employeeCounterData = { all: 45, org: 45 };
-    // await this.getEmployeeStore();
+    await this.getEmployeeStore();
     await this.getCriteriaStore();
   }
 
   async getCriteriaStore() {
     const criteria = this.$route.params.domain;
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+    await criteriaModule.getCriteria().then(() => {
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
       this.domain = _.find(allCriteria, { slug: criteria });
@@ -331,37 +333,15 @@ export default class Qna extends Vue {
   /*
   * GET EMPLOYEE DATA
   * endpoint  : employeeModule.getEmployee()
-  * result    : this.employeeCounterData => count all employee, this.employeeFilter => all employee data
-  * //TODO    : Still Need this method?
+  * result    : this.employee => all employee data
   */
   async getEmployeeStore() {
     let allEmployee:EmployeeResponseData[] = [];
-    let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
-      const org = this.decodeDataEmployee().user_organization;
       allEmployee = employeeModule.dataEmployee.data;
-      employeeFiltered = _.filter(
-        employeeModule.dataEmployee.data,
-        (o:EmployeeResponseData) => o.employee_organization === org,
-      );
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
-      this.employeeFilter = allEmployee;
+      this.employee = allEmployee;
       return true;
     });
-  }
-
-  decodeDataEmployee(): LoginData {
-    const jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-    return this.token ? jwtDecode(this.token) : jsonPayload;
   }
   /* END GET EMPLOYEE DATA */
 
@@ -387,17 +367,23 @@ export default class Qna extends Vue {
   }
 
   public criteriaProgressCount() {
-    return qnaModule.submitResponse.data.percent_progress_filter === 0
-      ? _.round(this.domain.percent_progress_filter, 2)
-      : _.round(qnaModule.submitResponse.data.percent_progress_filter, 2);
+    const progress:CriteriaResponseData = _.clone(this.domain);
+    progress.percent_progress = qnaModule.submitResponse.data.percent_progress;
+
+    return progress.percent_progress === 0
+      ? _.round(this.calc(this.domain, this.employee.length), 2)
+      : _.round(this.calc(progress, this.employee.length), 2);
   }
   /* END UTILITIES */
 
   async init() {
+    // set current page
+    if (typeof this.$route.query.page === 'string') {
+      this.currentPages = Number(this.$route.query.page);
+    }
+
     await this.setSelectedCriteria().then(() => {
       this.allPageLoading = false;
-      // set employee counter
-      qnaModule.setCounter(this.employeeCounterData);
       // set initial progress
       qnaModule.setSubmit({
         response_code: '',
@@ -405,24 +391,26 @@ export default class Qna extends Vue {
         data: {
           count_submitted: 0,
           percent_progress: this.domain.percent_progress,
-          percent_progress_filter: this.domain.percent_progress_filter,
         },
       });
 
-      // load employee data
-      // if whitelist store exist use that data instead
-      // else not load swipeable card component
+      // always load employee data
       this.loadSwipableComponent = true;
     });
   }
 
   initSwipableData(payload) {
+    if (this.criteriaProgressCount() >= 100) {
+      this.thankyouPage = true;
+    }
+
     // set loading
     this.loading = true;
     this.allPageLoading = true;
     // set data
     this.answers = _.take(payload.employee, 9);
     this.answersObject = _.take(payload.employeeObject, 9);
+
     // set loading = false and close swipable component
     this.loading = false;
     this.allPageLoading = false;
