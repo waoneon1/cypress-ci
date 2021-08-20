@@ -59,15 +59,25 @@ const mockedResponse: AxiosResponse = {
 };
 mockedAxios.get.mockResolvedValue(mockedResponse);
 
-describe('pages > Faq.vue', () => {
+describe('pages > employee.vue', () => {
   // mounting component
   it('berhasil mounting komponen', async () => {
     const wrapper: any = shallowMount(MoreEmployee, {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
+          debug: 'false',
+          employee: [{}],
           token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjMzMTQ2NTEuMTcxMDc0NCwidXNlcl9pZCI6IjYwYjQ2ZGYxZmQ0MGU5Yjk4MjZiZjAzNyIsInVzZXJfb2F1dGhfaWQiOiIxMTMzMzI3NjE3NTgwODA3Njc5MjkiLCJ1c2VyX2VtYWlsIjoiZGhhcm1hd2FuQGFsdGVycmEuaWQiLCJ1c2VyX25hbWUiOiJEaGFybWF3YW4gU3VrbWEgSGFyZGkgUHJhdGFtYSIsInVzZXJfb3JnYW5pemF0aW9uIjoiVEVDIC0gRU5HIiwidXNlcl9vcmdhbml6YXRpb25fZnVsbF90ZXh0IjoiVGVjaG5vbG9neSAtIEVuZ2luZWVyaW5nIiwidXNlcl9idXNpbmVzc191bml0IjoiSE8gLSBUZWNobm9sb2d5In0.Aw8qbhOYxf1E7nrG84n7xAj4i269AJVIW3wocHcB4Vg',
         };
+      },
+      propsData: {
+        swipeableData: {
+          employee: [],
+          blacklist: [],
+          whitelist: [],
+          employeeObject: [],
+        },
       },
     });
     const service = employeeModule();
@@ -83,9 +93,19 @@ describe('pages > Faq.vue', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
+          debug: 'false',
+          employee: [{}],
           localStorageBlacklist: '[]',
           localStorageWhitelist: '[]',
         };
+      },
+      propsData: {
+        swipeableData: {
+          employee: [],
+          blacklist: [],
+          whitelist: [],
+          employeeObject: [],
+        },
       },
     });
     expect(wrapper.vm).toBeTruthy();
@@ -102,8 +122,18 @@ describe('pages > Faq.vue', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       data() {
         return {
+          debug: 'false',
+          employee: [{}],
           selected: ['a@alterra.id', 'c@alterra.id', 'd@alterra.id'],
         };
+      },
+      propsData: {
+        swipeableData: {
+          employee: [],
+          blacklist: [],
+          whitelist: [],
+          employeeObject: [],
+        },
       },
     });
     expect(wrapper.vm.selected.length).toBe(3);
@@ -123,10 +153,20 @@ describe('pages > Faq.vue', () => {
       },
       data() {
         return {
+          debug: 'false',
+          employee: [{}],
           selected: ['a@alterra.id', 'c@alterra.id', 'd@alterra.id'],
           localStorageBlacklist: '',
           localStorageWhitelist: '',
         };
+      },
+      propsData: {
+        swipeableData: {
+          employee: [],
+          blacklist: [],
+          whitelist: [],
+          employeeObject: [],
+        },
       },
     });
     wrapper.vm.save();
@@ -138,6 +178,31 @@ describe('pages > Faq.vue', () => {
       mocks: {
         $router: {
           push: jest.fn(),
+        },
+      },
+      data() {
+        return {
+          debug: 'false',
+          employee: [{
+            id: '',
+            employee_name: '',
+            employee_email: '',
+            employee_image_url: '',
+            employee_alt_id: '',
+            employee_organization: '',
+            employee_organization_full_text: '',
+          }],
+          selected: ['a@alterra.id', 'c@alterra.id', 'd@alterra.id'],
+          localStorageBlacklist: '',
+          localStorageWhitelist: '',
+        };
+      },
+      propsData: {
+        swipeableData: {
+          employee: [],
+          blacklist: [],
+          whitelist: [],
+          employeeObject: [],
         },
       },
     });

@@ -21,18 +21,11 @@ class Percentage extends Vue {
     const countEmployee = (employeeLength - 1); // 49
 
     // count whitelist from check & from organization
-    const countWhitelist = countEmployee - blacklist;
+    const countWhitelist = countEmployee - (blacklist + 1);
 
     const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
     const totalEmployeePair = (countEmployee * countEmployee - countEmployee) - (countEmployee * 2 - 2);
     const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
-
-    // console.log(employeeLength, categories.criteria_name, 'category');
-    // console.log('countWhitelist : ', countWhitelist);
-    // console.log('totalEmployeePercentage : ', totalEmployeePercentage);
-    // console.log('totalEmployeePair : ', totalEmployeePair);
-    // console.log('totalWhitelistPair : ', totalWhitelistPair);
-    console.log('(totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair) : ', percentageForUser);
 
     return percentageForUser;
   }

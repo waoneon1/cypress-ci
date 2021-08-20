@@ -216,7 +216,7 @@ describe('components > SwipeableCard.vue', () => {
   it('Test getUniqueEmployees()', () => {
     mockedAxiosPost.post.mockResolvedValue(mockedQnaResponseData);
     wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.answers.length).toBe(2);
+    expect(wrapper.vm.answers.length).toBe(0);
 
     wrapper.setData({
       employees: [
@@ -274,7 +274,7 @@ describe('components > SwipeableCard.vue', () => {
     });
 
     wrapper.vm.getUniqueEmployees();
-    expect(wrapper.vm.answers.length).toBe(12);
+    expect(wrapper.vm.answers.length).toBe(10);
   });
 
   it('Test proceedQnaPage()', () => {

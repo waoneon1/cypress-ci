@@ -39,9 +39,7 @@ export default class CriteriaModule extends VuexModule {
 
   @Mutation
   setCriteria(value: CriteriaResponse): void {
-    // TODO: Persentage (take care later)
     const intro = 'Alterrans yang akan kamu pilih setelah ini mempunyai kompetensi untuk';
-    // const whitelistJson = localStorage.getItem('rrs_whitelist');
     const dataCriteria = [
       {
         criteria_name: 'Design',

@@ -13,14 +13,7 @@
         </div>
       </div>
       <div class="h-1 w-full border-b"></div>
-      <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2 mx-3 mt-4">
-        <p>
-          employee : {{ employee.length }} |
-          white : {{ (this.localStorageWhitelist ? JSON.parse(this.localStorageWhitelist).length : 0) }} |
-          black : {{ (this.localStorageBlacklist ? JSON.parse(this.localStorageBlacklist).length : 0) }} |
-          select : {{ selected.length }} | selectBefore : {{ swipeableData.employee.length }}
-        </p>
-      </div>
+
       <!-- Content: Answer -->
       <div class="px-5 pt-5">
         <!-- Search -->
@@ -186,7 +179,6 @@ const _ = require('lodash');
 
 @Component
 export default class MoreEmployee extends Vue {
-  // TODO: remove debug
   debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
 
   loading: boolean = true;

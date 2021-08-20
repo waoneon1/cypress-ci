@@ -94,7 +94,6 @@ export default class QnaModule extends VuexModule {
         });
       }
     } catch (e) {
-      // TODO : handdle when employee habis
       this.setQna({
         response_code: '401',
         message: 'unautorized',

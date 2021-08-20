@@ -316,7 +316,6 @@ export default class Qna extends Mixins(Percentage) {
   * result    : this.domain
   */
   async setSelectedCriteria() {
-    // TODO: butuh remove get employee (kemungkinan g perlu ini buat persentage)
     await this.getEmployeeStore();
     await this.getCriteriaStore();
   }
@@ -411,7 +410,7 @@ export default class Qna extends Mixins(Percentage) {
     // set data
     this.answers = _.take(payload.employee, 9);
     this.answersObject = _.take(payload.employeeObject, 9);
-    this.calc;
+
     // set loading = false and close swipable component
     this.loading = false;
     this.allPageLoading = false;
