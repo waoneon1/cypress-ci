@@ -426,7 +426,7 @@ export default class SwipeableCard extends Vue {
 
     // 4. check if prioritize non whitelist !== 0
     let uniqueEmployeeReady: AnswersObject[] = whitelistObject;
-    // const takeWhitelist: number = 9 - prioritize.length
+
     const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9);
     if (prioritize.length !== 0) {
       uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist];
@@ -481,7 +481,6 @@ export default class SwipeableCard extends Vue {
   }
 
   checkTotalSwipe(): boolean {
-    // const bnwTotal = this.selected.whitelist.length + this.selected.blacklist.length;
     if (this.currentPages === 1) {
       if (this.totalSwipe === (this.limitSwipe1 - 1)) {
         this.replaceBlackWhitelist();
