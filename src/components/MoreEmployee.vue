@@ -275,7 +275,6 @@ export default class MoreEmployee extends Vue {
       this.currentPages = Number(this.$route.query.page);
     }
 
-    // Get Employee filter by ORG and BU
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
       let blacklist: string[] = [];

@@ -1,4 +1,3 @@
-// import { shallowMount } from 'ts-jest/utils';
 import ClassLogout from '@/pages/logout.vue';
 import {
   expect, it, describe, jest,

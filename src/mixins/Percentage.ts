@@ -20,7 +20,7 @@ class Percentage extends Vue {
     }
     // count progress with filter
     const totalEmployeePercentage = categories.percent_progress;
-    const countEmployee = (employeeLength - 1); // 49
+    const countEmployee = (employeeLength - 1);
 
     // count whitelist from check & from organization
     const countWhitelist = countEmployee - (this.bl + 1);

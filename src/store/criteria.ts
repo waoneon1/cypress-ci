@@ -128,7 +128,6 @@ export default class CriteriaModule extends VuexModule {
     ];
     const makeSlug = _.map(value.data, (a: CriteriaResponseData) => {
       const obj = a;
-      // making slug by lowercase criteria name
       obj.slug = obj.criteria_name.toLowerCase();
       return obj;
     });

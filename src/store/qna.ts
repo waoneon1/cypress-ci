@@ -74,6 +74,7 @@ export default class QnaModule extends VuexModule {
     this.submitResponse = value;
   }
 
+  // get qna
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
     const token: string | null = localStorage.getItem('token');

@@ -18,7 +18,7 @@ const employeeModule: any = () => {
   return getModule(EmployeeModule, store);
 };
 
-// Mock axios
+// Mock axioss
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 const mockedResponse: AxiosResponse = {

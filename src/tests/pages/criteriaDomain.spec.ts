@@ -1,4 +1,3 @@
-// import { shallowMount } from 'ts-jest/utils';
 import CriteriaDomain from '@/pages/criteria/_domain.vue';
 import CriteriaStore from '@/store/criteria';
 import { getModule } from 'vuex-module-decorators';
