@@ -103,7 +103,7 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div class="fixed bottom-0 left-0 right-0 z-10">
+      <div class="fixed bottom-0 left-0 right-0 z-10 bg-white">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-5 transform rotate-180"
         ></div>

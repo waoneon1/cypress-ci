@@ -104,9 +104,9 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0"></div>
+      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0 bg-white"></div>
       <div v-else-if="criteriaProgressCount() >= 100"></div>
-      <div v-else class="fixed bottom-0 left-0 right-0">
+      <div v-else class="fixed bottom-0 left-0 right-0 bg-white">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
         ></div>
