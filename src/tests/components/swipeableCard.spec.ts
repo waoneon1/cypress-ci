@@ -64,8 +64,6 @@ const mockedQnaResponseData: AxiosResponse = {
   config: {},
 };
 
-//= =========================================================
-
 describe('components > SwipeableCard.vue', () => {
   jest.useFakeTimers();
 

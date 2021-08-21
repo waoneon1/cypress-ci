@@ -1,4 +1,3 @@
-// import { shallowMount } from 'ts-jest/utils';
 import Faq from '@/pages/faq.vue';
 import { expect, it, describe } from '@jest/globals';
 import { shallowMount } from '@vue/test-utils';

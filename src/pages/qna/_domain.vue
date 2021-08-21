@@ -201,9 +201,9 @@ const _ = require('lodash');
 export default class Qna extends Mixins(Percentage) {
   domain: CriteriaResponseData = {
     id: '',
-    criteria_name: 'Loading ...',
-    shortdec: 'Loading ...',
-    description: 'Loading ...',
+    criteria_name: 'Loading ..',
+    shortdec: 'Loading ..',
+    description: 'Loading ..',
     percent_progress: 0,
     slug: '',
   }
@@ -243,11 +243,6 @@ export default class Qna extends Mixins(Percentage) {
   thankyouPage: boolean = false;
 
   loadSwipableComponent: boolean = false;
-
-  // move to swipeable card :
-  // async loadEmployeeData()
-  // async getUniqueEmployees()
-  // async checkDataAnswer()
 
   /* PROCESS nextPage */
   /* Result: qnaModule.submitResponse */

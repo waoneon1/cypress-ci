@@ -31,6 +31,7 @@ export default class EmployeeModule extends VuexModule {
       this.dataEmployee = value;
     }
 
+    // get employee
     @Action({ rawError: true })
     async getEmployee(): Promise<void> {
       const token: string | null = localStorage.getItem('token');

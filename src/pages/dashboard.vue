@@ -222,7 +222,6 @@ export default class Dashboard extends Mixins(Percentage) {
     shortdec: '',
   };
 
-  // Criteria
   criteria: CriteriaResponseData[] = [];
 
   goToQnaPage(payload: CriteriaResponseData): void {

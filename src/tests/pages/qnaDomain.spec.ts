@@ -13,7 +13,6 @@ let wrapper: Wrapper<any>;
 const Vue = createLocalVue();
 Vue.use(Vuex);
 
-//= =========================================================
 jest.mock('axios');
 const mockedAxiosGet = axios as jest.Mocked<typeof axios>;
 const mockedResponseGet: AxiosResponse = {

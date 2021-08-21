@@ -1,4 +1,3 @@
-// import { shallowMount } from 'ts-jest/utils';
 import ClassDashboard from '@/pages/dashboard.vue';
 import { expect, it, describe } from '@jest/globals';
 import { shallowMount, createLocalVue } from '@vue/test-utils';

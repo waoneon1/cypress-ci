@@ -1,4 +1,3 @@
-// import { shallowMount } from 'ts-jest/utils';
 import ClassLogin from '@/pages/index.vue';
 import {
   expect, it, describe, beforeEach, afterEach,

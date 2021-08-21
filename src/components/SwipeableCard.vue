@@ -394,7 +394,7 @@ export default class SwipeableCard extends Vue {
     const pairToEmployee:AnswersObject[] = [];
     let uniqueEmployee:AnswersObject[] = [];
 
-    // 1. get unique employee
+    // 1. get unique employee d
     _.map(this.employees, (object) => {
       const xObj = {
         employee_name: object.employee_name_x,
