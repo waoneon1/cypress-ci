@@ -19,6 +19,12 @@ export interface QnaResponseData {
   employee_email_y: string;
   employee_image_url_x: string;
   employee_image_url_y: string;
+  employee_business_unit_x: string;
+  employee_business_unit_y: string;
+  employee_organization_full_text_x: string;
+  employee_organization_full_text_y: string;
+  employee_organization_x: string;
+  employee_organization_y: string;
   /* eslint-enable camelcase */
 }
 export interface QnaResponse {
@@ -31,7 +37,6 @@ export interface SubmitResponseData {
   /* eslint-disable camelcase */
   count_submitted: number;
   percent_progress: number;
-  percent_progress_filter?: number;
   /* eslint-enable camelcase */
 }
 export interface SubmitResponse {
@@ -56,13 +61,8 @@ export default class QnaModule extends VuexModule {
     data: {
       count_submitted: 0,
       percent_progress: 0,
-      percent_progress_filter: 0,
     },
   };
-
-  public dataQuestion: string[] = [];
-
-  public dataCounter = { all: 0, org: 0 };
 
   @Mutation
   setQna(value: QnaResponse): void {
@@ -70,36 +70,11 @@ export default class QnaModule extends VuexModule {
   }
 
   @Mutation
-  setCounter(value: { all: number; org: number }): void {
-    this.dataCounter = value;
-  }
-
-  @Mutation
   setSubmit(value: SubmitResponse): void {
-    /* eslint no-param-reassign: "error" */
-    const whitelistJson = localStorage.getItem('rrs_whitelist');
-
-    // count progress with filter
-    const totalEmployeePercentage = value.data.percent_progress;
-    const whitelistCheck = whitelistJson ? JSON.parse(whitelistJson).selected.length : 0;
-    const countEmployee = this.dataCounter;
-
-    // count whitelist from check & from organization
-    const countWhitelist = whitelistCheck;
-
-    const totalWhitelistPair = countWhitelist * countWhitelist - countWhitelist;
-    const totalEmployeePair = (countEmployee.all * countEmployee.all - countEmployee.all) - (countEmployee.all * 2 - 2);
-    const percentageForUser = ((totalEmployeePercentage * totalEmployeePair) / totalWhitelistPair);
-
-    value.data.percent_progress_filter = percentageForUser;
     this.submitResponse = value;
   }
 
-  @Mutation
-  setQuestion(value: string[]): void {
-    this.dataQuestion = value;
-  }
-
+  // get qna
   @Action({ rawError: true })
   async getQna(payload: object): Promise<void> {
     const token: string | null = localStorage.getItem('token');
@@ -119,7 +94,7 @@ export default class QnaModule extends VuexModule {
           data: [],
         });
       }
-    } catch {
+    } catch (e) {
       this.setQna({
         response_code: '401',
         message: 'unautorized',
@@ -132,7 +107,6 @@ export default class QnaModule extends VuexModule {
   async submitQna(data: {
     payload: object[];
     criteriaId: string;
-    counter: { all: number; org: number };
   }): Promise<void> {
     const token: string | null = localStorage.getItem('token');
     try {
@@ -147,7 +121,6 @@ export default class QnaModule extends VuexModule {
       );
 
       if (response.data.data) {
-        this.setCounter(data.counter);
         this.setSubmit(response.data);
       } else {
         this.setSubmit({
@@ -156,7 +129,6 @@ export default class QnaModule extends VuexModule {
           data: {
             count_submitted: 0,
             percent_progress: 0,
-            percent_progress_filter: 0,
           },
         });
       }
@@ -167,18 +139,9 @@ export default class QnaModule extends VuexModule {
         data: {
           count_submitted: 0,
           percent_progress: 0,
-          percent_progress_filter: 0,
         },
       });
     }
-  }
-
-  @Action({ rawError: true })
-  async getQuestion(domain: string): Promise<void> {
-    const response = await axios.get('/json/question.json', {
-      baseURL: window.location.origin,
-    });
-    this.setQuestion(response.data[domain]);
   }
 }
 

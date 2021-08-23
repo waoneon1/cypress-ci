@@ -45,7 +45,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              item.percent_progress_filter <= 100 || whitelist === null ? goToQnaPage(item) : null
+              criteriaProgressCount(item) <= 100 || whitelist === null ? goToQnaPage(item) : null
             "
           >
             <div
@@ -61,7 +61,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    item.percent_progress_filter < 100 || whitelist === null
+                    criteriaProgressCount(item) < 100 || whitelist === null
                       ? 'hover:bg-blue-100'
                       : ''
                   }`
@@ -81,22 +81,16 @@
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         :style="
-                          `width:${roundedNumber(
-                            item.percent_progress_filter
-                          )}%`
+                          `width:${criteriaProgressCount(item)}%`
                         "
                       ></div>
                     </div>
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="item.percent_progress_filter < 100 || whitelist === null"
+                    v-if="criteriaProgressCount(item) < 100 || whitelist === null"
                     class="text-xs inline-block text-primary"
-                    >{{
-                      item.percent_progress_filter === 0 || whitelist === null
-                        ? 0
-                        : roundedNumber(item.percent_progress_filter)
-                    }}%</span
+                    >{{criteriaProgressCount(item)}}%</span
                   >
                   <div
                     v-else
@@ -180,66 +174,23 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { criteriaModule } from '@/store/criteria';
+import { Component, Mixins } from 'vue-property-decorator';
+import Percentage from '@/mixins/Percentage';
+import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import { alertModule } from '@/store/alert';
 import jwtDecode from 'jwt-decode';
 import Alert from '~/components/utilities/Alert.vue';
 
-const _ = require('lodash');
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
-export interface CriteriaResponseData {
-  /* eslint-disable camelcase */
-  id?: string;
-  criteria_name: string;
-  percent_progress: number;
-  percent_progress_filter?: number;
-  /* eslint-enable camelcase */
-}
-export interface CriteriaResponse {
-  /* eslint-disable-next-line camelcase */
-  response_code: string;
-  message: string;
-  data: CriteriaResponseData[];
-}
-export interface SubmitResponseData {
-  /* eslint-disable camelcase */
-  count_submitted: number;
-  percent_progress: number;
-  /* eslint-enable camelcase */
-}
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
+const _ = require('lodash');
 
 @Component({
   components: { Alert },
 })
-export default class Dashboard extends Vue {
+export default class Dashboard extends Mixins(Percentage) {
   title: string = 'RRS Dashboard';
 
   alert: boolean = false;
@@ -250,7 +201,7 @@ export default class Dashboard extends Vue {
 
   loading: boolean = true;
 
-  employeeCounterData = { all: 0, org: 0 }
+  employee:EmployeeResponseData[] = []
 
   loginData: LoginData = {
     exp: 1,
@@ -271,7 +222,6 @@ export default class Dashboard extends Vue {
     shortdec: '',
   };
 
-  // Criteria
   criteria: CriteriaResponseData[] = [];
 
   goToQnaPage(payload: CriteriaResponseData): void {
@@ -282,17 +232,18 @@ export default class Dashboard extends Vue {
     const criteria = _.clone(this.criteria);
     return _.minBy(
       criteria,
-      (object: SubmitResponseData) => object.percent_progress,
+      (object) => object.percent_progress,
     );
   }
 
   roundedNumber = (val: number): number => _.round(val, 2);
 
   async loadCriteriaData(): Promise<void> {
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+    await criteriaModule.getCriteria().then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+
       this.recommendation = this.setRecommendation();
     });
   }
@@ -320,16 +271,9 @@ export default class Dashboard extends Vue {
 
   async EmployeeCounter() {
     // Get Employee filter by ORG and BU
-    let allEmployee:EmployeeResponseData[] = [];
-    let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
-      allEmployee = employeeModule.dataEmployee.data;
-      employeeFiltered = _.filter(allEmployee, {
-        // employee_organization : TEC - ENG
-        employee_organization: this.loginData.user_organization,
-      });
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+      this.employee = employeeModule.dataEmployee.data;
     });
   }
 
@@ -349,8 +293,12 @@ export default class Dashboard extends Vue {
     });
   }
 
+  public criteriaProgressCount(categories) {
+    return _.round(this.calc(categories, this.employee.length), 2);
+  }
+
   created() {
-    setInterval(() => {
+    setTimeout(() => {
       this.alert = false;
       alertModule.setAlertFalse();
     }, 4000);

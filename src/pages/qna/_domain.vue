@@ -1,11 +1,22 @@
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden">
+    <div v-if="loadSwipableComponent">
+      <div class="relative">
+        <SwipeableCard
+          :domain="this.domain"
+          :currentPages="this.currentPages"
+          :allEmployee="this.employee"
+          @swipableData="initSwipableData"
+        />
+      </div>
+    </div>
     <div
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
       || help
       || criteriaProgressCount() >= 100
       ? '' : 'pb-36'"
+      v-else
     >
       <!-- Heading -->
       <div class="flex justify-between relative py-5">
@@ -60,12 +71,12 @@
             <div
               v-for="(item, i) in answersObject"
               :key="i"
-              @click="answerAdd(item.email)"
+              @click="answerAdd(item.employee_email)"
               class="relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
-                v-show="selectedAnswer.includes(item.email)"
+                v-show="selectedAnswer.includes(item.employee_email)"
               >
                 <svg class="fill-current text-success" width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z"/>
@@ -74,17 +85,17 @@
               <div
                 class="rounded-xl overflow-hidden cursor-pointer"
                 :class="
-                  selectedAnswer.includes(item.email)
+                  selectedAnswer.includes(item.employee_email)
                   ? `opacity-30 shadow-md hover:opacity-50`
                   : `shadow-lg`
                 "
               >
                 <div class="bg-gray-50 w-full overflow-hidden relative pulse" style="padding-bottom: 100%;">
-                  <v-lazy-image v-if="item.image" :src="item.image" src-placeholder="/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
-                  <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                  <v-lazy-image v-if="item.employee_image_url" :src="item.employee_image_url" src-placeholder="/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
+                  <img v-else class="" src="~/static/img/blank.jpeg" :alt="item.employee_name" style="position:absolute; min-width:100%; min-height :100%;"/>
                 </div>
                 <div class="flex justify-center bg-white text-sm px-2 py-1 overflow-hidden">
-                  <small class="text-primary autotrim">{{ item.name }}</small>
+                  <small class="text-primary autotrim">{{ item.employee_name }}</small>
                 </div>
               </div>
             </div>
@@ -93,9 +104,9 @@
       </div>
 
       <!-- Navigation Footer -->
-      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0"></div>
+      <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0 bg-white"></div>
       <div v-else-if="criteriaProgressCount() >= 100"></div>
-      <div v-else class="fixed bottom-0 left-0 right-0">
+      <div v-else class="fixed bottom-0 left-0 right-0 bg-white">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
         ></div>
@@ -142,10 +153,11 @@
               </div>
             </div>
             <div class="inline-block flex">
+              <!-- :disabled="loading" -->
               <button
                 :disabled="loading"
                 @click="nextPage();"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white hover:bg-white hover:text-secondary focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -167,105 +179,42 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { qnaModule } from '@/store/qna';
-import { criteriaModule } from '@/store/criteria';
+import { Component, Mixins } from 'vue-property-decorator';
+import Percentage from '@/mixins/Percentage';
+import { qnaModule, QnaResponse } from '@/store/qna';
+import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
-import jwtDecode from 'jwt-decode';
+
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
+import SwipeableCard from '~/components/SwipeableCard.vue';
+
+import { QnaSubmit } from '~/types/QnaSubmit';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
+import { AnswersObject } from '~/types/AnswersObject';
 
 const _ = require('lodash');
 
-export interface QnaResponseData {
-  /* eslint-disable camelcase */
-  criteria_id: string;
-  criteria_name: string;
-  employee_name_x: string;
-  employee_name_y: string;
-  employee_email_x: string;
-  employee_email_y: string;
-  employee_image_url_x: string;
-  employee_image_url_y: string;
-  /* eslint-enable camelcase */
-}
-export interface QnaResponse {
-  /* eslint-disable-next-line camelcase */
-  response_code: string;
-  message: string;
-  data: QnaResponseData[] | string | number;
-}
-export interface QnaSubmit {
-  /* eslint-disable camelcase */
-  criteria_id?: string | (string | null)[];
-  selected_employee_email?: string;
-  employee_email_x?: string;
-  employee_email_y?: string;
-  /* eslint-enable camelcase */
-}
-export interface CriteriaResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  criteria_name: string;
-  percent_progress: number;
-  percent_progress_filter: number;
-  slug: string;
-  description: string;
-  shortdec: string;
-  /* eslint-enable camelcase */
-}
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
-
 @Component({
-  components: { Thankyou, Help },
+  components: { Thankyou, Help, SwipeableCard },
 })
-export default class Qna extends Vue {
+export default class Qna extends Mixins(Percentage) {
   domain: CriteriaResponseData = {
     id: '',
-    criteria_name: 'Loading ...',
-    shortdec: 'Loading ...',
-    description: 'Loading ...',
+    criteria_name: 'Loading ..',
+    shortdec: 'Loading ..',
+    description: 'Loading ..',
     percent_progress: 0,
-    percent_progress_filter: 0,
     slug: '',
   }
 
   token: string | null = localStorage.getItem('token');
 
-  employees: QnaResponseData[] = [];
+  blacklist: string | null = localStorage.getItem('rrs_blacklist');
 
-  employeeFilter: EmployeeResponseData[] = [];
-
-  employeeCounterData = { all: 0, org: 0 }
+  employee: EmployeeResponseData[] = [];
 
   questions: string = '';
-
-  local: string | null = localStorage.getItem('rss_criteria');
 
   loading: boolean = true;
 
@@ -275,100 +224,126 @@ export default class Qna extends Vue {
 
   progressCounter: number = 0;
 
-  progressCheckpoint: number = 1;
-
-  // data answer
   selectedAnswer: string[] = [];
 
   allSelectedAnswer: string[][] = [];
 
   answers: string[] = [];
 
-  answersObject: { name?: string; email?: string; image?: string; }[] = [];
+  answersObject: AnswersObject[] = [];
 
   maxSelectedAnswer = 3;
 
   indenClass: string[] = ['', '-left-2', '-left-3.5'];
 
-  // pagination
   pages: number = 999;
 
   currentPages: number = 1;
 
   thankyouPage: boolean = false;
 
-  async getUniqueEmployees() {
-    // buat array unique employee
-    try {
-      this.employees.forEach((e) => {
-        // check employee x
-        if (!this.answers.includes(e.employee_email_x)) {
-          // add data
-          this.answers.push(e.employee_email_x);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_x,
-            email: e.employee_email_x,
-            image: e.employee_image_url_x,
-          });
-        }
-        // check employee y
-        if (!this.answers.includes(e.employee_email_y)) {
-          // add data
-          this.answers.push(e.employee_email_y);
-          // add detail data
-          this.answersObject.push({
-            name: e.employee_name_y,
-            email: e.employee_email_y,
-            image: e.employee_image_url_y,
-          });
-        }
-      });
-      await this.checkDataAnswer();
-    } catch (e) {
-      // error code
-    }
-  }
+  loadSwipableComponent: boolean = false;
 
-  async checkDataAnswer() {
-    // cek jika belum mendapatkan 9 unique employee
-    if (this.employees.length === 0) { this.thankyouPage = true; }
-    if (this.answers.length < 9 && this.employees.length >= 10) {
-      // get 3 data lagi sampai dapat 9 unique employee
-      await this.loadEmployeeData();
-    } else {
-      this.answers.splice(9);
-      this.answersObject.splice(9);
-    }
-  }
-
-  selectedAnswerImage(email: string) {
-    const i = this.answersObject.filter(
-      (ao) => ao.email === email,
-    );
-    return i[0]?.image;
-  }
-
-  async nextPage(): Promise<void> {
+  /* PROCESS nextPage */
+  /* Result: qnaModule.submitResponse */
+  public async nextPage(): Promise<void> {
     this.loading = true;
     if (this.pages > this.currentPages) {
-      // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadEmployeeData()
+      // Submit this.prepareSubmit() via this.submitEmployeeData() and recall this.loadSwipableComponent()
       await this.submitEmployeeData();
-      // success : console.log(response.response_code === '0000')
+
       // reload data
       this.answers.splice(0);
       this.answersObject.splice(0);
-      await this.loadEmployeeData().then(() => { this.loading = false; });
-      // go to the next page
       this.allSelectedAnswer.push(this.selectedAnswer);
       this.selectedAnswer = [];
       this.currentPages += 1;
+
+      // go to the next page
+      this.loadSwipableComponent = true;
+      this.$router.push(`?page=${this.currentPages}`);
     } else {
       this.thankyouPage = true;
     }
   }
 
-  answerAdd(email: string): void {
+  async submitEmployeeData(): Promise<QnaResponse | object> {
+    if (this.prepareSubmit().length) {
+      const data = {
+        payload: this.prepareSubmit(),
+        criteriaId: this.domain.id,
+      };
+
+      await qnaModule.submitQna(data);
+      return qnaModule.submitResponse;
+    }
+    return {};
+  }
+
+  prepareSubmit(): QnaSubmit[] {
+    const data: QnaSubmit[] = [];
+
+    this.selectedAnswer.forEach((emailX) => {
+      this.answers.forEach((emailY) => {
+        if (!this.selectedAnswer.includes(emailY)) {
+          data.push({
+            selected_employee_email: emailX,
+            employee_email_x: emailX,
+            employee_email_y: emailY,
+          });
+        } else if (emailX !== emailY) {
+          data.push({
+            selected_employee_email: 'equal',
+            employee_email_x: emailX,
+            employee_email_y: emailY,
+          });
+        }
+      });
+    });
+
+    return data;
+  }
+  /* END PROCESS nextPage */
+
+  /*
+  * GET CRITERIA DATA
+  * endpoint  : criteriaModule.getCriteria
+  * result    : this.domain
+  */
+  async setSelectedCriteria() {
+    await this.getEmployeeStore();
+    await this.getCriteriaStore();
+  }
+
+  async getCriteriaStore() {
+    const criteria = this.$route.params.domain;
+    await criteriaModule.getCriteria().then(() => {
+      const allCriteria = criteriaModule.dataCriteria.data;
+      // set domain variable
+      this.domain = _.find(allCriteria, { slug: criteria });
+    });
+  }
+  /* END GET CRITERIA DATA */
+
+  /*
+  * GET EMPLOYEE DATA
+  * endpoint  : employeeModule.getEmployee()
+  * result    : this.employee => all employee data
+  */
+  async getEmployeeStore() {
+    let allEmployee:EmployeeResponseData[] = [];
+    await employeeModule.getEmployee().then(() => {
+      allEmployee = employeeModule.dataEmployee.data;
+      this.employee = allEmployee;
+      return true;
+    });
+  }
+  /* END GET EMPLOYEE DATA */
+
+  /*
+  * UTILITIES
+  */
+  public answerAdd(email: string): void {
     const index = this.selectedAnswer.indexOf(email);
     if (index === -1) {
       if (this.selectedAnswer.length < this.maxSelectedAnswer) {
@@ -379,59 +354,31 @@ export default class Qna extends Vue {
     }
   }
 
-  async setSelectedCriteria() {
-    await this.getEmployeeStore();
-    await this.getCriteriaStore();
+  public selectedAnswerImage(email: string) {
+    const i = this.answersObject.filter(
+      (ao) => ao.employee_email === email,
+    );
+    return i[0]?.employee_image_url;
   }
 
-  async getEmployeeStore() {
-    let allEmployee:EmployeeResponseData[] = [];
-    let employeeFiltered = [];
-    await employeeModule.getEmployee().then(() => {
-      const org = this.decodeDataEmployee().user_organization;
-      allEmployee = employeeModule.dataEmployee.data;
-      employeeFiltered = _.filter(
-        employeeModule.dataEmployee.data,
-        (o:EmployeeResponseData) => o.employee_organization === org,
-      );
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
-      this.employeeFilter = allEmployee;
-      return true;
-    });
-  }
+  public criteriaProgressCount() {
+    const progress:CriteriaResponseData = _.clone(this.domain);
+    progress.percent_progress = qnaModule.submitResponse.data.percent_progress;
 
-  async getCriteriaStore() {
-    const criteria = this.$route.params.domain;
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
-      const allCriteria = criteriaModule.dataCriteria.data;
-      // set domain variable
-      this.domain = _.find(allCriteria, { slug: criteria });
-    });
+    return progress.percent_progress === 0
+      ? _.round(this.calc(this.domain, this.employee.length), 2)
+      : _.round(this.calc(progress, this.employee.length), 2);
   }
-
-  decodeDataEmployee(): LoginData {
-    const jsonPayload: LoginData = {
-      exp: 1,
-      user_business_unit: 'nodata',
-      user_email: 'nodata',
-      user_id: 'nodata',
-      user_name: 'nodata',
-      user_oauth_id: 'nodata',
-      user_organization: 'nodata',
-      user_organization_full_text: 'nodata',
-    };
-    return this.token ? jwtDecode(this.token) : jsonPayload;
-  }
+  /* END UTILITIES */
 
   async init() {
+    // set current page
+    if (typeof this.$route.query.page === 'string') {
+      this.currentPages = Number(this.$route.query.page);
+    }
+
     await this.setSelectedCriteria().then(() => {
       this.allPageLoading = false;
-
-      // load employee data
-      this.loadEmployeeData().then(() => { this.loading = false; });
-
-      // set employee counter
-      qnaModule.setCounter(this.employeeCounterData);
       // set initial progress
       qnaModule.setSubmit({
         response_code: '',
@@ -439,72 +386,34 @@ export default class Qna extends Vue {
         data: {
           count_submitted: 0,
           percent_progress: this.domain.percent_progress,
-          percent_progress_filter: this.domain.percent_progress_filter,
         },
       });
 
-      // set initial checkpoint progress
-      this.progressCheckpoint = _.floor(this.domain.percent_progress_filter + 10);
+      // always load employee data
+      this.loadSwipableComponent = true;
     });
   }
 
-  async loadEmployeeData(): Promise<void> {
-    const whitelistJson = localStorage.getItem('rrs_whitelist');
-    const whitelist = whitelistJson ? JSON.parse(whitelistJson).selected : [];
-
-    await qnaModule.getQna({
-      criteria_id: this.domain.id,
-      limit: 10,
-      filter: {
-        emails: whitelist,
-      },
-    });
-    this.employees = qnaModule.dataQna.data;
-    this.getUniqueEmployees();
-  }
-
-  prepareSubmit(): QnaSubmit[] {
-    const data: QnaSubmit[] = [];
-    this.selectedAnswer.forEach((emailX) => {
-      this.answers.forEach((emailY) => {
-        if (!this.selectedAnswer.includes(emailY)) {
-          data.push({
-            criteria_id: this.domain.id,
-            selected_employee_email: emailX,
-            employee_email_x: emailX,
-            employee_email_y: emailY,
-          });
-        }
-      });
-    });
-    return data;
-  }
-
-  async submitEmployeeData(): Promise<QnaResponse | object> {
-    if (this.prepareSubmit().length) {
-      const data = {
-        payload: this.prepareSubmit(),
-        criteriaId: this.domain.id,
-        counter: this.employeeCounterData,
-      };
-      await qnaModule.submitQna(data);
-      return qnaModule.submitResponse;
+  initSwipableData(payload) {
+    if (this.criteriaProgressCount() >= 100) {
+      this.thankyouPage = true;
     }
-    return {};
+
+    // set loading
+    this.loading = true;
+    this.allPageLoading = true;
+    // set data
+    this.answers = _.take(payload.employee, 9);
+    this.answersObject = _.take(payload.employeeObject, 9);
+
+    // set loading = false and close swipable component
+    this.loading = false;
+    this.allPageLoading = false;
+    this.loadSwipableComponent = false;
   }
 
   mounted() {
     this.init();
-  }
-
-  criteriaProgressCount() {
-    return qnaModule.submitResponse.data.percent_progress_filter === 0
-      ? _.round(this.domain.percent_progress_filter, 2)
-      : _.round(qnaModule.submitResponse.data.percent_progress_filter, 2);
-  }
-
-  progressCheckpointFloor() {
-    this.progressCheckpoint = _.floor(this.progressCheckpoint + 10);
   }
 }
 </script>

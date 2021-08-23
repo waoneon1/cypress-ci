@@ -32,7 +32,7 @@
           <!--eslint-enable-->
           <div class="flex space-x-4">
             <div class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
-              @click="checkWhiteList()"
+              @click="goToQnaPage()"
             >
               Mulai
             </div>
@@ -55,12 +55,15 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { criteriaModule } from '@/store/criteria';
+import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { employeeModule } from '@/store/employee';
 import jwtDecode from 'jwt-decode';
 import Thankyou from '~/components/utilities/Thankyou.vue';
 import Help from '~/components/utilities/Help.vue';
 import SkeletonQna from '~/components/utilities/SkeletonQna.vue';
+
+import { LoginData } from '~/types/LoginData';
+import { EmployeeResponseData } from '~/types/EmployeeResponseData';
 
 const _ = require('lodash');
 
@@ -74,42 +77,6 @@ const loginDataDefault = {
   user_organization: 'nodata',
   user_organization_full_text: 'nodata',
 };
-export interface CriteriaResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  criteria_name: string;
-  percent_progress: number;
-  slug: string;
-  description: string;
-  shortdec: string;
-  /* eslint-enable camelcase */
-}
-export interface LoginData {
-  /* eslint-disable camelcase */
-  exp: number;
-  user_business_unit: string;
-  user_email: string;
-  user_id: string;
-  user_name: string;
-  user_oauth_id: string;
-  user_organization: string;
-  user_organization_full_text: string;
-  /* eslint-enable camelcase */
-}
-export interface EmployeeResponseData {
-  /* eslint-disable camelcase */
-  id: string;
-  employee_name: string;
-  employee_email: string;
-  employee_image_url: string;
-  employee_alt_id: string;
-  employee_organization: string;
-  employee_organization_full_text: string;
-  employee_business_unit: string;
-  created_at: string;
-  updated_at: string;
-  /* eslint-enable camelcase */
-}
 
 @Component({
   components: { Thankyou, Help, SkeletonQna },
@@ -142,24 +109,11 @@ export default class Criteria extends Vue {
     this.$router.push(`/qna/${this.domain.criteria_name.toLowerCase()}`);
   }
 
-  checkWhiteList() {
-    if (this.whitelist) {
-      const whitelist = JSON.parse(this.whitelist);
-      if (whitelist.selected.length >= 9) {
-        this.goToQnaPage();
-      } else {
-        this.skeletonQna = true;
-      }
-    } else {
-      this.skeletonQna = true;
-    }
-  }
-
   async setSelectedCriteria() {
     // get query param
     const criteria = this.$route.params.domain;
     // get criteria endpoint
-    await criteriaModule.getCriteria(this.employeeCounterData).then(() => {
+    await criteriaModule.getCriteria().then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
@@ -169,7 +123,7 @@ export default class Criteria extends Vue {
 
   decodeDataEmployee() {
     const jsonPayload: LoginData = loginDataDefault;
-    this.loginData = this.token ? jwtDecode(this.token) : jsonPayload;
+    this.loginData = (this.token !== undefined && this.token !== null) ? jwtDecode(this.token) : jsonPayload;
   }
 
   async init() {
