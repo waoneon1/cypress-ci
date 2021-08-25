@@ -45,7 +45,9 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              criteriaProgressCount(item) <= 100 || whitelist === null ? goToQnaPage(item) : null
+              criteriaProgressCount(item) <= 100 || whitelist === null
+                ? goToQnaPage(item)
+                : null
             "
           >
             <div
@@ -80,17 +82,17 @@
                     >
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
-                        :style="
-                          `width:${criteriaProgressCount(item)}%`
-                        "
+                        :style="`width:${criteriaProgressCount(item)}%`"
                       ></div>
                     </div>
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
-                    v-if="criteriaProgressCount(item) < 100 || whitelist === null"
+                    v-if="
+                      criteriaProgressCount(item) < 100 || whitelist === null
+                    "
                     class="text-xs inline-block text-primary"
-                    >{{criteriaProgressCount(item)}}%</span
+                    >{{ criteriaProgressCount(item) }}%</span
                   >
                   <div
                     v-else
@@ -201,7 +203,7 @@ export default class Dashboard extends Mixins(Percentage) {
 
   loading: boolean = true;
 
-  employee:EmployeeResponseData[] = []
+  employee: EmployeeResponseData[] = [];
 
   loginData: LoginData = {
     exp: 1,
@@ -212,7 +214,7 @@ export default class Dashboard extends Mixins(Percentage) {
     user_oauth_id: 'nodata',
     user_organization: 'nodata',
     user_organization_full_text: 'nodata',
-  }
+  };
 
   recommendation = {
     criteria_name: 'No Data',
@@ -230,10 +232,7 @@ export default class Dashboard extends Mixins(Percentage) {
 
   setRecommendation() {
     const criteria = _.clone(this.criteria);
-    return _.minBy(
-      criteria,
-      (object) => object.percent_progress,
-    );
+    return _.minBy(criteria, (object) => object.percent_progress);
   }
 
   roundedNumber = (val: number): number => _.round(val, 2);
@@ -242,7 +241,20 @@ export default class Dashboard extends Mixins(Percentage) {
     await criteriaModule.getCriteria().then(() => {
       this.loading = false;
       const allCriteria = criteriaModule.dataCriteria.data;
-      this.criteria = _.filter(allCriteria, (o: any) => _.includes(['Construction', 'Quality', 'Process'], o.criteria_name));
+      this.criteria = _.filter(allCriteria, (o: any) => _.includes(
+        [
+          'Requirements',
+          'Design',
+          'Construction',
+          'Sustainment',
+          'Process',
+          'Quality',
+          'Measurement',
+          'Systems Engineering',
+          'Security',
+        ],
+        o.criteria_name,
+      ));
 
       this.recommendation = this.setRecommendation();
     });
@@ -285,12 +297,11 @@ export default class Dashboard extends Mixins(Percentage) {
 
   async init() {
     this.alert = alertModule.showAlert;
-    Promise.all([
-      this.decodeDataEmployee(),
-      this.EmployeeCounter(),
-    ]).then(() => {
-      this.loadCriteriaData();
-    });
+    Promise.all([this.decodeDataEmployee(), this.EmployeeCounter()]).then(
+      () => {
+        this.loadCriteriaData();
+      },
+    );
   }
 
   public criteriaProgressCount(categories) {
