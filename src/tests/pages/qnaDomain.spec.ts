@@ -1,4 +1,4 @@
-import Qna from '@/pages/qna/_domain.vue';
+import Qna from '@/pages/qna/_qna.vue';
 import {
   expect, it, describe, beforeEach,
 } from '@jest/globals';

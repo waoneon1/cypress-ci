@@ -153,7 +153,6 @@
               </div>
             </div>
             <div class="inline-block flex">
-              <!-- :disabled="loading" -->
               <button
                 :disabled="loading"
                 @click="nextPage();"

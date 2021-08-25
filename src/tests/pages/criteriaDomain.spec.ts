@@ -1,4 +1,4 @@
-import CriteriaDomain from '@/pages/criteria/_domain.vue';
+import CriteriaDomain from '@/pages/criteria/_criteria.vue';
 import CriteriaStore from '@/store/criteria';
 import { getModule } from 'vuex-module-decorators';
 import { expect, it, describe } from '@jest/globals';
