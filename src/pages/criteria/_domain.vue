@@ -1,19 +1,26 @@
 <template>
-  <div class="bg-gray-100 h-screen overflow-x-hidden">
-    <SkeletonQna v-show="skeletonQna" :criteria="this.domain.criteria_name.toLowerCase()" />
-    <div v-show="!skeletonQna" class="relative bg-white mx-auto max-w-md px-5 font-secondary">
+  <div class="bg-primary h-screen overflow-x-hidden">
+    <SkeletonQna
+      v-show="skeletonQna"
+      :criteria="this.domain.criteria_name.toLowerCase()"
+    />
+    <div v-show="!skeletonQna" class="relative font-secondary">
       <!-- Heading -->
-      <div class="flex justify-between relative py-5">
+      <div
+        class="mx-auto max-w-md px-5 bg-white flex justify-between relative py-5 z-10"
+      >
         <nuxt-link to="/dashboard">
           <svg
-            class="fill-current text-gray-400 absolute left-0 w-4 h-4 hover:text-secondary"
+            class="fill-current text-gray-400 w-4 h-4 hover:text-secondary"
             viewBox="0 0 8 12"
             fill="none"
           >
             <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
           </svg>
         </nuxt-link>
-        <h1 class="text-primary text-sm capitalize">{{ domain.criteria_name }}</h1>
+        <h1 class="text-primary text-sm capitalize">
+          {{ domain.criteria_name }}
+        </h1>
         <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
@@ -23,15 +30,24 @@
         </div>
       </div>
 
-      <div class="flex items-center relative bg-primary -mx-5" style="height: calc(100vh - 60px);">
-        <div class="flex flex-col justify-center items-center text-center px-5 w-full">
-          <img class="mb-10 w-2/3" src="~/static/img/svg/domain.svg" alt="description domain" />
-          <span class="text-xs text-gray-400 mb-5">Deskripsi</span>
+      <div
+        class="mx-auto max-w-md px-5 flex items-center relative bg-primary -mx-5"
+        style="height: calc(100vh - 60px);"
+      >
+        <div
+          class="flex flex-col justify-center items-center text-center px-5 w-full"
+        >
+          <img
+            class="mb-5 w-2/3"
+            src="~/static/img/svg/domain.svg"
+            alt="description domain"
+          />
           <!-- eslint-disable vue/no-v-html -->
-          <h1 class="text-sm text-white mb-10 px-5" v-html="domain.shortdec"></h1>
+          <p class="text-sm text-white mb-5" v-html="domain.shortdec"></p>
           <!--eslint-enable-->
-          <div class="flex space-x-4">
-            <div class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
+          <div class="flex space-x-4 my-2">
+            <div
+              class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
               @click="goToQnaPage()"
             >
               Mulai
@@ -91,7 +107,7 @@ export default class Criteria extends Vue {
     description: 'Loading ...',
     percent_progress: 0,
     slug: '',
-  }
+  };
 
   skeletonQna: boolean = false;
 
@@ -99,9 +115,9 @@ export default class Criteria extends Vue {
 
   help: boolean = false;
 
-  employeeCounterData = { all: 0, org: 0 }
+  employeeCounterData = { all: 0, org: 0 };
 
-  loginData: LoginData = loginDataDefault
+  loginData: LoginData = loginDataDefault;
 
   loading: boolean = true;
 
@@ -123,21 +139,20 @@ export default class Criteria extends Vue {
 
   decodeDataEmployee() {
     const jsonPayload: LoginData = loginDataDefault;
-    this.loginData = (this.token !== undefined && this.token !== null) ? jwtDecode(this.token) : jsonPayload;
+    this.loginData = this.token !== undefined && this.token !== null
+      ? jwtDecode(this.token)
+      : jsonPayload;
   }
 
   async init() {
-    Promise.all([
-      this.employeeCount(),
-      this.decodeDataEmployee(),
-    ]).then(() => {
+    Promise.all([this.employeeCount(), this.decodeDataEmployee()]).then(() => {
       this.setSelectedCriteria();
     });
   }
 
   async employeeCount() {
     // Get Employee filter by ORG and BU
-    let allEmployee:EmployeeResponseData[] = [];
+    let allEmployee: EmployeeResponseData[] = [];
     let employeeFiltered = [];
     await employeeModule.getEmployee().then(() => {
       this.loading = false;
@@ -146,7 +161,10 @@ export default class Criteria extends Vue {
         // employee_organization : TEC - ENG
         employee_organization: this.loginData.user_organization,
       });
-      this.employeeCounterData = { all: allEmployee.length, org: employeeFiltered.length };
+      this.employeeCounterData = {
+        all: allEmployee.length,
+        org: employeeFiltered.length,
+      };
     });
   }
 
