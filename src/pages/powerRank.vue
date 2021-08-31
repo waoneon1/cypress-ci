@@ -120,7 +120,8 @@ export default class PowerRank extends Vue {
     security: true,
   }
 
-  // LOAD STORE ========
+  /* LOAD store */
+  /* Result: currentEmployee, criteria comparison */
   loadCurrentEmployee() {
     const jsonPayload: LoginData = {
       exp: 1,
@@ -168,26 +169,33 @@ export default class PowerRank extends Vue {
       }
     });
   }
+  /* END LOAD store */
+  
+  /* Comparasion Function */
+  /* Result: ??? */
+  // TODO: Comparasion Process
+  
+  /* End Comparasion Function */
 
-  // END LOAD STORE ========
-
-  async loadAllComparison() {
+  /* Initial */
+  /* Result: load employe, criteria comparison */
+  async init() {
     await Promise.all(
       _.forEach(this.criteria, (criteriaObject: CriteriaResponseData) => {
         this.loadComparionData(criteriaObject);
       }),
     );
   }
-
   mounted() {
     Promise.all([
       this.loadCurrentEmployee(),
       this.loadCriteriaData(),
     ]).then(() => {
       this.loading = false;
-      this.loadAllComparison();
+      this.init();
       console.log(this.comparison);
     });
   }
+  /* End Initial */
 }
 </script>
