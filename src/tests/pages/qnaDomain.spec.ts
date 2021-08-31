@@ -93,7 +93,7 @@ describe('Pages > index.vue > Kondisi Normal', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'design' },
+          params: { qna: 'design' },
           query: { page: '1' },
         },
         $router: {
@@ -237,8 +237,8 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'design' },
-          query: { page: '1' },
+          params: { qna: 'design' },
+          query: { page: false },
         },
         $router: {
           push: jest.fn(),
@@ -319,7 +319,7 @@ describe('Pages > index.vue > Kondisi ke 2', () => {
 
   it('Test > nextPage() : this.pages == this.currentPages', async () => {
     await wrapper.vm.nextPage();
-    expect(wrapper.vm.thankyouPage).toBe(false);
+    expect(wrapper.vm.thankyouPage).toBe(true);
   });
 });
 
@@ -349,7 +349,7 @@ describe('Pages > index.vue : kondisi ke 3', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'design' },
+          params: { qna: 'design' },
           query: { page: '1' },
         },
         $router: {
@@ -389,7 +389,7 @@ describe('Pages > index.vue : kondisi ke 4', () => {
       stubs: ['nuxt-link', 'v-lazy-image'],
       mocks: {
         $route: {
-          params: { domain: 'design' },
+          params: { qna: 'design' },
           query: { page: '1' },
         },
         $router: {

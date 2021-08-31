@@ -49,7 +49,7 @@ describe('Pages > criteria/_domain.vue', () => {
           push: mockRouterPush,
         },
         $route: {
-          params: { domain: 'requirements' },
+          params: { criteria: 'requirements' },
         },
       },
       data() {
@@ -84,7 +84,7 @@ describe('Pages > criteria/_domain.vue', () => {
           push: mockRouterPush,
         },
         $route: {
-          params: { domain: 'requirements' },
+          params: { criteria: 'requirements' },
         },
       },
     });

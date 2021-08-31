@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary h-screen overflow-x-hidden">
+  <div class="bg-gray-100 h-screen overflow-x-hidden">
     <SkeletonQna
       v-show="skeletonQna"
       :criteria="this.domain.criteria_name.toLowerCase()"
@@ -31,7 +31,7 @@
       </div>
 
       <div
-        class="mx-auto max-w-md px-5 flex items-center relative bg-primary -mx-5"
+        class="mx-auto max-w-md px-5 flex items-center relative bg-primary"
         style="height: calc(100vh - 60px);"
       >
         <div
@@ -127,7 +127,7 @@ export default class Criteria extends Vue {
 
   async setSelectedCriteria() {
     // get query param
-    const criteria = this.$route.params.domain;
+    const { criteria } = this.$route.params;
     // get criteria endpoint
     await criteriaModule.getCriteria().then(() => {
       this.loading = false;
