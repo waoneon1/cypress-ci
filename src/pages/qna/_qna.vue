@@ -243,6 +243,8 @@ export default class Qna extends Mixins(Percentage) {
 
   loadSwipableComponent: boolean = false;
 
+  criteriaProgress: number = 0
+
   /* PROCESS nextPage */
   /* Result: qnaModule.submitResponse */
   public async nextPage(): Promise<void> {
@@ -315,7 +317,7 @@ export default class Qna extends Mixins(Percentage) {
   }
 
   async getCriteriaStore() {
-    const criteria = this.$route.params.domain;
+    const criteria = this.$route.params.qna;
     await criteriaModule.getCriteria().then(() => {
       const allCriteria = criteriaModule.dataCriteria.data;
       // set domain variable
@@ -360,7 +362,7 @@ export default class Qna extends Mixins(Percentage) {
     return i[0]?.employee_image_url;
   }
 
-  public criteriaProgressCount() {
+  criteriaProgressCountFunc() {
     const progress:CriteriaResponseData = _.clone(this.domain);
     progress.percent_progress = qnaModule.submitResponse.data.percent_progress;
 
@@ -368,9 +370,15 @@ export default class Qna extends Mixins(Percentage) {
       ? _.round(this.calc(this.domain, this.employee.length), 2)
       : _.round(this.calc(progress, this.employee.length), 2);
   }
+
+  public criteriaProgressCount() {
+    return this.criteriaProgress;
+  }
   /* END UTILITIES */
 
   async init() {
+    this.criteriaProgress = this.criteriaProgressCountFunc();
+
     // set current page
     if (typeof this.$route.query.page === 'string') {
       this.currentPages = Number(this.$route.query.page);
