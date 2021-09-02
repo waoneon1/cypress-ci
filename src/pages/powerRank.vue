@@ -110,15 +110,13 @@ const _ = require('lodash');
 export default class PowerRank extends Vue {
   token: string | null = localStorage.getItem('token');
 
-  currentEmployee: LoginData | null = null;
-
   criteria: CriteriaResponseData[] = [];
 
   comparison: ComparisonResponseData[] = [];
 
   loading: boolean = true;
 
-  user: string = 'septema@alterra.id'
+  user: string = ''
 
   loadingCrit = {
     requirements: true,
@@ -157,7 +155,8 @@ export default class PowerRank extends Vue {
       user_organization: 'nodata',
       user_organization_full_text: 'nodata',
     };
-    this.currentEmployee = this.token ? jwtDecode(this.token) : jsonPayload;
+    const currentEmployee: LoginData = this.token ? jwtDecode(this.token) : jsonPayload;
+    this.user = currentEmployee.user_email
   }
 
   async loadCriteriaData(): Promise<void> {
