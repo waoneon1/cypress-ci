@@ -192,8 +192,7 @@ export default class PowerRank extends Vue {
   /* END LOAD store */
 
   /* Comparasion Function */
-  /* Result: ??? */
-  // TODO: Comparasion Process
+  /* Result: rank point */
   getRanker(neutralRanker) {
     const rankerEmail = this.user;
 
