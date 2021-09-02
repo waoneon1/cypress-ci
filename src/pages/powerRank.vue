@@ -156,7 +156,7 @@ export default class PowerRank extends Vue {
       user_organization_full_text: 'nodata',
     };
     const currentEmployee: LoginData = this.token ? jwtDecode(this.token) : jsonPayload;
-    this.user = currentEmployee.user_email
+    this.user = currentEmployee.user_email;
   }
 
   async loadCriteriaData(): Promise<void> {
