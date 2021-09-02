@@ -144,6 +144,12 @@
                     <img v-for="i in 2" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
                   </div>
                 </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">99%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
                 <li>Untuk list domains yg belum muncul, artinya belum ada alterran yg menilai kamu di domain tersebut</li>
               </ol>
             </div>
