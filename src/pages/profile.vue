@@ -65,10 +65,17 @@
                   />
                 </div>
               </div>
-              <div class="flex justify-end mt-4">
+              <div class="flex justify-between mt-4">
+                <nuxt-link
+                  to="/powerrank"
+                  class="flex rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+                >
+                  <img class="mr-2" src="~static/img/svg/medal2.svg" alt="medal disabled">
+                  <span class="font-bold text-sm">Power Rank</span>
+                </nuxt-link>
                 <nuxt-link
                   to="/logout"
-                  class="ml-2 rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
+                  class="rounded-full py-2 px-6 border border-solid border-secondary bg-secondary hover:bg-yellow-700 text-white focus:outline-none inline-block"
                 >
                   <span class="font-bold text-sm">Logout</span>
                 </nuxt-link>
