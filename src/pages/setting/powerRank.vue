@@ -4,7 +4,15 @@
       <!-- Heading -->
       <div class="px-5">
         <div class="flex justify-between relative py-5">
-          <div><!-- Added back button in here --></div>
+          <nuxt-link to="/setting">
+            <svg
+              class="fill-current text-gray-400 w-4 h-4 hover:text-secondary"
+              viewBox="0 0 8 12"
+              fill="none"
+            >
+              <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
+            </svg>
+          </nuxt-link>
           <h1 class="text-primary text-sm capitalize">Power Rank</h1>
           <div
             class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
@@ -21,8 +29,11 @@
       <div class="relative">
         <div>
           <div class="px-3 md:px-6 pt-5 pb-20">
-            <div class="" v-if="loading === true">
-              loading . . .
+            <div class="flex items-center justify-center pt-20" v-if="loading === true">
+              <svg class="animate-spin -ml-1 mr-3 h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
             </div>
             <ul class="" v-else>
               <li v-for="(item, i) in criteria" :key="i">
@@ -33,7 +44,7 @@
                   </svg>
                 </div>
                 <div v-else-if="rankFormula[userPowerRanking[item.slug]] === 0"></div>
-                <div v-else class="flex w-full items-center justify-between border border-gray-100 mb-2 rounded px-4 py-3">
+                <div v-else class="flex w-full items-center justify-between border border-gray-100 mb-2 rounded px-4 py-3 hover:shadow-lg">
                   <div class="text-gray-800 text-sm flex flex-col">
                     <div>{{ item.criteria_name }}</div>
                     <div v-if="rankFormula[userPowerRanking[item.slug]] !== -1" class="text-xs text-gray-300">
@@ -45,6 +56,18 @@
                       <img v-if="userPowerRanking[item.slug] >= i" src="~static/img/svg/medal1.svg" alt="medal active">
                       <img v-else src="~static/img/svg/medal2.svg" alt="medal disabled">
                     </span>
+                  </div>
+                </div>
+              </li>
+              <li v-if="comparisonIsEmpty === 9000">
+                <div class="flex flex-col justify-between text-center px-5 w-full mt-5 mb-8">
+                  <div>
+                    <img class="mb-5 mx-auto" :src="'/img/svg/empty_rank.svg'" alt="empty rank"/>
+                    <h1 class="text-2xl text-primary mb-5 font-mulish font-bold">Broadcast Diri Kamu</h1>
+                    <div class="text-xs mb-6 max-w-xs mx-auto text-gray-800">
+                      <p class="mb-2">Saat ini tidak ada data penilaian yang kami temukan di database tentang kamu.</p>
+                      <p>Kami tahu, kamu punya potensi yang sangat besar, kamu bisa memulai untuk meminta teman menominasikan kamu di aplikasi ini, memperbanyak sharing & open workshow kepada rekan engineer lainnya, bahkan di luar tim kamu</p>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -90,16 +113,18 @@
               </nuxt-link>
             </li>
             <li class="cursor-pointer hover:text-secondary text-secondary">
-              <svg
-                class="fill-current"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM13.61 6.34C14.68 6.34 15.54 7.2 15.54 8.27C15.54 9.34 14.68 10.2 13.61 10.2C12.54 10.2 11.68 9.34 11.68 8.27C11.67 7.2 12.54 6.34 13.61 6.34ZM7.61 4.76C8.91 4.76 9.97 5.82 9.97 7.12C9.97 8.42 8.91 9.48 7.61 9.48C6.31 9.48 5.25 8.42 5.25 7.12C5.25 5.81 6.3 4.76 7.61 4.76ZM7.61 13.89V17.64C5.21 16.89 3.31 15.04 2.47 12.68C3.52 11.56 6.14 10.99 7.61 10.99C8.14 10.99 8.81 11.07 9.51 11.21C7.87 12.08 7.61 13.23 7.61 13.89ZM10 18C9.73 18 9.47 17.99 9.21 17.96V13.89C9.21 12.47 12.15 11.76 13.61 11.76C14.68 11.76 16.53 12.15 17.45 12.91C16.28 15.88 13.39 18 10 18Z"
-                />
-              </svg>
+              <nuxt-link to="/setting">
+                <svg
+                  class="fill-current"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM13.61 6.34C14.68 6.34 15.54 7.2 15.54 8.27C15.54 9.34 14.68 10.2 13.61 10.2C12.54 10.2 11.68 9.34 11.68 8.27C11.67 7.2 12.54 6.34 13.61 6.34ZM7.61 4.76C8.91 4.76 9.97 5.82 9.97 7.12C9.97 8.42 8.91 9.48 7.61 9.48C6.31 9.48 5.25 8.42 5.25 7.12C5.25 5.81 6.3 4.76 7.61 4.76ZM7.61 13.89V17.64C5.21 16.89 3.31 15.04 2.47 12.68C3.52 11.56 6.14 10.99 7.61 10.99C8.14 10.99 8.81 11.07 9.51 11.21C7.87 12.08 7.61 13.23 7.61 13.89ZM10 18C9.73 18 9.47 17.99 9.21 17.96V13.89C9.21 12.47 12.15 11.76 13.61 11.76C14.68 11.76 16.53 12.15 17.45 12.91C16.28 15.88 13.39 18 10 18Z"
+                  />
+                </svg>
+              </nuxt-link>
             </li>
           </ul>
         </div>
@@ -184,6 +209,8 @@ export default class PowerRank extends Vue {
 
   user: string = ''
 
+  comparisonIsEmpty: number = 0
+
   loadingCrit = {
     requirements: true,
     design: true,
@@ -255,6 +282,9 @@ export default class PowerRank extends Vue {
         this.comparison = comparisonModule.dataComparison.data;
         this.loadingCrit[payload.slug] = false;
         this.userPowerRanking[payload.slug] = this.comparisonProcess();
+        this.comparisonIsEmpty = this.userPowerRanking[payload.slug]
+          ? this.comparisonIsEmpty + this.userPowerRanking[payload.slug]
+          : this.comparisonIsEmpty + 1000;
       }
     });
   }
@@ -329,6 +359,7 @@ export default class PowerRank extends Vue {
 
     return this.getRanker(neutralRanker);
   }
+
   /* End Comparasion Function */
 
   /* Initial */

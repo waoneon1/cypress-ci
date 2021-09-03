@@ -1,8 +1,8 @@
-import Profile from '@/pages/profile.vue';
 import { expect, it, describe } from '@jest/globals';
 import { shallowMount } from '@vue/test-utils';
+import Profile from '~/pages/setting/profile.vue';
 
-describe('pages > Faq.vue', () => {
+describe('pages > setting/profile.vue', () => {
   it('berhasil mounting komponen', () => {
     const wrapper: any = shallowMount(Profile, {
       stubs: ['nuxt-link'],

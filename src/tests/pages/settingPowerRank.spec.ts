@@ -1,8 +1,8 @@
-import PowerRank from '@/pages/powerRank.vue';
 import { expect, it, describe } from '@jest/globals';
 import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import Vuex from 'vuex';
 import axios, { AxiosResponse } from 'axios';
+import PowerRank from '~/pages/setting/powerRank.vue';
 
 let wrapper: Wrapper<any>;
 

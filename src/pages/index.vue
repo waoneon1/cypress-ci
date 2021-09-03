@@ -1,5 +1,5 @@
 <template>
-  <div class="md:h-screen overflow-x-hidden">
+  <div class="h-screen overflow-x-hidden">
     <Alert
       :show="alert"
       :title="alertTitle"
@@ -7,7 +7,9 @@
       :theme="alertTheme"
       @close="alert = false"
     />
-    <div class="relative my-0 mx-auto h-full max-w-md p-5 sm:p-10">
+    <div
+      class="flex flex-col bg-white justify-between my-0 mx-auto h-full h-screen md:shadow-md max-w-md p-5 sm:p-10"
+    >
       <div class="flex items-center mb-5">
         <svg
           width="44"
@@ -56,8 +58,8 @@
         <p class="text-sm font-light text-primary">Learn from The Best</p>
       </div>
       <ComponentsRandomPict />
-      <div class="fixed bottom-0 left-0 right-0">
-        <div class="mx-auto max-w-md pb-2 px-5 md:px-10">
+      <div class="mt-10">
+        <div class="mx-auto bg-white max-w-md pb-2 px-5 md:px-10">
           <div
             class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
             @click="handleClickLogin"

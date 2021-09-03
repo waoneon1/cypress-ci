@@ -163,7 +163,7 @@
               </nuxt-link>
             </li>
             <li class="cursor-pointer hover:text-secondary text-gray-400">
-              <nuxt-link to="/profile">
+              <nuxt-link to="/setting">
                 <svg
                   class="fill-current"
                   width="20"
