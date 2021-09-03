@@ -4,7 +4,7 @@
       <!-- Heading -->
       <div class="px-5">
         <div class="flex justify-between relative py-5">
-          <nuxt-link to="/profile">
+          <nuxt-link to="/setting">
             <svg
               class="fill-current text-gray-400 w-4 h-4 hover:text-secondary"
               viewBox="0 0 8 12"
@@ -113,7 +113,7 @@
               </nuxt-link>
             </li>
             <li class="cursor-pointer hover:text-secondary text-secondary">
-              <nuxt-link to="/profile">
+              <nuxt-link to="/setting">
                 <svg
                   class="fill-current"
                   width="20"
