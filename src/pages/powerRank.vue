@@ -3,8 +3,16 @@
     <div class="relative bg-white mx-auto max-w-md font-secondary h-screen">
       <!-- Heading -->
       <div class="px-5">
-        <div class="flex justify-center relative py-5">
+        <div class="flex justify-between relative py-5">
+          <div><!-- Added back button in here --></div>
           <h1 class="text-primary text-sm capitalize">Power Rank</h1>
+          <div
+            class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
+            @click="help = !help"
+          >
+            <span v-if="help" class="text-xs text-gray-400">x</span>
+            <span v-else class="text-xs text-gray-400">?</span>
+          </div>
         </div>
       </div>
       <div class="h-1 w-full border-b"></div>
@@ -17,21 +25,25 @@
               loading . . .
             </div>
             <ul class="" v-else>
-              <!-- this.criteria -->
-              <li v-for="(item, i) in criteria" :key="i" class="border mb-2 rounded px-4">
-                <div v-if="loadingCrit[item.slug]" class="py-2">
+              <li v-for="(item, i) in criteria" :key="i">
+                <div v-if="loadingCrit[item.slug]" class="py-2 border border-gray-100 mb-2 rounded px-4 py-2">
                   <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 </div>
-                <div v-else class="flex w-full h-10 items-center">
-                  <div class="w-3/6">{{ item.criteria_name }} </div>
-                  <div class="w-3/6 flex">
-                    <span class="mr-3"> : </span>
-                    <span v-for="i in 6" :key="i">
-                      <svg v-if="userPowerRanking[item.slug] >= i" class="w-5 h-5 fill-current text-secondary" viewBox="-32 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m50.007812 329.191406-48.421874 96.828125c-2.328126 4.652344-2.078126 10.179688.652343 14.601563 2.738281 4.417968 7.558594 7.109375 12.757813 7.109375h72.839844l43.703124 58.269531c2.839844 3.800781 7.296876 6 11.988282 6 6.230468 0 11.140625-3.71875 13.421875-8.289062l45.628906-91.261719c-61.691406-5.898438-116.082031-37.179688-152.570313-83.257813zm0 0"/><path d="m446.148438 426.019531-48.421876-96.828125c-36.488281 46.078125-90.878906 77.359375-152.570312 83.257813l45.632812 91.261719c2.277344 4.570312 7.1875 8.289062 13.417969 8.289062 4.691407 0 9.152344-2.199219 11.992188-6l43.699219-58.269531h72.839843c5.199219 0 10.019531-2.691407 12.757813-7.109375 2.730468-4.421875 2.980468-9.949219.652344-14.601563zm0 0"/><path d="m248.972656 147.644531-25.105468-40.105469-25.097657 40.105469c-2.058593 3.289063-5.3125 5.652344-9.074219 6.59375l-45.894531 11.480469 30.382813 36.265625c2.492187 2.972656 3.734375 6.796875 3.464844 10.667969l-3.269532 47.195312 43.878906-17.6875c2.085938-.839844 6.351563-1.960937 11.214844 0l43.882813 17.6875-3.265625-47.195312c-.265625-3.871094.976562-7.695313 3.46875-10.667969l30.382812-36.265625-45.894531-11.480469c-3.761719-.941406-7.015625-3.304687-9.074219-6.59375zm0 0"/><path d="m415.601562 191.734375c0-105.722656-86.011718-191.734375-191.734374-191.734375-105.722657 0-191.734376 86.011719-191.734376 191.734375 0 105.71875 86.011719 191.734375 191.734376 191.734375 105.722656 0 191.734374-86.011719 191.734374-191.734375zm-73.273437-25.121094-41.890625 50 4.5 65.070313c.355469 5.15625-1.964844 10.132812-6.144531 13.171875-4.183594 3.035156-9.632813 3.707031-14.425781 1.777343l-60.5-24.386718-60.5 24.386718c-1.621094.652344-8.078126 2.832032-14.425782-1.777343-4.179687-3.039063-6.5-8.015625-6.144531-13.171875l4.507813-65.070313-41.890626-49.996093c-3.320312-3.964844-4.367187-9.355469-2.769531-14.269532 1.597657-4.914062 5.613281-8.664062 10.628907-9.917968l63.273437-15.828126 34.605469-55.292968c2.742187-4.378906 7.546875-7.039063 12.714844-7.039063 5.167968 0 9.972656 2.660157 12.714843 7.039063l34.613281 55.292968 63.273438 15.828126c5.015625 1.253906 9.03125 5.003906 10.628906 9.917968 1.597656 4.914063.550782 10.304688-2.769531 14.265625zm0 0"/></svg>
-                      <svg v-else class="w-5 h-5 fill-current text-gray-100" viewBox="-32 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m50.007812 329.191406-48.421874 96.828125c-2.328126 4.652344-2.078126 10.179688.652343 14.601563 2.738281 4.417968 7.558594 7.109375 12.757813 7.109375h72.839844l43.703124 58.269531c2.839844 3.800781 7.296876 6 11.988282 6 6.230468 0 11.140625-3.71875 13.421875-8.289062l45.628906-91.261719c-61.691406-5.898438-116.082031-37.179688-152.570313-83.257813zm0 0"/><path d="m446.148438 426.019531-48.421876-96.828125c-36.488281 46.078125-90.878906 77.359375-152.570312 83.257813l45.632812 91.261719c2.277344 4.570312 7.1875 8.289062 13.417969 8.289062 4.691407 0 9.152344-2.199219 11.992188-6l43.699219-58.269531h72.839843c5.199219 0 10.019531-2.691407 12.757813-7.109375 2.730468-4.421875 2.980468-9.949219.652344-14.601563zm0 0"/><path d="m248.972656 147.644531-25.105468-40.105469-25.097657 40.105469c-2.058593 3.289063-5.3125 5.652344-9.074219 6.59375l-45.894531 11.480469 30.382813 36.265625c2.492187 2.972656 3.734375 6.796875 3.464844 10.667969l-3.269532 47.195312 43.878906-17.6875c2.085938-.839844 6.351563-1.960937 11.214844 0l43.882813 17.6875-3.265625-47.195312c-.265625-3.871094.976562-7.695313 3.46875-10.667969l30.382812-36.265625-45.894531-11.480469c-3.761719-.941406-7.015625-3.304687-9.074219-6.59375zm0 0"/><path d="m415.601562 191.734375c0-105.722656-86.011718-191.734375-191.734374-191.734375-105.722657 0-191.734376 86.011719-191.734376 191.734375 0 105.71875 86.011719 191.734375 191.734376 191.734375 105.722656 0 191.734374-86.011719 191.734374-191.734375zm-73.273437-25.121094-41.890625 50 4.5 65.070313c.355469 5.15625-1.964844 10.132812-6.144531 13.171875-4.183594 3.035156-9.632813 3.707031-14.425781 1.777343l-60.5-24.386718-60.5 24.386718c-1.621094.652344-8.078126 2.832032-14.425782-1.777343-4.179687-3.039063-6.5-8.015625-6.144531-13.171875l4.507813-65.070313-41.890626-49.996093c-3.320312-3.964844-4.367187-9.355469-2.769531-14.269532 1.597657-4.914062 5.613281-8.664062 10.628907-9.917968l63.273437-15.828126 34.605469-55.292968c2.742187-4.378906 7.546875-7.039063 12.714844-7.039063 5.167968 0 9.972656 2.660157 12.714843 7.039063l34.613281 55.292968 63.273438 15.828126c5.015625 1.253906 9.03125 5.003906 10.628906 9.917968 1.597656 4.914063.550782 10.304688-2.769531 14.265625zm0 0"/></svg>
+                <div v-else-if="rankFormula[userPowerRanking[item.slug]] === 0"></div>
+                <div v-else class="flex w-full items-center justify-between border border-gray-100 mb-2 rounded px-4 py-3">
+                  <div class="text-gray-800 text-sm flex flex-col">
+                    <div>{{ item.criteria_name }}</div>
+                    <div v-if="rankFormula[userPowerRanking[item.slug]] !== -1" class="text-xs text-gray-300">
+                      Top {{ rankFormula[userPowerRanking[item.slug]] }}%
+                    </div>
+                  </div>
+                  <div class="flex">
+                    <span v-for="i in 6" :key="i" class="mx-1">
+                      <img v-if="userPowerRanking[item.slug] >= i" src="~static/img/svg/medal1.svg" alt="medal active">
+                      <img v-else src="~static/img/svg/medal2.svg" alt="medal disabled">
                     </span>
                   </div>
                 </div>
@@ -92,6 +104,57 @@
           </ul>
         </div>
       </div>
+
+      <div
+        class="absolute top-0 left-0 w-full flex bg-primary py-4 bg-opacity-90"
+        style="margin-top:60px; height: calc(100vh - 60px);"
+        v-show="help"
+      >
+        <div class="flex flex-col text-left px-5 w-full overflow-auto">
+          <div class="text-white font-base text-sm">
+              <h2 class="text-white mb-5 font-bold">Keterangan</h2>
+              <ol>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">10%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img v-for="i in 6" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">15%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img v-for="i in 5" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">30%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img v-for="i in 4" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">50%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img v-for="i in 3" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">70%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img v-for="i in 2" :key="i" class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li class="mb-4">
+                  Kamu ada pada posisi top <span class="text-secondary">99%</span> di domain tersebut
+                  <div class="flex mb-2 bg-white rounded-lg p-2">
+                    <img class="mx-1" src="~static/img/svg/medal1.svg" alt="medal active">
+                  </div>
+                </li>
+                <li>Untuk list domains yg belum muncul, artinya belum ada alterran yg menilai kamu di domain tersebut</li>
+              </ol>
+            </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -101,12 +164,15 @@ import { Vue, Component } from 'vue-property-decorator';
 import jwtDecode from 'jwt-decode';
 import { criteriaModule, CriteriaResponseData } from '@/store/criteria';
 import { comparisonModule } from '@/store/comparison';
+import Help from '~/components/utilities/Help.vue';
 import { LoginData } from '~/types/LoginData';
 import { ComparisonResponseData } from '~/types/ComparisonData';
 
 const _ = require('lodash');
 
-@Component
+@Component({
+  components: { Help },
+})
 export default class PowerRank extends Vue {
   token: string | null = localStorage.getItem('token');
 
@@ -141,6 +207,10 @@ export default class PowerRank extends Vue {
     'systems engineering': 0,
     security: 0,
   }
+
+  rankFormula:number[] = [0, -1, 70, 50, 30, 15, 10];
+
+  help: boolean = false;
 
   /* LOAD store */
   /* Result: currentEmployee, criteria comparison */
