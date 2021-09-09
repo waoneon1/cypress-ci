@@ -22,7 +22,7 @@
           <h4 class="text-sm font-light text-white">{{ data.user_organization_full_text }}</h4>
         </div>
         <div class="text-sm px-10 py-6 font-medium text-gray-800">
-          <nuxt-link to="/setting/profile" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
+          <nuxt-link to="/setting/profile" id="profile" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
             <span>Profile Saya</span>
             <svg
               class="fill-current w-3 h-3 hover:text-secondary transform rotate-180"
@@ -32,7 +32,7 @@
               <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
             </svg>
           </nuxt-link>
-          <nuxt-link to="/setting/powerrank" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
+          <nuxt-link to="/setting/powerrank" id="powerrank" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
             <span>Power Rank</span>
             <svg
               class="fill-current w-3 h-3 hover:text-secondary transform rotate-180"
@@ -42,7 +42,7 @@
               <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
             </svg>
           </nuxt-link>
-          <nuxt-link to="/logout" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
+          <nuxt-link to="/logout" id="logout" class="flex justify-between items-center py-2 border border-gray-100 mb-5 rounded px-4 hover:shadow">
             <span>Logout</span>
             <svg
               class="fill-current w-3 h-3 hover:text-secondary transform rotate-180"
