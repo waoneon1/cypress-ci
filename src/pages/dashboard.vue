@@ -1,3 +1,4 @@
+// dashboard.vue
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden font-mulish">
     <Alert
@@ -45,7 +46,7 @@
             :key="i"
             class="mb-1 cursor-pointer"
             @click="
-              criteriaProgressCount(item) <= 100 || whitelist === null
+              criteriaProgressCount(i) <= 100 || whitelist === null
                 ? goToQnaPage(item)
                 : null
             "
@@ -63,7 +64,7 @@
               <div
                 :class="
                   `bg-white text-primary justify-center px-3 py-3 ${
-                    criteriaProgressCount(item) < 100 || whitelist === null
+                    criteriaProgressCount(i) < 100 || whitelist === null
                       ? 'hover:bg-blue-100'
                       : ''
                   }`
@@ -82,17 +83,17 @@
                     >
                       <div
                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
-                        :style="`width:${criteriaProgressCount(item)}%`"
+                        :style="`width:${criteriaProgressCount(i)}%`"
                       ></div>
                     </div>
                   </div>
                   <!-- if progress < 100 or whitelist not selected -->
                   <span
                     v-if="
-                      criteriaProgressCount(item) < 100 || whitelist === null
+                      criteriaProgressCount(i) < 100 || whitelist === null
                     "
                     class="text-xs inline-block text-primary"
-                    >{{ criteriaProgressCount(item) }}%</span
+                    >{{ criteriaProgressCount(i) }}%</span
                   >
                   <div
                     v-else
@@ -224,6 +225,8 @@ export default class Dashboard extends Mixins(Percentage) {
     shortdec: '',
   };
 
+  criteriaProgress: number = 0
+
   criteria: CriteriaResponseData[] = [];
 
   goToQnaPage(payload: CriteriaResponseData): void {
@@ -257,6 +260,7 @@ export default class Dashboard extends Mixins(Percentage) {
       ));
 
       this.recommendation = this.setRecommendation();
+      this.criteriaProgress = this.criteriaProgressCountFunc();
     });
   }
 
@@ -304,8 +308,13 @@ export default class Dashboard extends Mixins(Percentage) {
     );
   }
 
-  public criteriaProgressCount(categories) {
-    return _.round(this.calc(categories, this.employee.length), 2);
+  criteriaProgressCountFunc() {
+    const all = _.map(this.criteria, (obj) => _.round(this.calc(obj, this.employee.length), 2));
+    return all;
+  }
+
+  public criteriaProgressCount(i) {
+    return this.criteriaProgress[i];
   }
 
   created() {
