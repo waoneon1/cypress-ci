@@ -7,6 +7,7 @@ module.exports = {
   //   // "^.+\\.tsx?$": "ts-jest",
   //   //   '.*\\.(vue)$': 'vue-jest'
   // },
+  testPathIgnorePatterns: ["<rootDir>/cypress/"],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^~/(.*)$': '<rootDir>/$1',
