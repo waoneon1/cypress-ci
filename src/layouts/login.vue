@@ -16,20 +16,25 @@ import { Vue, Component } from 'vue-property-decorator';
       },
     };
   },
+  middleware: 'loggedIn',
 })
 export default class Login extends Vue {
   $exp: any;
 
   pageStatus: boolean = false;
 
-  checkMaintenance() {
+  token: string | null = localStorage.getItem('token');
+
+  check() {
     if (this.pageStatus) {
       this.$router.push('/maintenance');
+    } else if (this.token) {
+      this.$router.push('/dashboard');
     }
   }
 
   beforeMount() {
-    this.checkMaintenance();
+    this.check();
   }
 }
 </script>
