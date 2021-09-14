@@ -1,30 +1,33 @@
+import jwtDecode from 'jwt-decode'
 
 describe('pages > setting/index.vue', () => {
 
+  let loginData = jwtDecode(Cypress.env('token'));
+
   beforeEach(function () {
     cy.loginByGoogleApi()
-    cy.visit('/setting')
+    cy.visit('/dashboard')
   })
 
   it('Setting Page index', () => {
-    cy.get('h1').should('have.text', 'Dharmawan Sukma Hardi Pratama');
+    cy.get('h1').should('have.text', loginData.user_name);
   })
 
-  it('Setting Page > Profile', () => {
-    cy.get('#profile').should('be.visible').click()
-    cy.get('h1').should('have.text', 'Profile');
-    cy.get('#profileName').should('have.value', 'Dharmawan Sukma Hardi Pratama');
-  })
+  // it('Setting Page > Profile', () => {
+  //   cy.get('#profile').should('be.visible').click()
+  //   cy.get('h1').should('have.text', 'Profile');
+  //   cy.get('#profileName').should('have.value', loginData.user_name);
+  // })
 
-  it('Setting Page > Logout', () => {
-    cy.get('#logout').should('be.visible').click()
-    cy.url().should('eq', Cypress.config().baseUrl + '/')
-  })
+  // it('Setting Page > Logout', () => {
+  //   cy.get('#logout').should('be.visible').click()
+  //   cy.url().should('eq', Cypress.env('baseUrl') + '/')
+  // })
 
-  it('Setting Page > Power Rank', () => {
-    cy.get('#powerrank').should('be.visible').click()
-    cy.get('h1').should('have.text', 'Power Rank')
-    cy.url().should('eq', Cypress.config().baseUrl + '/setting/powerrank')
-  })
+  // it('Setting Page > Power Rank', () => {
+  //   cy.get('#powerrank').should('be.visible').click()
+  //   cy.get('h1').should('have.text', 'Power Rank')
+  //   cy.url().should('eq', Cypress.env('baseUrl') + '/setting/powerrank')
+  // })
 
 });

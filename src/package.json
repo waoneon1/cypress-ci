@@ -10,7 +10,8 @@
     "lintfix": "eslint --fix --ext .js,.vue,.ts .",
     "generate": "nuxt generate",
     "clean": "shx rm -rf dist/ coverage/",
-    "test": "npm run clean && jest"
+    "test": "npm run clean && jest",
+    "e2e": "npx cypress open"
   },
   "dependencies": {
     "@nuxt/types": "^2.14.12",

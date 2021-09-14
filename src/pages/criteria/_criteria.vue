@@ -47,6 +47,7 @@
           <!--eslint-enable-->
           <div class="flex space-x-4 my-2">
             <div
+              id="btnMulai"
               class="rounded-full py-3 px-8 mb-1 border border-solid focus:outline-none cursor-pointer flex items-center mx-auto justify-center border-secondary bg-secondary text-white"
               @click="goToQnaPage()"
             >
