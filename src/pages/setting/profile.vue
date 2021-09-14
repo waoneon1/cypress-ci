@@ -29,6 +29,7 @@
                   <label class="font-medium mb-2 pl-1">Nama Lengkap</label>
                   <input
                     type="text"
+                    id="profileName"
                     disabled
                     class="rounded-md border border-gray-300 bg-gray-300 font-roboto py-2 px-3"
                     :value="data.user_name"

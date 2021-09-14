@@ -1,4 +1,3 @@
-// dashboard.vue
 <template>
   <div class="bg-gray-100 h-screen overflow-x-hidden font-mulish">
     <Alert
@@ -15,9 +14,7 @@
       <div class="flex justify-between items-center relative py-5 mb-5  ">
         <div class="relative">
           <p class="text-xs text-primary">Welcome,</p>
-          <h1 class="text-primary font-medium text-xl">
-            {{ getUsername() }}
-          </h1>
+          <h1 class="text-primary font-medium text-xl">{{ getUsername() }}</h1>
         </div>
         <div class="rounded-full overflow-hidden h-7 w-7">
           <img class="" src="~/static/img/blank.jpeg" alt="profile" />
@@ -53,6 +50,7 @@
           >
             <div
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
+              :id="criteriaId(item)"
             >
               <div
                 v-show="checkRecommandation(item)"
@@ -228,6 +226,10 @@ export default class Dashboard extends Mixins(Percentage) {
   criteriaProgress: number = 0
 
   criteria: CriteriaResponseData[] = [];
+  
+  criteriaId(item) {
+    return item.slug.replace(' ', '-')
+  }
 
   goToQnaPage(payload: CriteriaResponseData): void {
     this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
@@ -261,6 +263,7 @@ export default class Dashboard extends Mixins(Percentage) {
 
       this.recommendation = this.setRecommendation();
       this.criteriaProgress = this.criteriaProgressCountFunc();
+
     });
   }
 
@@ -309,8 +312,10 @@ export default class Dashboard extends Mixins(Percentage) {
   }
 
   criteriaProgressCountFunc() {
-    const all = _.map(this.criteria, (obj) => _.round(this.calc(obj, this.employee.length), 2));
-    return all;
+    const all = _.map(this.criteria, (obj) => {
+      return _.round(this.calc(obj, this.employee.length), 2);
+    });
+    return all
   }
 
   public criteriaProgressCount(i) {
