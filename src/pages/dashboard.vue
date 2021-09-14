@@ -226,10 +226,8 @@ export default class Dashboard extends Mixins(Percentage) {
   criteriaProgress: number = 0
 
   criteria: CriteriaResponseData[] = [];
-  
-  criteriaId(item) {
-    return item.slug.replace(' ', '-')
-  }
+
+  criteriaId = (item) => item.slug.replace(' ', '-')
 
   goToQnaPage(payload: CriteriaResponseData): void {
     this.$router.push(`/criteria/${payload.criteria_name.toLowerCase()}`);
@@ -263,7 +261,6 @@ export default class Dashboard extends Mixins(Percentage) {
 
       this.recommendation = this.setRecommendation();
       this.criteriaProgress = this.criteriaProgressCountFunc();
-
     });
   }
 
@@ -312,10 +309,8 @@ export default class Dashboard extends Mixins(Percentage) {
   }
 
   criteriaProgressCountFunc() {
-    const all = _.map(this.criteria, (obj) => {
-      return _.round(this.calc(obj, this.employee.length), 2);
-    });
-    return all
+    const all = _.map(this.criteria, (obj) => _.round(this.calc(obj, this.employee.length), 2));
+    return all;
   }
 
   public criteriaProgressCount(i) {
