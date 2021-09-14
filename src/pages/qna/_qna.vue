@@ -35,8 +35,8 @@
       <!-- Content: Question -->
       <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
       <div v-else class="relative">
-        <div class="text-sm text-primary font-bold rounded-xl mb-5">
-          Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }}
+        <div id="qnaTitle" class="text-sm text-primary font-bold rounded-xl mb-5">
+          <span>Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }}</span>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
           </h1>
         </Thankyou>
         <div v-else class="relative" >
-          <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
+          <div id="employeeList" class="grid grid-cols-2 xs:grid-cols-3 gap-5">
             <div
               v-for="(item, i) in answersObject"
               :key="i"

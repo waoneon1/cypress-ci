@@ -8,7 +8,7 @@
         <div>
           <!-- Added back button in here -->
         </div>
-        <h1 class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
+        <h1 id="swipeTitle" class="text-primary text-sm capitalize">Mempersiapkan Data Employee</h1>
         <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
@@ -109,13 +109,13 @@
           </div>
           <div class="flex-none h-10">
             <div class="flex justify-around mt-10">
-              <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+              <button id="swipeReject" class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
                 :class="btnDisabled ? 'bg-gray-400' : 'bg-danger'"
                 :disabled="btnDisabled"
                 @click="reject()">
                 <img class="w-9 h-9" src="~/static/img/svg/cross.svg" alt="toast icon close" />
               </button>
-              <button class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
+              <button id="swipeMatch" class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
                 :class="btnDisabled ? 'bg-gray-400' : 'bg-success'"
                 :disabled="btnDisabled"
                 @click="match()">

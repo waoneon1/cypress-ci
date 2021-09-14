@@ -15,9 +15,7 @@
       <div class="flex justify-between items-center relative py-5 mb-5  ">
         <div class="relative">
           <p class="text-xs text-primary">Welcome,</p>
-          <h1 class="text-primary font-medium text-xl">
-            {{ getUsername() }}
-          </h1>
+          <h1 class="text-primary font-medium text-xl">{{ getUsername() }}</h1>
         </div>
         <div class="rounded-full overflow-hidden h-7 w-7">
           <img class="" src="~/static/img/blank.jpeg" alt="profile" />
@@ -53,7 +51,7 @@
           >
             <div
               class="rounded-xl overflow-hidden cursor-pointer relative shadow-lg text-sm "
-              :id="criteriaId()"
+              :id="criteriaId(item)"
             >
               <div
                 v-show="checkRecommandation(item)"

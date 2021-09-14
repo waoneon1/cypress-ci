@@ -18,9 +18,7 @@
             <path d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z" />
           </svg>
         </nuxt-link>
-        <h1 class="text-primary text-sm capitalize">
-          {{ domain.criteria_name }}
-        </h1>
+        <h1 id="criteriaTitle" class="text-primary text-sm capitalize">{{ domain.criteria_name }}</h1>
         <div
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"

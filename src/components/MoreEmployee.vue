@@ -7,8 +7,8 @@
       <!-- Heading -->
       <div class="px-5">
         <div class="flex justify-center relative py-5">
-          <h1 class="text-primary text-sm capitalize">
-            Apakah ada alterran lain yang bisa anda nilai ?
+          <h1 id="moreTitle" class="text-primary text-sm capitalize">
+            <span>Apakah ada alterran lain yang bisa anda nilai ?</span>
           </h1>
         </div>
       </div>
@@ -33,6 +33,7 @@
             type="text"
             class="shadow-lg mb-5 text-sm rounded-lg w-full py-3 px-4 border"
             placeholder="Cari Nama Alterrans"
+            id="cariAlterran"
           />
         </div>
         <!-- Grid Employee -->
@@ -53,12 +54,12 @@
           </div>
         </div>
         <div v-else class="relative">
-          <div class="grid grid-cols-2 xs:grid-cols-3 gap-5">
+          <div id="employeeList" class="grid grid-cols-2 xs:grid-cols-3 gap-5">
             <div
               v-for="(item, i) in employeeSearch"
               :key="i"
               @click="toggleSelect(item)"
-              class="relative"
+              class="employee relative"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
@@ -136,6 +137,7 @@
                   && selected.length !== 0 && currentPages === 1
                 "
                 @click="save()"
+                id="btnSubmit"
               >
                 <svg
                   v-show="loading"
@@ -158,12 +160,8 @@
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span v-if="selected.length" class="font-bold text-sm">
-                  Lanjutkan Penilaian
-                </span>
-                <span v-else class="font-bold text-sm">
-                  Saya Belum Bisa Menilai Alterran Lain
-                </span>
+                <span v-if="selected.length" class="font-bold text-sm">Lanjutkan Penilaian</span>
+                <span v-else class="font-bold text-sm">Saya Belum Bisa Menilai Alterran Lain</span>
               </button>
             </div>
           </div>
