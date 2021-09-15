@@ -49,9 +49,9 @@
         <div
           class="flex flex-col"
           :class="loadingDelay ? 'overflow-hidden' : ''"
-          style="height:70vh;"
+          style="height:75vh;"
         >
-          <div class="w-11/12 flex-grow">
+          <div class="ml-6 w-10/12 flex-grow">
             <div  class="h-full w-full relative">
               <!-- one -->
               <div
@@ -107,7 +107,7 @@
               </div>
             </div>
           </div>
-          <div class="flex-none h-10">
+          <div class="flex-none">
             <div class="flex justify-around mt-10">
               <button id="swipeReject" class="flex items-center justify-center flex-none rounded-full w-10 h-10 font-bold cursor-pointer"
                 :class="btnDisabled ? 'bg-gray-400' : 'bg-danger'"
