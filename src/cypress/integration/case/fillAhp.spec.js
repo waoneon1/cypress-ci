@@ -24,6 +24,7 @@ describe('pages > setting/index.vue', () => {
     cy.log('citeria page');
     const domainSlug = domain.toLowerCase();
     cy.get(`#${domainSlug}`).click();
+    cy.wait(2000);
     cy.get('#criteriaTitle').should('have.text', domain);
 
     // qna swipeable
@@ -43,7 +44,7 @@ describe('pages > setting/index.vue', () => {
     cy.get('#employeeList').children().should('have.length', 9);
   });
 
-  it('Choose 7 and reject the rest employee', () => {
+  it('Choose 15 blacklist and 5 whitlist to test prepare employee page', () => {
     cy.visit('/dashboard');
     const loginData = jwtDecode(Cypress.env('token'));
     const usernameArray = _.split(loginData.user_name, ' ', 2);
