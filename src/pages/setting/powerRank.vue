@@ -15,6 +15,7 @@
           </nuxt-link>
           <h1 class="text-primary text-sm capitalize">Power Rank</h1>
           <div
+            id="help"
             class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
             @click="help = !help"
           >
@@ -131,6 +132,7 @@
       </div>
 
       <div
+        id="helpPage"
         class="absolute top-0 left-0 w-full flex bg-primary py-4 bg-opacity-90"
         style="margin-top:60px; height: calc(100vh - 60px);"
         v-show="help"
