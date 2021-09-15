@@ -208,6 +208,8 @@ export default class MoreEmployee extends Vue {
 
   currentPages: number = 1
 
+  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
+
   @Prop({ required: true, type: Object })
   swipeableData!: SelectedSwipeable;
 
