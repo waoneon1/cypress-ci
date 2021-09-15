@@ -470,8 +470,7 @@ export default class SwipeableCard extends Vue {
   @Emit('swipableData')
   proceedQnaPage() {
     this.replaceBlackWhitelist();
-    const selected = _.clone(this.selected);
-    return selected;
+    return _.clone(this.selected);
   }
 
   replaceBlackWhitelist() {
