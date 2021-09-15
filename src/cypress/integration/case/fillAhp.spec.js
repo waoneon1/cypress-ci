@@ -9,7 +9,10 @@ describe('pages > setting/index.vue', () => {
     cy.loginByGoogleApi();
   });
 
-  it('Choose 9 whitelist employee', () => {
+  it('Choose 9 whitelist employee', {
+    viewportHeight: 700,
+    viewportWidth: 900,
+  }, () => {
     cy.visit('/dashboard');
     const loginData = jwtDecode(Cypress.env('token'));
     const usernameArray = _.split(loginData.user_name, ' ', 2);
@@ -44,7 +47,10 @@ describe('pages > setting/index.vue', () => {
     cy.get('#employeeList').children().should('have.length', 9);
   });
 
-  it('Choose 15 blacklist and 5 whitlist to test prepare employee page', () => {
+  it('Choose 15 blacklist and 5 whitlist to test prepare employee page', {
+    viewportHeight: 700,
+    viewportWidth: 900,
+  }, () => {
     cy.visit('/dashboard');
     const loginData = jwtDecode(Cypress.env('token'));
     const usernameArray = _.split(loginData.user_name, ' ', 2);
