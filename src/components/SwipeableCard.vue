@@ -435,7 +435,7 @@ export default class SwipeableCard extends Vue {
     // 2. Request unique employee until we get 20 or until Requesting 10 times
     uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
     this.storeUniqueEmployee = uniqueEmployee;
-    if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 1) {
+    if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 10) {
       this.storeUniqueEmployeeCounter += 1;
       this.loadEmployeeData();
     }
