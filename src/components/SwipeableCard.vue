@@ -404,7 +404,9 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
-    const pairToEmployee:AnswersObject[] = this.storeUniqueEmployee;
+    // 0. initial pair dengan pair sebelumnya. tapi pastikan blacklist not include
+
+    const pairToEmployee:AnswersObject[] = _.filter(this.storeUniqueEmployee, (o:AnswersObject) => !this.selected.blacklist.includes(o.employee_email));
     let uniqueEmployee:AnswersObject[] = [];
 
     // 1. get unique employee d
@@ -433,12 +435,13 @@ export default class SwipeableCard extends Vue {
     // 2. Request unique employee until we get 20 or until Requesting 10 times
     uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
     this.storeUniqueEmployee = uniqueEmployee;
-    if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 20) {
+    if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 1) {
       this.storeUniqueEmployeeCounter += 1;
       this.loadEmployeeData();
     }
 
     // 3. get whitelist object base on unique employee
+    // const whitelistObject: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email));
 
     // 4. prioritize : uniqemploye but not whitelist employee
     // - this is for swipable only. selected.employee will fill when user swipe
@@ -448,6 +451,7 @@ export default class SwipeableCard extends Vue {
     const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(uniqueEmployee), 9);
 
     // 6. asign variable to swipeable and not to selected
+    // const takeSelected = 9 - prioritize.length;
     this.answers = _.map(prioritize, 'employee_email');
     this.answersObject = prioritize;
 
