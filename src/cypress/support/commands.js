@@ -9,3 +9,9 @@ Cypress.Commands.add('loginByGoogleApi', () => {
 Cypress.Commands.add('checkToken', () => {
   cy.window().its('localStorage.token').should('eq', Cypress.env('googleClientId'));
 });
+
+// Onboarding
+Cypress.Commands.add('onboardingPage', () => {
+  window.localStorage.setItem('rrs_onboard', 'true');
+  cy.visit('/onboarding');
+});
