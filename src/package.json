@@ -3,14 +3,14 @@
   "version": "1.7.0",
   "private": true,
   "scripts": {
-    "dev": "npm run clean && nuxt",
+    "dev": "yarn clean && nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "lint": "eslint --ext .js,.vue,.ts .",
     "lintfix": "eslint --fix --ext .js,.vue,.ts .",
     "generate": "nuxt generate",
     "clean": "shx rm -rf dist/ coverage/",
-    "test": "npm run clean && jest",
+    "test": "yarn clean && jest",
     "e2e": "npx cypress open"
   },
   "dependencies": {
