@@ -20,10 +20,20 @@
 
       <!-- Content: Criteria List -->
       <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
-        <p> index : {{ index }} | iswipeable : {{ iteration }} | selected : {{ selected.employee.length }} | iteration : {{ currentPages }}</p>
-        <p> counterSelected : {{ counterSelected }} | total swipe : {{ totalSwipe }} | remaining em : {{ this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1 }}</p>
-        <p> blacklist : {{ selected.blacklist.length }} | whitelist : {{ selected.whitelist.length }} | selected : {{ selected.employee.length }}</p>
+        <small> {{ this.answers }}</small>
+        <p> index : {{ index }} |
+          iswipeable : {{ iteration }} |
+          selected : {{ selected.employee.length }} |
+          iteration : {{ currentPages }}</p>
+        <p> counterSelected : {{ counterSelected }} |
+          total swipe : {{ totalSwipe }} |
+          remaining em : {{ this.allEmployee.length - (this.selected.blacklist.length + this.selected.whitelist.length) - 1 }}</p>
+        <p> blacklist : {{ selected.blacklist.length }} |
+          whitelist : {{ selected.whitelist.length }} |
+          kandidat : {{ selected.employee.length }} |
+          priority : {{ this.answers.length }}</p>
       </div>
+
       <div class="relative" v-if="loading">
         <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -268,6 +278,10 @@ export default class SwipeableCard extends Vue {
 
   employees: QnaResponseData[] = [];
 
+  storeUniqueEmployee: AnswersObject[] = [];
+
+  storeUniqueEmployeeCounter: number = 0;
+
   answers: string[] = [];
 
   answersObject: AnswersObject[] = [];
@@ -391,7 +405,9 @@ export default class SwipeableCard extends Vue {
   }
 
   async getUniqueEmployees() {
-    const pairToEmployee:AnswersObject[] = [];
+    // 0. initial pair dengan pair sebelumnya. tapi pastikan blacklist not include
+
+    const pairToEmployee:AnswersObject[] = _.filter(this.storeUniqueEmployee, (o:AnswersObject) => !this.selected.blacklist.includes(o.employee_email));
     let uniqueEmployee:AnswersObject[] = [];
 
     // 1. get unique employee d
@@ -416,32 +432,38 @@ export default class SwipeableCard extends Vue {
       pairToEmployee.push(xObj);
       pairToEmployee.push(yObj);
     });
+
+    // 2. Request unique employee until we get 20 or until Requesting 10 times
     uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
+    this.storeUniqueEmployee = uniqueEmployee;
 
-    // 2. get whitelist object base on unique employee
-    const whitelistObject: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email));
+    if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 10) {
+      this.storeUniqueEmployeeCounter += 1;
+      this.loadEmployeeData();
+    }
 
-    // 3. prioritize non whitelist employee
+    // 3. get whitelist object base on unique employee
+
+    // 4. prioritize : uniqemploye but not whitelist employee
+    // - this is for swipable only. selected.employee will fill when user swipe
     const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
-    // 4. check if prioritize non whitelist !== 0
-    let uniqueEmployeeReady: AnswersObject[] = whitelistObject;
+    // 5. shuffle 9 unique from backend && whitelist
+    const shuffleWhitelist: AnswersObject[] = _.shuffle(
+      _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email)),
+    );
 
-    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(whitelistObject), 9);
-    if (prioritize.length !== 0) {
-      uniqueEmployeeReady = [...prioritize, ...shuffleWhitelist];
-    } else {
-      uniqueEmployeeReady = shuffleWhitelist;
-    }
-
-    // 5. asign to variable to selected and swipeable
-    if (prioritize.length < 9) {
-      const takeSelected = 9 - prioritize.length;
-      this.selected.employee = _.take(_.map(uniqueEmployeeReady, 'employee_email'), takeSelected);
-      this.selected.employeeObject = _.take(uniqueEmployeeReady, takeSelected);
-    }
+    // 6. asign variable to swipeable and not to selected
     this.answers = _.map(prioritize, 'employee_email');
     this.answersObject = prioritize;
+
+    // 7. if selected employee < 9 but prioritize/answer is zero
+    if (this.selected.employee.length < 9 && this.answers.length <= 0) {
+      const sEmp = _.clone(this.selected.employee);
+      const sEmpObj = _.clone(this.selected.employeeObject);
+      this.selected.employee = [...sEmp, ..._.map(shuffleWhitelist, 'employee_email')];
+      this.selected.employeeObject = [...sEmpObj, ...shuffleWhitelist];
+    }
 
     await this.checkDataAnswer();
   }
@@ -470,8 +492,7 @@ export default class SwipeableCard extends Vue {
   @Emit('swipableData')
   proceedQnaPage() {
     this.replaceBlackWhitelist();
-    const selected = _.clone(this.selected);
-    return selected;
+    return _.clone(this.selected);
   }
 
   replaceBlackWhitelist() {

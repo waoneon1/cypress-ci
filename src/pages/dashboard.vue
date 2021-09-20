@@ -295,8 +295,7 @@ export default class Dashboard extends Mixins(Percentage) {
 
   getUsername() {
     const usernameArray = _.split(this.loginData.user_name, ' ', 2);
-    const username = _.join(usernameArray, ' ');
-    return username;
+    return _.join(usernameArray, ' ');
   }
 
   async init() {
@@ -309,8 +308,7 @@ export default class Dashboard extends Mixins(Percentage) {
   }
 
   criteriaProgressCountFunc() {
-    const all = _.map(this.criteria, (obj) => _.round(this.calc(obj, this.employee.length), 2));
-    return all;
+    return _.map(this.criteria, (obj) => _.round(this.calc(obj, this.employee.length), 2));
   }
 
   public criteriaProgressCount(i) {

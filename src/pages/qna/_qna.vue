@@ -14,7 +14,7 @@
       class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary"
       :class="thankyouPage
       || help
-      || criteriaProgressCount() >= 100
+      || criteriaProgress >= 100
       ? '' : 'pb-36'"
       v-else
     >
@@ -33,7 +33,7 @@
         </div>
       </div>
       <!-- Content: Question -->
-      <div v-if="thankyouPage || criteriaProgressCount() >= 100"></div>
+      <div v-if="thankyouPage || criteriaProgress >= 100"></div>
       <div v-else class="relative">
         <div id="qnaTitle" class="text-sm text-primary font-bold rounded-xl mb-5">
           <span>Siapa yang kamu rekomendasikan untuk kriteria {{ domain.criteria_name }}</span>
@@ -54,7 +54,7 @@
       <!-- else allPageLoading -->
       <div v-else>
         <Thankyou
-          v-if="thankyouPage || criteriaProgressCount() >= 100"
+          v-if="thankyouPage || criteriaProgress >= 100"
           image="appreciation.svg"
           :buttons="[{
             label: 'Kembali',
@@ -105,7 +105,7 @@
 
       <!-- Navigation Footer -->
       <div v-if="thankyouPage" class="fixed bottom-0 left-0 right-0 bg-white"></div>
-      <div v-else-if="criteriaProgressCount() >= 100"></div>
+      <div v-else-if="criteriaProgress >= 100"></div>
       <div v-else class="fixed bottom-0 left-0 right-0">
         <div
           class="mx-auto max-w-md bg-white bg-white rounded-b-2xl shadow-lg w-full h-2 transform rotate-180"
@@ -117,10 +117,10 @@
           <div class="flex items-center justify-center mb-2">
             <div class="relative pr-2 w-full">
               <div class="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                <div :style="`width:${ criteriaProgressCount() }%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                <div :style="`width:${ criteriaProgress }%`" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
               </div>
             </div>
-            <span class="text-xs inline-block text-primary">{{ criteriaProgressCount() }}%</span>
+            <span class="text-xs inline-block text-primary">{{ criteriaProgress }}%</span>
           </div>
           <div class="flex justify-between items-center">
             <div class="relative">
@@ -370,15 +370,9 @@ export default class Qna extends Mixins(Percentage) {
       ? _.round(this.calc(this.domain, this.employee.length), 2)
       : _.round(this.calc(progress, this.employee.length), 2);
   }
-
-  public criteriaProgressCount() {
-    return this.criteriaProgress;
-  }
   /* END UTILITIES */
 
   async init() {
-    this.criteriaProgress = this.criteriaProgressCountFunc();
-
     // set current page
     if (typeof this.$route.query.page === 'string') {
       this.currentPages = Number(this.$route.query.page);
@@ -398,11 +392,14 @@ export default class Qna extends Mixins(Percentage) {
 
       // always load employee data
       this.loadSwipableComponent = true;
+      this.criteriaProgress = this.criteriaProgressCountFunc();
     });
   }
 
   initSwipableData(payload) {
-    if (this.criteriaProgressCount() >= 100) {
+    this.criteriaProgress = this.criteriaProgressCountFunc();
+
+    if (this.criteriaProgress >= 100) {
       this.thankyouPage = true;
     }
 
@@ -410,8 +407,14 @@ export default class Qna extends Mixins(Percentage) {
     this.loading = true;
     this.allPageLoading = true;
     // set data
-    this.answers = _.take(payload.employee, 9);
-    this.answersObject = _.take(payload.employeeObject, 9);
+    this.answers = _.take(
+      _.uniqBy(payload.employee),
+      9,
+    );
+    this.answersObject = _.take(
+      _.uniqBy(payload.employeeObject, 'employee_email'),
+      9,
+    );
 
     // set loading = false and close swipable component
     this.loading = false;
