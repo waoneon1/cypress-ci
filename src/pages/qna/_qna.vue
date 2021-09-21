@@ -409,8 +409,14 @@ export default class Qna extends Mixins(Percentage) {
     this.loading = true;
     this.allPageLoading = true;
     // set data
-    this.answers = _.take(payload.employee, 9);
-    this.answersObject = _.take(payload.employeeObject, 9);
+    this.answers = _.take(
+      _.uniqBy(payload.employee),
+      9,
+    );
+    this.answersObject = _.take(
+      _.uniqBy(payload.employeeObject, 'employee_email'),
+      9,
+    );
 
     // set loading = false and close swipable component
     this.loading = false;

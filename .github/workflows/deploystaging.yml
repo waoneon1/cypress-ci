@@ -22,15 +22,15 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.npm
+            ~/.yarn
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
         working-directory: ./src
-        run: npm ci
+        run: yarn
       - name: Run Lint
         working-directory: ./src
-        run: npm run lint
+        run: yarn lint
 
   unittest:
     name: Unit Test
@@ -46,15 +46,15 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.npm
+            ~/.yarn
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
         working-directory: ./src
-        run: npm ci
+        run: yarn
       - name: Run Test
         working-directory: ./src
-        run: npm run test
+        run: yarn test
       - name: Archive Code Coverage Results
         uses: actions/upload-artifact@v2
         with:
@@ -85,12 +85,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.npm
+            ~/.yarn
             **/node_modules/.cache
           key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
         working-directory: ./src
-        run: npm ci
+        run: yarn
       - name: Download Code Coverage Artifact
         uses: actions/download-artifact@v2
         with:

@@ -20,7 +20,11 @@
 
       <!-- Content: Criteria List -->
       <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
+<<<<<<< HEAD
         {{ answers }}
+=======
+        <small> {{ this.answers }}</small>
+>>>>>>> 4d3f59d8be1f1e53fec509472f879854c5285f52
         <p> index : {{ index }} |
           iswipeable : {{ iteration }} |
           selected : {{ selected.employee.length }} |
@@ -436,33 +440,33 @@ export default class SwipeableCard extends Vue {
     // 2. Request unique employee until we get 20 or until Requesting 10 times
     uniqueEmployee = _.uniqBy(pairToEmployee, 'employee_email');
     this.storeUniqueEmployee = uniqueEmployee;
+
     if (uniqueEmployee.length < 20 && this.storeUniqueEmployeeCounter < 10) {
       this.storeUniqueEmployeeCounter += 1;
       this.loadEmployeeData();
     }
 
     // 3. get whitelist object base on unique employee
-    // const whitelistObject: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email));
 
     // 4. prioritize : uniqemploye but not whitelist employee
     // - this is for swipable only. selected.employee will fill when user swipe
     const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
-    // 5. shuffle 9 unique employe we get from backend
-    const shuffleWhitelist: AnswersObject[] = _.take(_.shuffle(uniqueEmployee), 9);
+    // 5. shuffle 9 unique from backend && whitelist
+    const shuffleWhitelist: AnswersObject[] = _.shuffle(
+      _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email)),
+    );
 
     // 6. asign variable to swipeable and not to selected
-    // const takeSelected = 9 - prioritize.length;
     this.answers = _.map(prioritize, 'employee_email');
     this.answersObject = prioritize;
 
-    // 7. if we get 0 swipeable but remining employe more then 0 => go all selected data using whitelist
-    // - fill selected employee using whitelist data minus the prioritize
-    if (this.answers.length === 0) {
-      const priorityLeng = prioritize.length >= 9 ? 9 : prioritize.length;
-      const takeSelected = 9 - priorityLeng;
-      this.selected.employee = _.take(_.map(shuffleWhitelist, 'employee_email'), takeSelected);
-      this.selected.employeeObject = _.take(shuffleWhitelist, takeSelected);
+    // 7. if selected employee < 9 but prioritize/answer is zero
+    if (this.selected.employee.length < 9 && this.answers.length <= 0) {
+      const sEmp = _.clone(this.selected.employee);
+      const sEmpObj = _.clone(this.selected.employeeObject);
+      this.selected.employee = [...sEmp, ..._.map(shuffleWhitelist, 'employee_email')];
+      this.selected.employeeObject = [...sEmpObj, ...shuffleWhitelist];
     }
 
     await this.checkDataAnswer();
