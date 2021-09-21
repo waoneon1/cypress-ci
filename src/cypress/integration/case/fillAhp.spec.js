@@ -2,7 +2,7 @@ import jwtDecode from 'jwt-decode';
 
 const _ = require('lodash');
 
-describe('pages > setting/index.vue', () => {
+describe('Whitelist Page for Design Success', () => {
   const domain = 'Design';
 
   beforeEach(() => {
@@ -100,7 +100,7 @@ describe('pages > setting/index.vue', () => {
 
     // search employee
     cy.get('input#cariAlterran')
-      .type('ekky');
+      .type('a');
     cy.get('#employeeList').find('div.employee').eq(0).click();
 
     // reset search employee

@@ -131,7 +131,7 @@ export default class Login extends Vue {
   clickLogin: boolean = false
 
   async handleClickLogin() {
-    this.clickLogin = true
+    this.clickLogin = true;
     try {
       this.googleUser = await this.$gAuth.signIn();
       const idToken = this.googleUser.getAuthResponse().id_token;

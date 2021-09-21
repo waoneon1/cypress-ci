@@ -1,11 +1,7 @@
-import jwtDecode from 'jwt-decode';
-const _ = require('lodash');
-
 describe('FAQ Page', {
   viewportHeight: 700,
   viewportWidth: 900,
 }, () => {
-
   beforeEach(() => {
     cy.loginByGoogleApi();
     cy.visit('/faq');
@@ -20,7 +16,6 @@ describe('FAQ Page', {
 
     cy.url().should('eq', `${Cypress.env('baseUrl')}/faq`);
 
-    cy.get('a[href="/faq"]').parent().should('have.class', 'text-secondary')
+    cy.get('a[href="/faq"]').parent().should('have.class', 'text-secondary');
   });
-
 });
