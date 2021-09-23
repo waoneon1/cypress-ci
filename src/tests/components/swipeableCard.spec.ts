@@ -204,6 +204,9 @@ describe('components > SwipeableCard.vue', () => {
     expect(wrapper.vm.index).toBe(1);
     expect(wrapper.vm.isVisible).toBe(true);
     expect(wrapper.vm.btnDisabled).toBe(false);
+
+    wrapper.setData({ index: 1 })
+    wrapper.vm.visibleTrue();
   });
 
   it('Test visibleFalse()', () => {
@@ -273,6 +276,23 @@ describe('components > SwipeableCard.vue', () => {
 
     wrapper.vm.getUniqueEmployees();
     expect(wrapper.vm.answers.length).toBe(10);
+
+    wrapper.setData({ 
+      answers: [],
+      selected: {
+        whitelist: {
+          employee_name: '-',
+          employee_email: '-',
+          employee_image_url: '-',
+          employee_organization: '-',
+          employee_organization_full_text: '-',
+          employee_business_unit: '-',
+        },
+        employee: [1,2,3,4,5,6,7,8,9,10]
+      }
+    })
+    wrapper.vm.getUniqueEmployees();
+
   });
 
   it('Test proceedQnaPage()', () => {

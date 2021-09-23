@@ -225,8 +225,7 @@ const EVENTS = {
   },
 })
 export default class SwipeableCard extends Vue {
-  // Data: {}
-  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
+  // Active this to  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
 
   isVisible:boolean = true
 
