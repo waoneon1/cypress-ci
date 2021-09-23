@@ -277,20 +277,7 @@ describe('components > SwipeableCard.vue', () => {
     wrapper.vm.getUniqueEmployees();
     expect(wrapper.vm.answers.length).toBe(10);
 
-    wrapper.setData({
-      answers: [],
-      selected: {
-        whitelist: {
-          employee_name: '-',
-          employee_email: '-',
-          employee_image_url: '-',
-          employee_organization: '-',
-          employee_organization_full_text: '-',
-          employee_business_unit: '-',
-        },
-        employee: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      },
-    });
+    wrapper.setData({ limitSendData: 0 });
     wrapper.vm.getUniqueEmployees();
   });
 
@@ -488,5 +475,12 @@ describe('components > SwipeableCard.vue case 3', () => {
         employee: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       },
     });
+  });
+
+  it('Test getUniqueEmployees() false', () => {
+    mockedAxiosPost.post.mockResolvedValue(mockedQnaResponseData);
+
+    wrapper.setData({ limitSendData: 0 });
+    wrapper.vm.getUniqueEmployees();
   });
 });

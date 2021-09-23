@@ -268,6 +268,8 @@ export default class SwipeableCard extends Vue {
 
   limitEmp: number = 9
 
+  limitSendData: number = 9
+
   limitSwipe1: number = 20
 
   limitSwipe2: number = 20
@@ -468,7 +470,7 @@ export default class SwipeableCard extends Vue {
       this.selected.employeeObject = [...sEmpObj, ...shuffleWhitelist];
 
       // employee
-      if (this.selected.employee.length < 9) {
+      if (this.selected.employee.length < this.limitSendData) {
         this.moreWhitelist = true;
       }
     }
