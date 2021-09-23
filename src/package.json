@@ -11,7 +11,8 @@
     "generate": "nuxt generate",
     "clean": "shx rm -rf dist/ coverage/",
     "test": "yarn clean && jest",
-    "e2e": "npx cypress open"
+    "e2e": "npx cypress open",
+    "release" : "./pre-release.sh $version"
   },
   "dependencies": {
     "@nuxt/types": "^2.14.12",
