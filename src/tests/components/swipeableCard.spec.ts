@@ -190,7 +190,7 @@ describe('components > SwipeableCard.vue', () => {
       }],
     });
     wrapper.vm.emitAndNext('match');
-    expect(setTimeout).toHaveBeenCalledTimes(4);
+    expect(setTimeout).toHaveBeenCalledTimes(2);
   });
 
   it('Test checkWhitelist()', () => {

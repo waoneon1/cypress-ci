@@ -340,7 +340,7 @@ export default class SwipeableCard extends Vue {
     this.checkTotalSwipe();
   }
 
-  emitAndNext(event: 'match' | 'reject') {
+  async emitAndNext(event: 'match' | 'reject') {
     this.$emit(event, this.index);
 
     if (event === 'match') {
@@ -350,16 +350,21 @@ export default class SwipeableCard extends Vue {
     } else {
       this.selected.blacklist.push(this.answersObject[this.index].employee_email);
     }
-    this.checkWhitelist();
+
     this.btnDisabled = true;
-    setTimeout(() => this.visibleFalse(), 500);
-    setTimeout(() => {
+    await setTimeout(() => this.visibleFalse(), 0);
+    await setTimeout(() => {
       this.visibleTrue();
-    }, 500);
+    }, 0);
+
+    this.checkWhitelist();
   }
 
   visibleTrue() {
-    this.index += 1;
+    const total = this.answers.length - 1;
+    if (total !== this.index) {
+      this.index += 1;
+    }
     this.totalSwipe += 1;
     this.isVisible = true;
     this.btnDisabled = false;
@@ -447,10 +452,8 @@ export default class SwipeableCard extends Vue {
     // - this is for swipable only. selected.employee will fill when user swipe
     const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
-    // 5. shuffle 9 unique from backend && whitelist
-    const shuffleWhitelist: AnswersObject[] = _.shuffle(
-      _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email)),
-    );
+    // 5. shuffle 9 unique from whitelist
+    const shuffleWhitelist: AnswersObject[] = _.shuffle(this.selected.whitelist);
 
     // 6. asign variable to swipeable and not to selected
     this.answers = _.map(prioritize, 'employee_email');
@@ -473,7 +476,7 @@ export default class SwipeableCard extends Vue {
     if (this.iteration > 1) {
       localStorage.setItem('rrs_blacklist', JSON.stringify(this.selected.blacklist));
     }
-    this.index = this.iteration === 1 ? 0 : -1;
+    this.index = 0;
     this.current = _.clone(this.answersObject[0]);
     this.next = _.clone(this.answersObject[1]);
     this.next2 = _.clone(this.answersObject[2]);
