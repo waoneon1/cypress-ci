@@ -1,4 +1,4 @@
-<template>
+`<template>
   <div>
     <MoreEmployee v-if="moreWhitelist" :swipeableData="selected" @closeMoreEmployee="closeMoreEmployee"/>
     <div v-else class="relative bg-white mx-auto max-w-md min-h-screen px-5 font-secondary pb-28">
@@ -20,7 +20,6 @@
 
       <!-- Content: Criteria List -->
       <div v-if="debug === 'true'" class="text-xs bg-gray-100 text-gray-500 p-2 rounded-lg mb-2">
-        <small> {{ this.answers }}</small>
         <p> index : {{ index }} |
           iswipeable : {{ iteration }} |
           selected : {{ selected.employee.length }} |

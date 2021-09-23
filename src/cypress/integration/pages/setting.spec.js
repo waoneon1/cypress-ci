@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 
-describe('pages > setting/index.vue', () => {
+describe('Profile Show Success', () => {
   const loginData = jwtDecode(Cypress.env('token'));
 
   beforeEach(() => {
