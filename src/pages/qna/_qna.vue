@@ -72,7 +72,7 @@
               v-for="(item, i) in answersObject"
               :key="i"
               @click="answerAdd(item.employee_email)"
-              class="relative"
+              class="relative employee"
             >
               <div
                 class="absolute top-2 right-2 bg-white rounded-full text-white flex items-center justify-center z-10"
@@ -154,9 +154,11 @@
             </div>
             <div class="inline-block flex">
               <button
-                :disabled="loading"
+                id="getNextBtn"
+                :disabled="loading || !selectedAnswer.length"
                 @click="nextPage();"
-                class="ml-2 rounded-full py-2 px-4 border border-solid border-secondary bg-secondary text-white focus:outline-none flex items-center mx-auto justify-center inline-block"
+                class="ml-2 rounded-full py-2 px-4 border border-solid focus:outline-none flex items-center mx-auto justify-center inline-block"
+                :class="selectedAnswer.length ? 'border-secondary bg-secondary text-white' : 'border-gray-400 bg-gray-400 text-white'"
               >
                 <svg v-show="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

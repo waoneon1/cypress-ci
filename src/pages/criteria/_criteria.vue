@@ -20,6 +20,7 @@
         </nuxt-link>
         <h1 id="criteriaTitle" class="text-primary text-sm capitalize">{{ domain.criteria_name }}</h1>
         <div
+          id="btnInfo"
           class="flex items-center justify-center rounded-full border-2 border-gray-400 h-5 w-5 cursor-pointer"
           @click="help = !help"
         >

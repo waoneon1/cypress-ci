@@ -62,7 +62,9 @@
         <div class="mx-auto bg-white max-w-md pb-2 px-5 md:px-10">
           <div
             class="rounded-full py-3 mb-1 border border-solid border-secondary bg-secondary text-white focus:outline-none cursor-pointer flex items-center mx-auto justify-center"
+            :class="clickLogin ? 'active' : ''"
             @click="handleClickLogin"
+            id = "googleLoginBtn"
           >
             <svg
               class="mr-3"
@@ -126,7 +128,10 @@ export default class Login extends Vue {
 
   googleUser: any = '';
 
+  clickLogin: boolean = false
+
   async handleClickLogin() {
+    this.clickLogin = true;
     try {
       this.googleUser = await this.$gAuth.signIn();
       const idToken = this.googleUser.getAuthResponse().id_token;
