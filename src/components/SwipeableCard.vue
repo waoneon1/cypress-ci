@@ -454,7 +454,9 @@ export default class SwipeableCard extends Vue {
     const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
     // 5. shuffle 9 unique from whitelist
-    const shuffleWhitelist: AnswersObject[] = _.shuffle(this.selected.whitelist);
+    const shuffleWhitelist: AnswersObject[] = _.shuffle(
+      _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email))
+    );
 
     // 6. asign variable to swipeable and not to selected
     this.answers = _.map(prioritize, 'employee_email');
@@ -466,6 +468,11 @@ export default class SwipeableCard extends Vue {
       const sEmpObj = _.clone(this.selected.employeeObject);
       this.selected.employee = [...sEmp, ..._.map(shuffleWhitelist, 'employee_email')];
       this.selected.employeeObject = [...sEmpObj, ...shuffleWhitelist];
+
+      // employee 
+      if (this.selected.employee.length < 9) {
+        this.moreWhitelist = true;
+      }
     }
 
     await this.checkDataAnswer();
