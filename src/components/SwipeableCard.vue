@@ -353,10 +353,10 @@ export default class SwipeableCard extends Vue {
     }
 
     this.btnDisabled = true;
-    await setTimeout(() => this.visibleFalse(), 0);
+    await setTimeout(() => this.visibleFalse(), 500);
     await setTimeout(() => {
       this.visibleTrue();
-    }, 0);
+    }, 500);
 
     this.checkWhitelist();
   }
