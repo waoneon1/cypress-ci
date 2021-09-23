@@ -195,7 +195,7 @@ describe('components > SwipeableCard.vue', () => {
 
   it('Test checkWhitelist()', () => {
     wrapper.vm.checkWhitelist();
-    wrapper.setData({ limitEmp: 0 });
+    wrapper.setData({ limitEmp: 1 });
     wrapper.vm.checkWhitelist();
   });
 
@@ -204,6 +204,9 @@ describe('components > SwipeableCard.vue', () => {
     expect(wrapper.vm.index).toBe(1);
     expect(wrapper.vm.isVisible).toBe(true);
     expect(wrapper.vm.btnDisabled).toBe(false);
+
+    wrapper.setData({ index: 1 });
+    wrapper.vm.visibleTrue();
   });
 
   it('Test visibleFalse()', () => {
@@ -273,6 +276,9 @@ describe('components > SwipeableCard.vue', () => {
 
     wrapper.vm.getUniqueEmployees();
     expect(wrapper.vm.answers.length).toBe(10);
+
+    wrapper.setData({ limitSendData: 0 });
+    wrapper.vm.getUniqueEmployees();
   });
 
   it('Test proceedQnaPage()', () => {
@@ -307,6 +313,13 @@ describe('components > SwipeableCard.vue', () => {
         updated_at: 'string;',
       },
     ]);
+  });
+
+  it('Test checkEmployeeRemain()', () => {
+    wrapper.setData({
+      allEmployee: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    });
+    wrapper.vm.checkEmployeeRemain();
   });
 });
 
@@ -388,6 +401,17 @@ describe('components > SwipeableCard.vue case 2', () => {
     });
     wrapper.vm.checkTotalSwipe();
     expect(wrapper.vm.moreWhitelist).toBe(false);
+
+    wrapper.setData({
+      totalSwipe: 19,
+    });
+    wrapper.vm.checkTotalSwipe();
+
+    wrapper.setData({
+      totalSwipe: 19,
+      currentPages: 1,
+    });
+    wrapper.vm.checkTotalSwipe();
   });
 });
 
@@ -451,5 +475,12 @@ describe('components > SwipeableCard.vue case 3', () => {
         employee: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       },
     });
+  });
+
+  it('Test getUniqueEmployees() false', () => {
+    mockedAxiosPost.post.mockResolvedValue(mockedQnaResponseData);
+
+    wrapper.setData({ limitSendData: 0 });
+    wrapper.vm.getUniqueEmployees();
   });
 });

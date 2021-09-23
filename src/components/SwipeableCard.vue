@@ -225,8 +225,7 @@ const EVENTS = {
   },
 })
 export default class SwipeableCard extends Vue {
-  // Data: {}
-  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
+  // Active this to  debug: string = process.env.NUXT_ENV_RRS_DEBUG ? process.env.NUXT_ENV_RRS_DEBUG : 'false'
 
   isVisible:boolean = true
 
@@ -268,6 +267,8 @@ export default class SwipeableCard extends Vue {
   limitPair: number = 30
 
   limitEmp: number = 9
+
+  limitSendData: number = 9
 
   limitSwipe1: number = 20
 
@@ -352,10 +353,10 @@ export default class SwipeableCard extends Vue {
     }
 
     this.btnDisabled = true;
-    await setTimeout(() => this.visibleFalse(), 0);
+    await setTimeout(() => this.visibleFalse(), 500);
     await setTimeout(() => {
       this.visibleTrue();
-    }, 0);
+    }, 500);
 
     this.checkWhitelist();
   }
@@ -453,7 +454,9 @@ export default class SwipeableCard extends Vue {
     const prioritize: AnswersObject[] = _.filter(uniqueEmployee, (o:AnswersObject) => !this.selected.whitelist.includes(o.employee_email));
 
     // 5. shuffle 9 unique from whitelist
-    const shuffleWhitelist: AnswersObject[] = _.shuffle(this.selected.whitelist);
+    const shuffleWhitelist: AnswersObject[] = _.shuffle(
+      _.filter(uniqueEmployee, (o:AnswersObject) => this.selected.whitelist.includes(o.employee_email)),
+    );
 
     // 6. asign variable to swipeable and not to selected
     this.answers = _.map(prioritize, 'employee_email');
@@ -465,6 +468,11 @@ export default class SwipeableCard extends Vue {
       const sEmpObj = _.clone(this.selected.employeeObject);
       this.selected.employee = [...sEmp, ..._.map(shuffleWhitelist, 'employee_email')];
       this.selected.employeeObject = [...sEmpObj, ...shuffleWhitelist];
+
+      // employee
+      if (this.selected.employee.length < this.limitSendData) {
+        this.moreWhitelist = true;
+      }
     }
 
     await this.checkDataAnswer();
