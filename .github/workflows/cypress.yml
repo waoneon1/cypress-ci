@@ -20,7 +20,7 @@ jobs:
           node-version: "14"
       - name: Install Dependencies
         working-directory: ./src
-        run: npm install
+        run: npm init -y && npm install
       - name: Cypress run
         uses: cypress-io/github-action@v2
         # with:
