@@ -12,10 +12,25 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.yarn
+            **/node_modules/.cache
+          key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        working-directory: ./src
+        run: yarn
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        working-directory: ./src
         with:
           build: yarn run build
           start: yarn start
