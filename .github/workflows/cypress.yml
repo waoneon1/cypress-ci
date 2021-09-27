@@ -30,7 +30,6 @@ jobs:
         run: yarn
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        working-directory: ./src
         with:
           build: yarn run build
           start: yarn start
