@@ -24,15 +24,14 @@ jobs:
           path: |
             ~/.yarn
             **/node_modules/.cache
-          key: ${{ runner.OS }}-check-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
         working-directory: ./src
         run: yarn
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: yarn run build
-          start: yarn start
+          build: npm run build
+          start: npm start
           wait-on: http://localhost:3000
           browser: chrome
           headless: true
