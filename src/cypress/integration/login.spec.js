@@ -31,7 +31,6 @@ describe('Login Page', {
     // dashboard
     cy.log('Dashboard Page');
     cy.get('h1').should('have.text', username);
-    cy.url().should('eq', `${Cypress.env('BASEURL')}/dashboard`);
   });
 
   it('Login Failed', () => {
