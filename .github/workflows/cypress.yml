@@ -27,8 +27,7 @@ jobs:
         working-directory: ./src
         run: sh -eux deploy-env.sh
         env:
-          NUXT_ENV_CYPRESS_TOKEN: ${{ secrets.NUXT_ENV_CYPRESS_TOKEN }}
-          BASEURL: ${{ secrets.BASEURL }}
+          CYPRESS_ENV: ${{ secrets.CYPRESS_ENV }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
