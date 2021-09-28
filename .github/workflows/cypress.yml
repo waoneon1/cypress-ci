@@ -33,6 +33,11 @@ jobs:
 
           build: yarn build
           start: yarn start
-          
+
           # quote the url to be safe against YML parsing surprises
           wait-on: "http://localhost:3000"
+
+        env:
+          token: ${{ secrets.CYPRESS_TOKEN }}
+          rrs_whitelist: ${{secrets.CYPRESS_RRS_WHITELIST }}
+          title: ${{secrets.CYPRESS_TITLE}}
