@@ -11,7 +11,7 @@ describe('Login Page', {
   });
 
   it('Login page show success', () => {
-    cy.log('login is here' + Cypress.env('title'))
+    cy.log(Cypress.env('title'))
     const title = 'Know Your Best';
     cy.get('h1').should('include.text', title);
   });
@@ -25,7 +25,7 @@ describe('Login Page', {
     cy.loginByGoogleApi();
 
     cy.visit('/dashboard');
-    const loginData = jwtDecode(Cypress.env('token'));
+    const loginData = jwtDecode(Cypress.env('NUXT_ENV_CYPRESS_TOKEN'));
     const usernameArray = _.split(loginData.user_name, ' ', 2);
     const username = _.join(usernameArray, ' ');
 

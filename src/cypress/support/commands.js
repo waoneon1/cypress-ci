@@ -1,7 +1,7 @@
 // Save localstorage
 Cypress.Commands.add('loginByGoogleApi', () => {
   cy.log('Logging in to Google');
-  window.localStorage.setItem('token', Cypress.env('token'));
+  window.localStorage.setItem('token', Cypress.env('NUXT_ENV_CYPRESS_TOKEN'));
   cy.visit('/');
 });
 
