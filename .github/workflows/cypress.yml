@@ -24,7 +24,8 @@ jobs:
         run: yarn
 
       - name: Create Env
-        run: sh -eux ./src/deploy-env.sh
+        working-directory: ./src
+        run: sh -eux deploy-env.sh
         env:
           NUXT_ENV_CYPRESS_TOKEN: ${{ secrets.NUXT_ENV_CYPRESS_TOKEN }}
           BASEURL: ${{ secrets.BASEURL }}
