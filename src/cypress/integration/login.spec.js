@@ -11,7 +11,6 @@ describe('Login Page', {
   });
 
   it('Login page show success', () => {
-    cy.log(Cypress.env('title'))
     const title = 'Know Your Best';
     cy.get('h1').should('include.text', title);
   });
@@ -32,7 +31,7 @@ describe('Login Page', {
     // dashboard
     cy.log('Dashboard Page');
     cy.get('h1').should('have.text', username);
-    cy.url().should('eq', `${Cypress.env('baseUrl')}/dashboard`);
+    cy.url().should('eq', `${Cypress.env('BASEURL')}/dashboard`);
   });
 
   it('Login Failed', () => {

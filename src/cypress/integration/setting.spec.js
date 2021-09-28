@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode';
 
 describe('Profile Show Success', () => {
-  const loginData = jwtDecode(Cypress.env('token'));
+  const loginData = jwtDecode(Cypress.env('NUXT_ENV_CYPRESS_TOKEN'));
 
   beforeEach(() => {
     cy.loginByGoogleApi();
@@ -20,12 +20,12 @@ describe('Profile Show Success', () => {
 
   it('Setting Page > Logout', () => {
     cy.get('#logout').should('be.visible').click();
-    cy.url().should('eq', `${Cypress.env('baseUrl')}/`);
+    cy.url().should('eq', `${Cypress.env('BASEURL')}/`);
   });
 
   it('Setting Page > Power Rank', () => {
     cy.get('#powerrank').should('be.visible').click();
     cy.get('h1').should('have.text', 'Power Rank');
-    cy.url().should('eq', `${Cypress.env('baseUrl')}/setting/powerrank`);
+    cy.url().should('eq', `${Cypress.env('BASEURL')}/setting/powerrank`);
   });
 });
