@@ -11,7 +11,7 @@ describe('Login Page', {
   });
 
   it('Login page show success', () => {
-    cy.log(Cypress.env('title'))
+    cy.log('login is here' + Cypress.env('title'))
     const title = 'Know Your Best';
     cy.get('h1').should('include.text', title);
   });
