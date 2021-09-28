@@ -23,12 +23,7 @@ jobs:
         run: npm init -y && npm install
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        with:
-          build: npm run build
-          start: npm start
-          wait-on: http://localhost:3000
-          browser: chrome
-          headless: true
+        working-directory: ./src
       # - uses: actions/upload-artifact@v1
       #   if: failure()
       #   with:
