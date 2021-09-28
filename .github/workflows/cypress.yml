@@ -23,8 +23,8 @@ jobs:
         working-directory: ./src
         run: yarn
 
-      - name: Build Image And Deploy
-        run: sh -eux ./scripts/deploy-env.sh
+      - name: Create Env
+        run: sh -eux ./src/deploy-env.sh
         env:
           NUXT_ENV_CYPRESS_TOKEN: ${{ secrets.NUXT_ENV_CYPRESS_TOKEN }}
           BASEURL: ${{ secrets.BASEURL }}
