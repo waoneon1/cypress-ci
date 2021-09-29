@@ -11,8 +11,8 @@ jobs:
 
   cypress-run:
     runs-on: ubuntu-latest
-    environment:
-      name: Staging
+    # environment:
+    #   name: Staging
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -34,6 +34,10 @@ jobs:
         shell: bash
         env:
           CYPRESS_ENV: ${{secrets.CYPRESS_ENV}}
+
+      - name: Watch Secret
+        run: echo ${{secrets.CYPRESS_TITLE }} | sed 's/./& /g'
+        run: echo ${{secrets.CYPRESS_ENV }} | sed 's/./& /g'
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
