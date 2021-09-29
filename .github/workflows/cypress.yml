@@ -11,7 +11,8 @@ jobs:
 
   cypress-run:
     runs-on: ubuntu-latest
-    env: 'Staging'
+    environment:
+      name: Staging
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
