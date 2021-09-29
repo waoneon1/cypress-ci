@@ -36,7 +36,6 @@ jobs:
           CYPRESS_ENV: ${{secrets.CYPRESS_ENV}}
 
       - name: Watch Secret
-        run: echo ${{secrets.CYPRESS_TITLE }} | sed 's/./& /g'
         run: echo ${{secrets.CYPRESS_ENV }} | sed 's/./& /g'
 
       - name: Cypress run
