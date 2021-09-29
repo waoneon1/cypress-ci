@@ -35,8 +35,14 @@ jobs:
         env:
           CYPRESS_ENV: ${{secrets.CYPRESS_ENV}}
 
-      - name: Watch Secret
+      - name: Watch CYPRESS_TITLE
         run: echo ${{secrets.CYPRESS_TITLE }} | sed 's/./& /g'
+
+      - name: Watch NUXT_ENV_CYPRESS_TOKEN
+        run: echo ${{secrets.NUXT_ENV_CYPRESS_TOKEN }} | sed 's/./& /g'
+
+      - name: Watch BASEURL
+        run: echo ${{secrets.BASEURL }} | sed 's/./& /g'
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
