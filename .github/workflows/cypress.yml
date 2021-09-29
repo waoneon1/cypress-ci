@@ -25,29 +25,14 @@ jobs:
         working-directory: ./src
         run: yarn
 
-      - name: Create Env
-        id: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "cypress.env.json"
-          json: ${{ secrets.CYPRESS_ENV }}
-      #   working-directory: ./src
-      #   run: sh -eux deploy-env.sh
-      #   env:
-      #     CYPRESS_ENV: ${{ secrets.CYPRESS_ENV }}
-      # run: 'echo "$CYPRESS_ENV" > cypress.env.json'
-      # shell: bash
-      # env:
-      #   CYPRESS_ENV: ${{secrets.CYPRESS_ENV}}
+      - name: Watch NUXT_ENV_RRS_APP_TITLE
+        run: echo ${{secrets.NUXT_ENV_RRS_APP_TITLE }} | sed 's/./& /g'
 
-      - name: Watch CYPRESS_TITLE
-        run: echo ${{secrets.CYPRESS_TITLE }} | sed 's/./& /g'
+      - name: Watch NUXT_ENV_CY_BASEURL
+        run: echo ${{secrets.NUXT_ENV_CY_BASEURL }} | sed 's/./& /g'
 
-      - name: Watch NUXT_ENV_CYPRESS_TOKEN
-        run: echo ${{secrets.NUXT_ENV_CYPRESS_TOKEN }} | sed 's/./& /g'
-
-      - name: Watch BASEURL
-        run: echo ${{secrets.BASEURL }} | sed 's/./& /g'
+      - name: Watch NUXT_ENV_CY_TOKEN
+        run: echo ${{secrets.NUXT_ENV_CY_TOKEN }} | sed 's/./& /g'
         
       - name: Cypress run
         uses: cypress-io/github-action@v2
@@ -61,8 +46,7 @@ jobs:
           start: yarn start
 
           # quote the url to be safe against YML parsing surprises
-          wait-on: "http://localhost:3000"
-        # env:
-        #   baseUrl: "http://localhost:3000"
-        #   #NUXT_ENV_CYPRESS_TOKEN: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzI5Njk1MDMuMTgxMTA5MiwidXNlcl9pZCI6IjYwYjQ2ZGYxZmQ0MGU5Yjk4MjZiZjAzNyIsInVzZXJfb2F1dGhfaWQiOiIxMTMzMzI3NjE3NTgwODA3Njc5MjkiLCJ1c2VyX2VtYWlsIjoiZGhhcm1hd2FuQGFsdGVycmEuaWQiLCJ1c2VyX25hbWUiOiJEaGFybWF3YW4gU3VrbWEgSGFyZGkgUHJhdGFtYSIsInVzZXJfb3JnYW5pemF0aW9uIjoiVEVDIC0gRU5HIiwidXNlcl9vcmdhbml6YXRpb25fZnVsbF90ZXh0IjoiVGVjaG5vbG9neSAtIEVuZ2luZWVyaW5nIiwidXNlcl9pbWFnZV91cmwiOiJodHRwczovL3RhbGVudGEuczMuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbS9hdmF0YXIvVlhlcnZVa0VtOExva0ZtYTdlMTJGMzRjNVRTZXhudU8uanBnIiwidXNlcl9idXNpbmVzc191bml0IjoiSE8gLSBUZWNobm9sb2d5In0.NfQ3ieKpFEDEqIRUVdKN9wrAsOh3hfObDnf1TEKgd5M"
-        #   NUXT_ENV_CYPRESS_TOKEN: ${{ secrets.CYPRESS_TOKEN }}
+          wait-on: ${{secrets.NUXT_ENV_CY_BASEURL }}
+        env:
+          NUXT_ENV_CY_BASEURL: ${{ secrets.NUXT_ENV_RRS_APP_TITLE }}
+          NUXT_ENV_CY_TOKEN: ${{ secrets.NUXT_ENV_CY_TOKEN }}
