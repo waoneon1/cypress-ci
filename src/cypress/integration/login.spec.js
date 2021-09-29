@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode';
 const _ = require('lodash');
 
 describe(
-  'Login Page',
+  'Login Pages',
   {
     viewportHeight: 700,
     viewportWidth: 900,
